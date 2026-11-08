@@ -1,0 +1,2 @@
+# ifp
+generate prompt ai
