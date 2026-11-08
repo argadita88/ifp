@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Gamepad2, Presentation, Rocket, Sparkles, GraduationCap, Film, Download, ExternalLink } from 'lucide-react';
+import { Gamepad2, Presentation, Rocket, Sparkles, GraduationCap, Film, BookOpen, Download, ExternalLink } from 'lucide-react';
 
 export default function Footer({ onSwitchSection }) {
   return (
@@ -17,12 +17,12 @@ export default function Footer({ onSwitchSection }) {
               <span className="footer-brand-name">Gim Interaktif Informatika SMP</span>
             </div>
             <p className="footer-brand-desc">
-              Ekosistem media pembelajaran komprehensif berbasis layar sentuh interaktif untuk Kurikulum Merdeka Fase D: Presentasi pedagogis, game simulasi multi-touch simultan, AI LKPD Studio, dan AI Storyboard Scene Architect.
+              Ekosistem media pembelajaran komprehensif berbasis layar sentuh interaktif untuk Kurikulum Merdeka Fase D: Presentasi pedagogis, game simulasi multi-touch &amp; 3D multiplayer, AI LKPD Studio, AI Storyboard, dan SEMPENSARI AI Modul Ajar Architect (python-docx F4).
             </p>
             <div className="footer-tech-specs">
               <span className="tech-badge">Interactive Flat Panel 4K</span>
-              <span className="tech-badge">Multi-Touch Simultan</span>
-              <span className="tech-badge">AI Storyboard Studio</span>
+              <span className="tech-badge">Multi-Touch &amp; 3D Game</span>
+              <span className="tech-badge">AI Modul Ajar Architect</span>
               <span className="tech-badge">100% Standalone</span>
             </div>
           </div>
@@ -48,7 +48,7 @@ export default function Footer({ onSwitchSection }) {
                   className="footer-link-btn"
                 >
                   <Rocket size={14} />
-                  <span>2. Educational Gaming Arena</span>
+                  <span>2. Educational Gaming Arena (3D)</span>
                 </button>
               </li>
               <li>
@@ -78,7 +78,17 @@ export default function Footer({ onSwitchSection }) {
                   className="footer-link-btn"
                 >
                   <Film size={14} />
-                  <span>5. AI Storyboard Studio (Baru)</span>
+                  <span>5. AI Storyboard Studio</span>
+                </button>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  onClick={() => onSwitchSection('modul')}
+                  className="footer-link-btn"
+                >
+                  <BookOpen size={14} />
+                  <span>6. AI Modul Ajar Architect (Baru)</span>
                 </button>
               </li>
             </ul>
@@ -95,15 +105,21 @@ export default function Footer({ onSwitchSection }) {
                 </a>
               </li>
               <li>
-                <a href="/storyboard_prompt_generator.html" target="_blank" rel="noreferrer" className="footer-link-anchor">
+                <a href="/modul_ajar_prompt_generator.html" target="_blank" rel="noreferrer" className="footer-link-anchor">
                   <ExternalLink size={14} />
-                  <span>AI Storyboard Generator SPA</span>
+                  <span>AI Modul Ajar Architect SPA</span>
                 </a>
               </li>
               <li>
-                <a href="/ppt_prompt_generator.html" target="_blank" rel="noreferrer" className="footer-link-anchor">
+                <a href="/game_treasure_hunt_3d.html" target="_blank" rel="noreferrer" className="footer-link-anchor">
                   <ExternalLink size={14} />
-                  <span>AI PowerPoint Studio SPA</span>
+                  <span>3D Roblox Treasure Hunt Game</span>
+                </a>
+              </li>
+              <li>
+                <a href="/storyboard_prompt_generator.html" target="_blank" rel="noreferrer" className="footer-link-anchor">
+                  <ExternalLink size={14} />
+                  <span>AI Storyboard Generator SPA</span>
                 </a>
               </li>
               <li>
@@ -119,10 +135,10 @@ export default function Footer({ onSwitchSection }) {
         {/* Bottom Bar */}
         <div className="footer-bottom-row">
           <p className="footer-copy">
-            © 2026 <strong>Interaktif Game Panel</strong> — Gim Interaktif Informatika SMP. Didesain untuk Pembelajaran Aktif, Kolaboratif &amp; Menyenangkan.
+            © 2026 <strong>Interaktif Game Panel &amp; SEMPENSARI AI</strong> — Gim Interaktif &amp; Perangkat Ajar Kurikulum Merdeka. Didesain untuk Pembelajaran Aktif, Kolaboratif &amp; Menyenangkan.
           </p>
           <p className="footer-curriculum">
-            Kurikulum Merdeka • Berpikir Komputasional Fase D • IFP 4K
+            Kurikulum Merdeka • Deep Learning • Berpikir Komputasional Fase D • IFP 4K
           </p>
         </div>
       </div>

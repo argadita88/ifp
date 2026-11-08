@@ -13,6 +13,7 @@ import Toast from '../components/Toast';
 import Footer from '../components/Footer';
 import LKPDPromptStudio from '../components/lkpd/LKPDPromptStudio';
 import StoryboardPromptStudio from '../components/storyboard/StoryboardPromptStudio';
+import ModulAjarPromptStudio from '../components/modul_ajar/ModulAjarPromptStudio';
 
 export default function Home() {
   const [activeSection, setActiveSection] = useState('ppt');
@@ -103,6 +104,7 @@ export default function Home() {
         {activeSection === 'prompt' && <PromptGenerator showToast={showToast} />}
         {activeSection === 'lkpd' && <LKPDPromptStudio showToast={showToast} />}
         {activeSection === 'storyboard' && <StoryboardPromptStudio showToast={showToast} />}
+        {activeSection === 'modul' && <ModulAjarPromptStudio showToast={showToast} />}
       </main>
 
       {/* Multi-Column SaaS Footer */}

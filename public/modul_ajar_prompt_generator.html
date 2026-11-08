@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SEMPENSARI EduPlanner AI — Generator Prompt Modul Ajar Kurikulum Merdeka</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #070B14;
+      --panel: #0F172A;
+      --panel2: #1E293B;
+      --line: #334155;
+      --text: #F8FAFC;
+      --muted: #94A3B8;
+      --gold: #F59E0B;
+      --cyan: #38BDF8;
+      --emerald: #10B981;
+      --indigo: #6366F1;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: radial-gradient(ellipse at 15% 0%, #161D30 0, transparent 40%), var(--bg);
+      color: var(--text);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      padding: 22px;
+      min-height: 100vh;
+    }
+
+    header {
+      max-width: 1500px;
+      margin: 0 auto 20px;
+      padding: 20px 24px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: linear-gradient(120deg, #1E1B4B, #0F172A);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .brand { display: flex; align-items: center; gap: 14px; }
+    .logo {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #6366F1, #38BDF8);
+      display: grid;
+      place-items: center;
+      font-size: 25px;
+      color: #FFF;
+    }
+
+    .brand h1 { font-size: 19px; margin: 0 0 4px; }
+    .brand p { margin: 0; color: var(--muted); font-size: 12px; }
+
+    .tag {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      color: #A5B4FC;
+      border: 1px solid #4338CA;
+      background: #1E1B4B;
+      padding: 8px 12px;
+      border-radius: 99px;
+    }
+
+    main {
+      max-width: 1500px;
+      margin: auto;
+      display: grid;
+      grid-template-columns: minmax(0, 1.08fr) minmax(360px, .92fr);
+      gap: 20px;
+    }
+
+    .panel {
+      background: rgba(15, 23, 42, .96);
+      border: 1px solid var(--line);
+      border-radius: 17px;
+      padding: 21px;
+      min-width: 0;
+    }
+
+    .panel h2 {
+      font-size: 15px;
+      margin: 0 0 18px;
+      padding-bottom: 13px;
+      border-bottom: 1px solid var(--line);
+      color: var(--cyan);
+    }
+
+    .section {
+      margin: 20px 0 8px;
+      color: #D9E5F7;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+
+    .field { display: flex; flex-direction: column; gap: 7px; margin-bottom: 13px; }
+    .field label { font-size: 12px; color: var(--muted); font-weight: 700; }
+    .field input, .field select, .field textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      background: var(--panel2);
+      color: var(--text);
+      border-radius: 10px;
+      padding: 11px 12px;
+      font: inherit;
+      font-size: 13px;
+      outline: none;
+    }
+
+    .field textarea { resize: vertical; min-height: 75px; line-height: 1.5; }
+    .field input:focus, .field select:focus, .field textarea:focus {
+      border-color: var(--cyan);
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
+    }
+
+    .actions { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
+    .btn {
+      border: 0;
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-weight: 800;
+      cursor: pointer;
+      font: inherit;
+      font-size: 12px;
+    }
+
+    .primary {
+      background: linear-gradient(120deg, #6366F1, #38BDF8);
+      color: #FFF;
+      flex: 1;
+    }
+
+    .secondary { background: #1E293B; color: #E2E8F0; border: 1px solid var(--line); }
+
+    .output {
+      font: 12px/1.65 'DM Mono', monospace;
+      white-space: pre-wrap;
+      overflow: auto;
+      max-height: 72vh;
+      min-height: 520px;
+      padding: 17px;
+      background: #070B14;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      color: #E2E8F0;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #10B981;
+      color: white;
+      padding: 12px 17px;
+      border-radius: 10px;
+      display: none;
+      font-size: 13px;
+      font-weight: 700;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+    }
+
+    @media(max-width: 950px) {
+      main { grid-template-columns: 1fr; }
+      .output { max-height: none; min-height: 420px; }
+      .grid-3 { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="brand">
+      <div class="logo">📚</div>
+      <div>
+        <h1>SEMPENSARI EduPlanner AI — MODUL AJAR ARCHITECT</h1>
+        <p>Kurikulum Merdeka • Deep Learning • 10 Soal HOTS • LKPD • Python-Docx Ready</p>
+      </div>
+    </div>
+    <div class="tag">DOCX F4 &amp; DEEP LEARNING READY</div>
+  </header>
+
+  <main>
+    <section class="panel">
+      <h2>📘 1. Identitas Administrasi &amp; Pengesahan Modul Ajar</h2>
+
+      <div class="grid">
+        <div class="field" style="grid-column: span 2;">
+          <label for="schoolName">Nama Satuan Pendidikan / Sekolah</label>
+          <input id="schoolName" value="SMP Negeri 1 Jakarta" placeholder="Masukkan nama sekolah">
+        </div>
+        <div class="field">
+          <label for="subject">Mata Pelajaran</label>
+          <input id="subject" value="Informatika" placeholder="Contoh: IPA, Matematika">
+        </div>
+        <div class="field">
+          <label for="gradePhase">Jenjang, Kelas &amp; Fase</label>
+          <select id="gradePhase">
+            <option selected>SMP — Kelas 8 (Fase D)</option>
+            <option>SMP — Kelas 7 (Fase D)</option>
+            <option>SMP — Kelas 9 (Fase D)</option>
+            <option>SD — Kelas 1–2 (Fase A)</option>
+            <option>SD — Kelas 3–4 (Fase B)</option>
+            <option>SD — Kelas 5–6 (Fase C)</option>
+            <option>SMA/K — Kelas 10 (Fase E)</option>
+            <option>SMA/K — Kelas 11–12 (Fase F)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="semester">Semester &amp; Tahun Ajaran</label>
+          <input id="semester" value="Semester Ganjil / 2026-2027" placeholder="Ganjil / 2026-2027">
+        </div>
+        <div class="field">
+          <label for="teacherName">Nama Guru Penyusun &amp; NIP</label>
+          <input id="teacherName" value="Drs. Budi Santoso, M.Pd. / NIP. 198203152009021003" placeholder="Nama & NIP Guru">
+        </div>
+        <div class="field">
+          <label for="principalName">Nama Kepala Sekolah &amp; NIP</label>
+          <input id="principalName" value="Dr. Hj. Siti Rahmah, M.Pd. / NIP. 197505121999032001" placeholder="Nama & NIP Kepala Sekolah">
+        </div>
+        <div class="field">
+          <label for="approvalDate">Lokasi &amp; Tanggal Pengesahan</label>
+          <input id="approvalDate" value="Jakarta, 14 Juli 2026" placeholder="Contoh: Jakarta, 14 Juli 2026">
+        </div>
+      </div>
+
+      <div class="section">🎯 2. Konten Pembelajaran &amp; Model Pedagogi</div>
+      <div class="grid">
+        <div class="field" style="grid-column: span 2;">
+          <label for="topic">Topik Utama / Bab Pembelajaran</label>
+          <input id="topic" value="Berpikir Komputasional & Enkripsi Data" placeholder="Masukkan topik materi">
+        </div>
+        <div class="field" style="grid-column: span 2;">
+          <label for="subtopic">Submateri / Fokus Keterampilan</label>
+          <input id="subtopic" value="Algoritma Kriptografi Caesar Cipher & Proteksi Keamanan Siber" placeholder="Submateri spesifik">
+        </div>
+        <div class="field">
+          <label for="timeAlloc">Alokasi Waktu &amp; Pertemuan</label>
+          <select id="timeAlloc">
+            <option selected>2 x 40 Menit (1 Pertemuan)</option>
+            <option>4 x 40 Menit (2 Pertemuan)</option>
+            <option>6 x 40 Menit (3 Pertemuan)</option>
+            <option>8 x 40 Menit (4 Pertemuan)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="model">Model Pembelajaran Utama</label>
+          <select id="model">
+            <option selected>Problem Based Learning (PBL)</option>
+            <option>Project Based Learning (PjBL)</option>
+            <option>Discovery Learning</option>
+            <option>Inquiry Learning</option>
+            <option>Cooperative Learning</option>
+            <option>Contextual Teaching & Learning (CTL)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="cp">Capaian Pembelajaran (CP) Resmi / Acuan</label>
+        <textarea id="cp" placeholder="Kutipan CP resmi...">Peserta didik mampu memahami konsep konektivitas jaringan, enkripsi data sederhana, serta mendemonstrasikan praktik proteksi data pribadi dalam kehidupan digital.</textarea>
+      </div>
+
+      <div class="field">
+        <label for="tp">Tujuan Pembelajaran (TP ABCD &amp; KKTP)</label>
+        <textarea id="tp" placeholder="Tujuan pembelajaran spesifik..."> Melalui kegiatan diskusi kelompok dan simulasi dekripsi Caesar Cipher (Condition), peserta didik kelas 8 (Audience) mampu menganalisis pentingnya enkripsi data dan memecahkan pesan terenkripsi (Behavior) dengan tingkat akurasi minimal 80% (Degree).</textarea>
+      </div>
+
+      <div class="section">⚙️ 3. Pendekatan Khusus &amp; Spesifikasi Asesmen</div>
+      <div class="grid">
+        <div class="field">
+          <label for="deepLearning">Pendekatan Deep Learning</label>
+          <select id="deepLearning">
+            <option selected>Integrasi Mindful, Meaningful & Joyful Learning</option>
+            <option>Fokus Meaningful & Computational Thinking</option>
+            <option>Fokus Mindful & Problem Solving</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="differentiation">Pembelajaran Berdiferensiasi</label>
+          <select id="differentiation">
+            <option selected>Lengkap: Konten, Proses, Produk & Kesiapan Belajar</option>
+            <option>Diferensiasi Proses & Produk</option>
+            <option>Diferensiasi Kesiapan Belajar & Konten</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="notes">Kebutuhan Fasilitas &amp; Catatan Khusus (Unplugged / IFP)</label>
+        <textarea id="notes" placeholder="Contoh: Sediakan modul unplugged tanpa komputer jika jaringan terputus, gunakan layar sentuh IFP 4K."></textarea>
+      </div>
+
+      <div class="actions">
+        <button class="btn primary" onclick="generate()">✨ Buat Master Prompt Modul Ajar</button>
+        <button class="btn secondary" onclick="resetForm()">↺ Reset Form</button>
+      </div>
+    </section>
+
+    <!-- Output Panel -->
+    <section class="panel">
+      <h2>📄 Master Prompt Modul Ajar (Siap Salin ke ChatGPT / Claude / DeepSeek)</h2>
+      <div id="output" class="output">Klik "Buat Master Prompt Modul Ajar" untuk menyusun instruksi lengkap Kurikulum Merdeka + Python-Docx Code.</div>
+      <p style="font-size: 11px; color: var(--muted); margin-top: 8px;">
+        Prompt ini diarsitekturi berdasarkan spesifikasi <b>SEMPENSARI EduPlanner AI</b> untuk menghasilkan dokumen Word F4/Folio lengkap dengan 16 Bagian, Pengesahan 2 Kolom, 10 Soal HOTS dengan Kunci Jawaban Teracak Seimbang, LKPD Cetak, dan Rubrik Penilaian.
+      </p>
+      <div class="actions">
+        <button class="btn primary" onclick="copyPrompt()">📋 Salin Master Prompt</button>
+        <button class="btn secondary" onclick="downloadPrompt()">⬇ Unduh .TXT</button>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast">Master Prompt Modul Ajar berhasil disalin!</div>
+
+  <script>
+    const $ = id => document.getElementById(id);
+    function val(id) { return $(id).value; }
+
+    function generate() {
+      const schoolName = val('schoolName').trim() || 'SMP Negeri 1 Jakarta';
+      const subject = val('subject').trim() || 'Informatika';
+      const gradePhase = val('gradePhase');
+      const semester = val('semester').trim() || 'Ganjil / 2026-2027';
+      const teacherName = val('teacherName').trim() || 'Drs. Budi Santoso, M.Pd. / NIP...';
+      const principalName = val('principalName').trim() || 'Dr. Hj. Siti Rahmah, M.Pd. / NIP...';
+      const approvalDate = val('approvalDate').trim() || 'Jakarta, 14 Juli 2026';
+      const topic = val('topic').trim() || 'Topik Pembelajaran';
+      const subtopic = val('subtopic').trim() || 'Submateri Pokok';
+      const timeAlloc = val('timeAlloc');
+      const model = val('model');
+      const cp = val('cp').trim() || 'Capaian Pembelajaran Kurikulum Merdeka.';
+      const tp = val('tp').trim() || 'Tujuan Pembelajaran ABCD.';
+      const deepLearning = val('deepLearning');
+      const differentiation = val('differentiation');
+      const notes = val('notes').trim() || 'Tidak ada catatan tambahan.';
+
+      const prompt = `# MASTER PROMPT SYSTEM: SEMPENSARI EduPlanner AI — ARCHITECT MODUL AJAR KURIKULUM MERDEKA
+# DOKUMEN OUTPUT WAJIB: SCRIPT PYTHON PYTHON-DOCX (.DOCX F4/FOLIO) & NASKAH LENGKAP MODUL AJAR
+
+Bertindaklah sebagai **SEMPENSARI EduPlanner AI**, sebuah asisten kecerdasan buatan profesional yang mengintegrasikan peran sebagai Ahli Kurikulum Merdeka, Guru Penggerak, Ahli Pembelajaran Berdiferensiasi, Spesialis Deep Learning (Mindful, Meaningful, Joyful), Ahli Computational Thinking, serta Microsoft Word Document Developer (python-docx).
+
+Buatkan **MODUL AJAR KURIKULUM MERDEKA LENGKAP & KOMPREHENSIF 16 BAGIAN** berdasarkan identitas dan spesifikasi berikut:
+
+==================================================
+1. IDENTITAS ADMINISTRASI & PENGESAHAN MODUL
+==================================================
+- Nama Satuan Pendidikan: ${schoolName}
+- Mata Pelajaran: ${subject}
+- Jenjang, Kelas & Fase: ${gradePhase}
+- Semester / Tahun Ajaran: ${semester}
+- Nama Guru Penyusun: ${teacherName}
+- Nama Kepala Sekolah: ${principalName}
+- Lokasi & Tanggal Pengesahan: ${approvalDate}
+
+==================================================
+2. SPESIFIKASI KONTEN PEMBELAJARAN
+==================================================
+- Topik Utama / Bab: ${topic}
+- Submateri / Fokus Keterampilan: ${subtopic}
+- Alokasi Waktu & Pertemuan: ${timeAlloc}
+- Model Pembelajaran Utama: ${model}
+- Pendekatan Pembelajaran: ${deepLearning}
+- Pembelajaran Berdiferensiasi: ${differentiation}
+- Catatan Fasilitas & Sarana: ${notes}
+
+==================================================
+3. CAPAIAN & TUJUAN PEMBELAJARAN (CP & TP ABCD)
+==================================================
+- Capaian Pembelajaran (CP):
+  "${cp}"
+- Tujuan Pembelajaran (TP ABCD & KKTP):
+  "${tp}"
+
+==================================================
+4. KETENTUAN WAJIB STRUKTUR DOKUMEN MODUL AJAR (16 BAGIAN)
+==================================================
+Susun dokumen Modul Ajar secara utuh dan terstruktur mencakup:
+BAGIAN I. HALAMAN SAMPUL (Warna Navy Blue, Putih & Gold)
+BAGIAN II. LEMBAR PENGESAHAN (Tabel 2 Kolom Sejajar: Kepala Sekolah di Kiri, Guru di Kanan, Lokasi & Tanggal)
+BAGIAN III. IDENTITAS MODUL (Tabel Rinci Administrasi)
+BAGIAN IV. KOMPONEN AWAL PEMBELAJARAN (Kompetensi Awal, Profil Lulusan & Solusi Hambatan)
+BAGIAN V. CP, TP & KKTP (Pemetaan CP → TP → Indikator → Aktivitas → Asesmen)
+BAGIAN VI. PEMAHAMAN BERMAKNA & PERTANYAAN PEMANTIK
+BAGIAN VII. PEMETAAN MATERI & RENCANA PERTEMUAN (Tabel Alur Pertemuan)
+BAGIAN VIII. LANGKAH-LANGKAH PEMBELAJARAN PER PERTEMUAN (Tabel Pendahuluan, Inti & Penutup)
+BAGIAN IX. STRATEGI PEMBELAJARAN BERDIFERENSIASI (Konten, Proses, Produk, Kesiapan, Minat, Profil)
+BAGIAN X. ASESMEN PEMBELAJARAN & SOAL EVALUASI HOTS WAJIB TEPAT 10 SOAL
+  - TEPAT 10 Soal Pilihan Ganda (A, B, C, D) dengan 1 Jawaban Benar + 3 Pilihan Pengecoh (Distractors) Berkualitas Logis.
+  - DISTRIBUSI KUNCI JAWABAN WAJIB SEIMBANG & TERACAK (Distribusi mendekati 25% A, 25% B, 25% C, 25% D).
+  - Dilengkapi Kisi-kisi Soal, Kunci Jawaban + Pembahasan Khusus Guru, serta Pedoman Penskoran.
+BAGIAN XI. LKPD SIAP CETAK (Petunjuk, Langkah Kerja, Tabel Pengamatan & Pertanyaan Analisis)
+BAGIAN XII. PROGRAM REMEDIAL & PENGAYAAN
+BAGIAN XIII. REFLEKSI GURU & PESERTA DIDIK
+BAGIAN XIV. MEDIA, SUMBER BELAJAR & GLOSARIUM
+BAGIAN XV. KISI-KISI & RUBRIK PENILAIAN SKALA 1–4
+BAGIAN XVI. LEMBAR PENGESAHAN PENUTUP ADMINISTRATIF
+
+==================================================
+5. SPESIFIKASI FORMAT KERTAS & PYTHON-DOCX GENERATOR
+==================================================
+1. Hasilkan naskah lengkap Modul Ajar sekaligus SCRIPT PYTHON `python-docx` untuk meng-generate file Word `.docx` secara otomatis!
+2. Kertas WAJIB F4/Folio (Ukuran Lebar: 21.5 cm, Tinggi: 33 cm) dengan Margin 2 cm pada seluruh sisi.
+3. Tipografi: Judul Sampul 20-24pt Bold, Judul Bab 14-16pt Bold, Isi Teks 11pt (Spasi 1.15 Justify), Isi Tabel 9-10pt.
+4. Warna Desain: Navy Blue (#1E1B4B), Akses Biru Muda & Gold.
+
+Silakan hasilkan naskah Modul Ajar Kurikulum Merdeka tentang "${topic}" beserta script Python `python-docx` secara utuh, lengkap, dan tanpa terpotong!`;
+
+      $('output').textContent = prompt;
+    }
+
+    function copyPrompt() {
+      const t = $('output').textContent;
+      navigator.clipboard.writeText(t).then(() => toast()).catch(() => {
+        const x = document.createElement('textarea');
+        x.value = t;
+        document.body.appendChild(x);
+        x.select();
+        document.execCommand('copy');
+        x.remove();
+        toast();
+      });
+    }
+
+    function downloadPrompt() {
+      const blob = new Blob([$('output').textContent], { type: 'text/plain;charset=utf-8' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'Master_Prompt_Modul_Ajar_SEMPENSARI_AI.txt';
+      a.click();
+      URL.revokeObjectURL(a.href);
+    }
+
+    function toast() {
+      $('toast').style.display = 'block';
+      setTimeout(() => $('toast').style.display = 'none', 2200);
+    }
+
+    function resetForm() {
+      location.reload();
+    }
+
+    // Attach real-time input and change listeners
+    document.querySelectorAll('input, select, textarea').forEach(el => {
+      el.addEventListener('input', generate);
+      el.addEventListener('change', generate);
+    });
+
+    generate();
+  </script>
+</body>
+</html>

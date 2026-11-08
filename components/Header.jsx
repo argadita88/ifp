@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Gamepad2, Presentation, Rocket, Sparkles, GraduationCap, Film, Sun, Moon, Menu, X } from 'lucide-react';
+import { Gamepad2, Presentation, Rocket, Sparkles, GraduationCap, Film, BookOpen, Sun, Moon, Menu, X } from 'lucide-react';
 
 export default function Header({ activeSection, onSwitchSection, theme, onToggleTheme }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -83,6 +83,15 @@ export default function Header({ activeSection, onSwitchSection, theme, onToggle
           >
             <Film size={16} strokeWidth={2} />
             <span>AI Storyboard</span>
+          </button>
+
+          <button
+            type="button"
+            className={`header-nav-btn header-lkpd-btn ${activeSection === 'modul' ? 'active' : ''}`}
+            onClick={() => handleNavClick('modul')}
+          >
+            <BookOpen size={16} strokeWidth={2} />
+            <span>AI Modul Ajar</span>
             <span className="header-new-badge">BARU</span>
           </button>
 
@@ -134,7 +143,7 @@ export default function Header({ activeSection, onSwitchSection, theme, onToggle
                 <Rocket size={18} />
                 <span>2. Showcase Live Game Arena</span>
               </div>
-              <span className="mnl-badge mnl-live">2 Game</span>
+              <span className="mnl-badge mnl-live">3 Game</span>
             </button>
 
             <button
@@ -169,6 +178,18 @@ export default function Header({ activeSection, onSwitchSection, theme, onToggle
               <div className="mnl-left">
                 <Film size={18} />
                 <span>5. AI Storyboard Studio</span>
+              </div>
+              <span className="mnl-badge mnl-new">STORYBOARD</span>
+            </button>
+
+            <button
+              type="button"
+              className={`mobile-nav-link ${activeSection === 'modul' ? 'active' : ''}`}
+              onClick={() => handleNavClick('modul')}
+            >
+              <div className="mnl-left">
+                <BookOpen size={18} />
+                <span>6. AI Modul Ajar Architect</span>
               </div>
               <span className="mnl-badge mnl-new">BARU</span>
             </button>

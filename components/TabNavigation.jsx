@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Presentation, Gamepad2, Sparkles, GraduationCap, Film } from 'lucide-react';
+import { Presentation, Gamepad2, Sparkles, GraduationCap, Film, BookOpen } from 'lucide-react';
 
 export default function TabNavigation({ activeSection, onSwitchSection }) {
   const tabs = [
@@ -39,6 +39,13 @@ export default function TabNavigation({ activeSection, onSwitchSection }) {
       sub: 'Visual Scene & Panel Flow Architect',
       badge: 'BARU • AI',
       icon: Film,
+    },
+    {
+      id: 'modul',
+      title: 'AI Modul Ajar',
+      sub: 'Kurikulum Merdeka & Python-Docx F4',
+      badge: 'SEMPENSARI',
+      icon: BookOpen,
     },
   ];
 

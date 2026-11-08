@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Presentation, Gamepad2, Sparkles, GraduationCap, Film } from 'lucide-react';
+import { Presentation, Gamepad2, Sparkles, GraduationCap, Film, BookOpen } from 'lucide-react';
 
 export default function MobileBottomNav({ activeSection, onSwitchSection }) {
   return (
@@ -64,6 +64,18 @@ export default function MobileBottomNav({ activeSection, onSwitchSection }) {
           <Film size={18} strokeWidth={activeSection === 'storyboard' ? 2.4 : 1.8} />
         </div>
         <span className="bnav-text">Storyboard</span>
+      </button>
+
+      <button
+        type="button"
+        className={`bnav-item ${activeSection === 'modul' ? 'active' : ''}`}
+        onClick={() => onSwitchSection('modul')}
+        aria-label="AI Modul Ajar"
+      >
+        <div className="bnav-icon-pill">
+          <BookOpen size={18} strokeWidth={activeSection === 'modul' ? 2.4 : 1.8} />
+        </div>
+        <span className="bnav-text">Modul Ajar</span>
       </button>
     </nav>
   );
