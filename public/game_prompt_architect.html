@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Game Prompt Architect v4.0 — Single Web Page Application</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #070B14;
+      --bg-card: #0F172A;
+      --bg-input: #1E293B;
+      --border: rgba(255, 255, 255, 0.12);
+      --primary: #38BDF8;
+      --primary-gradient: linear-gradient(135deg, #0284C7 0%, #2563EB 100%);
+      --accent-purple: #A855F7;
+      --accent-amber: #F59E0B;
+      --accent-emerald: #10B981;
+      --accent-rose: #F43F5E;
+      --text: #F8FAFC;
+      --text-muted: #94A3B8;
+
+      /* User Custom Color Palette Preview */
+      --c-primary: #38BDF8;
+      --c-secondary: #0284C7;
+      --c-accent: #F59E0B;
+      --c-bg: #070B14;
+      --c-text: #FFFFFF;
+      --c-button: #2563EB;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+    }
+
+    /* Header Bar */
+    .header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 24px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-icon {
+      width: 44px;
+      height: 44px;
+      background: var(--primary-gradient);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      box-shadow: 0 0 16px rgba(56, 189, 248, 0.35);
+    }
+
+    .brand-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #FFF;
+      letter-spacing: -0.01em;
+    }
+
+    .brand-sub {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .badge-pill {
+      background: rgba(56, 189, 248, 0.15);
+      color: var(--primary);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Layout Grid */
+    .workspace-grid {
+      display: grid;
+      grid-template-columns: 1.25fr 1fr;
+      gap: 20px;
+      flex: 1;
+    }
+
+    @media (max-width: 1080px) {
+      .workspace-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .panel-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .panel-title {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 12px;
+    }
+
+    .form-section {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 10px;
+      padding: 14px;
+    }
+
+    .section-head {
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: #FFF;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-head span.num {
+      background: var(--primary-gradient);
+      color: #FFF;
+      font-size: 0.7rem;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 6px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    input[type="text"], input[type="number"], select, textarea {
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      color: #FFF;
+      font-size: 0.85rem;
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2);
+    }
+
+    /* Cards Grid for Themes & Genres */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 10px;
+      max-height: 220px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .selectable-tile {
+      background: var(--bg-input);
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 10px;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .selectable-tile:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+    }
+
+    .selectable-tile.active {
+      border-color: var(--primary);
+      background: rgba(56, 189, 248, 0.15);
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.3);
+    }
+
+    .tile-icon {
+      font-size: 22px;
+    }
+
+    .tile-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #FFF;
+      line-height: 1.2;
+    }
+
+    /* Custom Color Pickers */
+    .color-pickers-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .color-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      padding: 6px 10px;
+      border-radius: 8px;
+    }
+
+    .color-item input[type="color"] {
+      width: 24px;
+      height: 24px;
+      padding: 0;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      background: none;
+    }
+
+    .color-item span {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .palette-preview-box {
+      margin-top: 6px;
+      padding: 10px;
+      border-radius: 8px;
+      background: var(--c-bg);
+      border: 2px solid var(--c-primary);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .ppb-text {
+      color: var(--c-text);
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    .ppb-btn {
+      background: var(--c-button);
+      color: #FFF;
+      border: none;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.7rem;
+      font-weight: 700;
+    }
+
+    /* Chips */
+    .chip-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .chip-btn {
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 6px 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .chip-btn:hover {
+      border-color: var(--primary);
+      color: #FFF;
+    }
+
+    .chip-btn.active {
+      background: var(--primary-gradient);
+      border-color: transparent;
+      color: #FFF;
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
+    }
+
+    /* Output Viewport */
+    .code-viewport {
+      background: #030712;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.76rem;
+      color: #E2E8F0;
+      line-height: 1.65;
+      flex: 1;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      max-height: 600px;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 10px;
+      margin-top: auto;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      flex: 1;
+      min-width: 140px;
+      background: var(--primary-gradient);
+      color: #FFF;
+      border: none;
+      padding: 12px 18px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+
+    .btn-primary:hover {
+      opacity: 0.92;
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: var(--bg-input);
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.82rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--primary);
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--accent-emerald);
+      color: #FFF;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      display: none;
+      z-index: 1000;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Header Bar -->
+  <div class="header-bar">
+    <div class="brand">
+      <div class="brand-icon">🎮</div>
+      <div>
+        <div class="brand-title">AI GAME PROMPT ARCHITECT v4.0</div>
+        <div class="brand-sub">Single Web Page Application — Anti-Broken Educational Game Generator</div>
+      </div>
+    </div>
+    <div class="badge-pill">100% SINGLE-FILE HTML5 · ZERO SERVER</div>
+  </div>
+
+  <div class="workspace-grid">
+    <!-- Configurator Panel -->
+    <div class="panel-card custom-scrollbar" style="max-height: 820px; overflow-y: auto;">
+      <div class="panel-title">
+        <span>⚡ Muti-Parameter Architectural Configurator</span>
+        <button type="button" class="btn-secondary" style="padding: 4px 10px; font-size: 0.72rem;" onclick="randomizeAll()">🎲 Randomize Design</button>
+      </div>
+
+      <!-- 1. Visual Game Design Selector (15 Themes) -->
+      <div class="form-section">
+        <div class="section-head">
+          <span class="num">1</span>
+          <span>VISUAL GAME DESIGN SELECTOR (15 TEMA VISUAL)</span>
+        </div>
+        <div class="cards-grid" id="themeGrid"></div>
+      </div>
+
+      <!-- 2. Color Palette Selector & Custom Pickers -->
+      <div class="form-section">
+        <div class="section-head">
+          <span class="num">2</span>
+          <span>COLOR PALETTE SELECTOR &amp; CUSTOM PICKER</span>
+        </div>
+        <div class="form-group">
+          <label>Preset Palet Warna</label>
+          <select id="palettePreset" onchange="applyPalettePreset(this.value)">
+            <option value="Cyber Neon">Cyber Neon (#38BDF8, #0284C7, #F59E0B)</option>
+            <option value="Ocean Blue">Ocean Blue (#0284C7, #0369A1, #38BDF8)</option>
+            <option value="Sunset Orange">Sunset Orange (#F97316, #EA580C, #FBBF24)</option>
+            <option value="Candy Pop">Candy Pop (#EC4899, #D946EF, #38BDF8)</option>
+            <option value="Galaxy Purple">Galaxy Purple (#A855F7, #7E22CE, #06B6D4)</option>
+            <option value="Emerald Gold">Emerald Gold (#10B981, #047857, #F59E0B)</option>
+
+            <option value="Custom Palette">Custom Palette (Manual Color Picker)</option>
+          </select>
+        </div>
+
+        <div class="color-pickers-row">
+          <div class="color-item"><input type="color" id="cPrimary" value="#38BDF8" onchange="updateCustomColors()"><span>Primary</span></div>
+          <div class="color-item"><input type="color" id="cSecondary" value="#0284C7" onchange="updateCustomColors()"><span>Secondary</span></div>
+          <div class="color-item"><input type="color" id="cAccent" value="#F59E0B" onchange="updateCustomColors()"><span>Accent</span></div>
+          <div class="color-item"><input type="color" id="cBg" value="#070B14" onchange="updateCustomColors()"><span>Background</span></div>
+          <div class="color-item"><input type="color" id="cText" value="#FFFFFF" onchange="updateCustomColors()"><span>Text</span></div>
+          <div class="color-item"><input type="color" id="cButton" value="#2563EB" onchange="updateCustomColors()"><span>Button</span></div>
+        </div>
+
+        <div class="palette-preview-box" id="palettePreview">
+          <span class="ppb-text">Live Preview UI Palette</span>
+          <button type="button" class="ppb-btn">Tombol Demo</button>
+        </div>
+      </div>
+
+      <!-- 3. Animation Customizer -->
+      <div class="form-section">
+        <div class="section-head">
+          <span class="num">3</span>
+          <span>ANIMATION CUSTOMIZER &amp; INTENSITY</span>
+        </div>
+        <div class="grid-2">
+          <div class="form-group">
+            <label>Tingkat Animasi</label>
+            <select id="animLevel" onchange="compilePrompt()">
+              <option value="Premium Animation (Confetti, Fireworks, Particle Effects, Parallax, Screen Shake)">Premium (Particle, Confetti &amp; Parallax)</option>
+              <option value="Dynamic Animation (Animated Cards, Floating Objects, Character Move)">Dynamic (Card Motion &amp; Floating)</option>
+              <option value="Basic Animation (Hover, Fade, Progress & Score Pop-up)">Basic (Hover &amp; Fade)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Kontrol Intensitas Animasi</label>
+            <div class="chip-group" id="animIntensityGroup">
+              <button type="button" class="chip-btn" data-val="Minimal">Minimal</button>
+              <button type="button" class="chip-btn active" data-val="Normal">Normal</button>
+              <button type="button" class="chip-btn" data-val="Maximum">Maximum</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. Game Genre Selector (18 Genres) -->
+      <div class="form-section">
+        <div class="section-head">
+          <span class="num">4</span>
+          <span>GAME GENRE SELECTOR (18 GENRE MEKANISME ASLI)</span>
+        </div>
+        <div class="cards-grid" id="genreGrid"></div>
+      </div>
+
+      <!-- 5. Local Multiplayer Mode (No Server Required) -->
+      <div class="form-section">
+        <div class="section-head">
+          <span class="num">5</span>
+          <span>MULTIPLAYER LOKAL — TANPA SERVER (5 MODE)</span>
+        </div>
+        <div class="form-group">
+          <label>Pilih Mode Permainan</label>
+          <div class="chip-group" id="multiplayerGroup">
+            <button type="button" class="chip-btn active" data-val="MODE 1 — SINGLE PLAYER (1 Pemain)">Single Player</button>
+            <button type="button" class="chip-btn" data-val="MODE 2 — TWO PLAYERS (2 Pemain Bergantian/Bersamaan)">Two Players</button>
+            <button type="button" class="chip-btn" data-val="MODE 3 — TEAM BATTLE (2-6 Tim Kolaboratif)">Team Battle</button>
+            <button type="button" class="chip-btn" data-val="MODE 4 — CLASS COMPETITION (5-40 Siswa / CSV Import)">Class Competition</button>
+            <button type="button" class="chip-btn" data-val="MODE 5 — LOCAL PARTY (Pass the Device / Eliminasi)">Local Party</button>
+          </div>
+        </div>
+
+        <div id="classCsvBox" style="display: none; margin-top: 6px;">
+          <label>Import Daftar Siswa (Format CSV / Pisahkan koma)</label>
+          <textarea id="classCsvInput" rows="2" placeholder="Contoh: Ahmad, Budi, Citra, Doni, Eka, Fitri"></textarea>
+        </div>
+      </div>
+
+      <!-- 6. Educational Content & Question Bank -->
+      <div class="form-section">
+        <div class="section-head">
+          <span class="num">6</span>
+          <span>EDUCATIONAL CONTENT ENGINE &amp; GENERATOR SOAL HOTS</span>
+        </div>
+
+        <div class="form-group" style="grid-column: span 2;">
+          <label>Nama Sekolah / Instansi</label>
+          <input type="text" id="schoolName" value="SMP Negeri 1 Jakarta" onchange="compilePrompt()">
+        </div>
+
+        <div class="grid-2">
+          <div class="form-group">
+            <label>Mata Pelajaran &amp; Topik</label>
+            <input type="text" id="subject" value="Informatika - Berpikir Komputasional" onchange="compilePrompt()">
+          </div>
+          <div class="form-group">
+            <label>Target Jenjang &amp; Kelas</label>
+            <input type="text" id="grade" value="SMP Kelas 8 (Fase D)" onchange="compilePrompt()">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Mode Penyusunan Bank Soal</label>
+          <div class="chip-group" id="questionModeGroup">
+            <button type="button" class="chip-btn active" data-val="🤖 Generasi Otomatis AI (HOTS + Pengecoh + Kunci Jawaban Teracak Seimbang)">🤖 Otomatis AI (HOTS + Pengecoh)</button>
+            <button type="button" class="chip-btn" data-val="✍️ Input Manual Bank Soal">✍️ Input Manual Soal</button>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="form-group">
+            <label>Jumlah Soal</label>
+            <select id="questionCount" onchange="compilePrompt()">
+              <option value="5 Soal (Kilat)">5 Soal</option>
+              <option value="10 Soal (Ideal)" selected>10 Soal</option>
+              <option value="15 Soal (Standar)">15 Soal</option>
+              <option value="20 Soal (Komprehensif)">20 Soal</option>
+              <option value="30 Soal (Ujian)">30 Soal</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Format Variasi Soal</label>
+            <select id="questionFormat" onchange="compilePrompt()">
+              <option value="Multiple Choice & True/False">Pilihan Ganda &amp; Benar/Salah</option>
+              <option value="Matching & Drag and Drop">Menjodohkan &amp; Drag &amp; Drop</option>
+              <option value="Short Answer & Sequencing">Isian Singkat &amp; Pengurutan</option>
+              <option value="Problem Solving & Case Study">Problem Solving HOTS</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group" id="manualBankBox" style="display: none;">
+          <label>Bank Soal Manual / Catatan Tambahan (Opsional)</label>
+          <textarea id="questionBank" rows="3" onchange="compilePrompt()">Q1: Apa fungsi utama algoritma? | A1: Langkah sistematis pemecahan masalah.
+Q2: Apakah Caesar Cipher termasuk enkripsi klasik? | A2: Benar.
+Q3: Satuan kecepatan transfer data internet? | A3: Mbps.</textarea>
+        </div>
+      </div>
+
+      <!-- 7. Game Difficulty & Audio -->
+      <div class="form-section">
+        <div class="section-head">
+          <span class="num">7</span>
+          <span>DIFFICULTY &amp; WEB AUDIO ENGINE</span>
+        </div>
+
+        <div class="grid-2">
+          <div class="form-group">
+            <label>Tingkat Kesulitan</label>
+            <select id="difficulty" onchange="compilePrompt()">
+              <option value="Adaptive (Menyesuaikan Performa Siswa)">Adaptive (Otomatis)</option>
+              <option value="Easy (Mudah / Pemula)">Easy (Mudah)</option>
+              <option value="Normal (Standar)">Normal (Sedang)</option>
+              <option value="Hard (Tantangan Tinggi)">Hard (Tinggi)</option>
+              <option value="Expert (Master HOTS)">Expert (Sangat Tinggi)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Tema Audio Web Audio API</label>
+            <select id="audioTheme" onchange="compilePrompt()">
+              <option value="Basic Arcade SFX (Web Audio API Synthesizer)">Basic Arcade SFX</option>
+              <option value="Futuristic Cyber Sound (Web Audio API)">Futuristic Cyber SFX</option>
+              <option value="Cartoon Upbeat SFX (Web Audio API)">Cartoon Upbeat SFX</option>
+              <option value="Fantasy Magic SFX (Web Audio API)">Fantasy Magic SFX</option>
+              <option value="No Audio / Mute">No Audio (Mute)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="btn-group">
+        <button type="button" class="btn-primary" onclick="compilePrompt()">✨ Generate Master Prompt SPA v4.0</button>
+        <button type="button" class="btn-secondary" onclick="resetForm()">🔄 Reset Configuration</button>
+      </div>
+    </div>
+
+    <!-- Output Compiled Prompt Panel -->
+    <div class="panel-card">
+      <div class="panel-title">
+        <span>🚀 Compiled Master Prompt (Siap Paste ke AI)</span>
+        <span class="badge-pill">OUTPUT: 1 FILE HTML5 STANDALONE</span>
+      </div>
+
+      <div class="code-viewport" id="promptViewport">Mengkompilasi prompt master...</div>
+
+      <div class="btn-group">
+        <button type="button" class="btn-primary" onclick="copyPrompt()">📋 Salin Master Prompt</button>
+        <button type="button" class="btn-secondary" onclick="downloadTxt()">💾 Unduh .TXT</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">✅ Master Prompt berhasil disalin!</div>
+
+  <script>
+    // 15 Themes Data
+    const THEMES = [
+      { id: 'Cartoon Adventure', icon: '🎨' },
+      { id: '3D Cartoon Style', icon: '🧊' },
+      { id: 'Fantasy Kingdom', icon: '🏰' },
+      { id: 'Neon Cyberpunk', icon: '🌆' },
+      { id: 'Retro Arcade', icon: '👾' },
+      { id: 'Pixel Art', icon: '🕹️' },
+      { id: 'Cute Kawaii', icon: '🌸' },
+      { id: 'Modern Minimalist', icon: '✨' },
+      { id: 'Comic Book', icon: '💥' },
+      { id: 'Space Galaxy', icon: '🚀' },
+      { id: 'Underwater World', icon: '🌊' },
+      { id: 'Jungle Adventure', icon: '🌴' },
+      { id: 'Futuristic Technology', icon: '🤖' },
+      { id: 'Isometric World', icon: '📐' },
+      { id: 'Premium Game UI', icon: '💎' }
+    ];
+
+    // 18 Genres Data
+    const GENRES = [
+      { id: 'Platformer Adventure', icon: '🏃' },
+      { id: 'Space Shooter', icon: '🚀' },
+      { id: 'Quiz Arcade', icon: '⚡' },
+      { id: 'Racing Challenge', icon: '🏎️' },
+      { id: 'Memory Matching', icon: '🃏' },
+      { id: 'Puzzle & Logic', icon: '🧩' },
+      { id: 'Drag and Drop', icon: '🖐️' },
+      { id: 'Escape Room', icon: '🔑' },
+      { id: 'Treasure Hunt', icon: '🗺️' },
+      { id: 'Tower Defense', icon: '🏰' },
+      { id: 'Board Game', icon: '🎲' },
+      { id: 'Word Adventure', icon: '🔤' },
+      { id: 'Educational RPG', icon: '🛡️' },
+      { id: 'Interactive Story', icon: '📖' },
+      { id: 'Strategy Battle', icon: '⚔️' },
+      { id: 'Survival Challenge', icon: '🌲' },
+      { id: 'Reaction Game', icon: '⏱️' },
+      { id: 'Simulation Game', icon: '🏙️' }
+    ];
+
+    let selectedTheme = 'Neon Cyberpunk';
+    let selectedGenre = 'Space Shooter';
+    let selectedMultiplayer = 'MODE 1 — SINGLE PLAYER (1 Pemain)';
+    let selectedAnimIntensity = 'Normal';
+    let selectedQuestionMode = '🤖 Generasi Otomatis AI (HOTS + Pengecoh + Kunci Jawaban Teracak Seimbang)';
+
+    // Render Theme Grid
+    function renderThemes() {
+      const container = document.getElementById('themeGrid');
+      container.innerHTML = THEMES.map(t => `
+        <div class="selectable-tile ${t.id === selectedTheme ? 'active' : ''}" onclick="selectTheme('${t.id}')">
+          <div class="tile-icon">${t.icon}</div>
+          <span class="tile-title">${t.id}</span>
+        </div>
+      `).join('');
+    }
+
+    function selectTheme(id) {
+      selectedTheme = id;
+      renderThemes();
+      compilePrompt();
+    }
+
+    // Render Genre Grid
+    function renderGenres() {
+      const container = document.getElementById('genreGrid');
+      container.innerHTML = GENRES.map(g => `
+        <div class="selectable-tile ${g.id === selectedGenre ? 'active' : ''}" onclick="selectGenre('${g.id}')">
+          <div class="tile-icon">${g.icon}</div>
+          <span class="tile-title">${g.id}</span>
+        </div>
+      `).join('');
+    }
+
+    function selectGenre(id) {
+      selectedGenre = id;
+      renderGenres();
+      compilePrompt();
+    }
+
+    // Handlers
+    document.querySelectorAll('#animIntensityGroup .chip-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#animIntensityGroup .chip-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        selectedAnimIntensity = btn.getAttribute('data-val');
+        compilePrompt();
+      });
+    });
+
+    document.querySelectorAll('#multiplayerGroup .chip-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#multiplayerGroup .chip-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        selectedMultiplayer = btn.getAttribute('data-val');
+        document.getElementById('classCsvBox').style.display = selectedMultiplayer.includes('CLASS') ? 'block' : 'none';
+        compilePrompt();
+      });
+    });
+
+    document.querySelectorAll('#questionModeGroup .chip-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#questionModeGroup .chip-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        selectedQuestionMode = btn.getAttribute('data-val');
+        document.getElementById('manualBankBox').style.display = selectedQuestionMode.includes('Manual') ? 'block' : 'none';
+        compilePrompt();
+      });
+    });
+
+    function applyPalettePreset(val) {
+      if (val === 'Cyber Neon') { setColors('#38BDF8', '#0284C7', '#F59E0B', '#070B14', '#FFFFFF', '#2563EB'); }
+      else if (val === 'Ocean Blue') { setColors('#0284C7', '#0369A1', '#38BDF8', '#0F172A', '#FFFFFF', '#0284C7'); }
+      else if (val === 'Sunset Orange') { setColors('#F97316', '#EA580C', '#FBBF24', '#180E08', '#FFFFFF', '#EA580C'); }
+      else if (val === 'Candy Pop') { setColors('#EC4899', '#D946EF', '#38BDF8', '#0F0B18', '#FFFFFF', '#D946EF'); }
+      else if (val === 'Galaxy Purple') { setColors('#A855F7', '#7E22CE', '#06B6D4', '#0A0612', '#FFFFFF', '#7E22CE'); }
+      else if (val === 'Emerald Gold') { setColors('#10B981', '#047857', '#F59E0B', '#04120D', '#FFFFFF', '#047857'); }
+      updateCustomColors();
+    }
+
+    function setColors(p, s, a, bg, txt, btn) {
+      document.getElementById('cPrimary').value = p;
+      document.getElementById('cSecondary').value = s;
+      document.getElementById('cAccent').value = a;
+      document.getElementById('cBg').value = bg;
+      document.getElementById('cText').value = txt;
+      document.getElementById('cButton').value = btn;
+    }
+
+    function updateCustomColors() {
+      const p = document.getElementById('cPrimary').value;
+      const s = document.getElementById('cSecondary').value;
+      const a = document.getElementById('cAccent').value;
+      const bg = document.getElementById('cBg').value;
+      const txt = document.getElementById('cText').value;
+      const btn = document.getElementById('cButton').value;
+
+      document.documentElement.style.setProperty('--c-primary', p);
+      document.documentElement.style.setProperty('--c-secondary', s);
+      document.documentElement.style.setProperty('--c-accent', a);
+      document.documentElement.style.setProperty('--c-bg', bg);
+      document.documentElement.style.setProperty('--c-text', txt);
+      document.documentElement.style.setProperty('--c-button', btn);
+      compilePrompt();
+    }
+
+    function randomizeAll() {
+      const randomTheme = THEMES[Math.floor(Math.random() * THEMES.length)].id;
+      const randomGenre = GENRES[Math.floor(Math.random() * GENRES.length)].id;
+      selectTheme(randomTheme);
+      selectGenre(randomGenre);
+    }
+
+    function compilePrompt() {
+      const p = document.getElementById('cPrimary').value;
+      const s = document.getElementById('cSecondary').value;
+      const a = document.getElementById('cAccent').value;
+      const bg = document.getElementById('cBg').value;
+      const txt = document.getElementById('cText').value;
+      const btnColor = document.getElementById('cButton').value;
+
+      const schoolName = document.getElementById('schoolName').value || 'Nama Sekolah / Instansi';
+      const animLevel = document.getElementById('animLevel').value;
+      const subject = document.getElementById('subject').value;
+      const grade = document.getElementById('grade').value;
+      const questionCount = document.getElementById('questionCount').value;
+      const questionFormat = document.getElementById('questionFormat').value;
+      const questionBank = document.getElementById('questionBank').value;
+      const difficulty = document.getElementById('difficulty').value;
+      const audioTheme = document.getElementById('audioTheme').value;
+      const classCsv = document.getElementById('classCsvInput').value;
+
+      const masterPrompt = `### SYSTEM PROMPT: ARCHITECTING 100% SINGLE-FILE HTML5 EDUCATIONAL GAME (NO SERVER)
+
+Bertindak sebagai Senior Web Game Developer, Game Designer, UI/UX Designer, Animation Specialist, dan Instructional Designer.
+Kembangkan generator game edukasi berbasis Single Web Page Application yang menghasilkan SATU FILE HTML LENGKAP, MANDIRI, INTERAKTIF, RESPONSIF, dan dapat langsung dimainkan secara offline melalui browser.
+
+==================================================
+1. LINGKUNGAN TEKNIS & SINGLE-FILE ANTI-BROKEN ENGINE
+==================================================
+- Wajib menggunakan: HTML5, CSS3, Vanilla JavaScript, Canvas API, Web Audio API, dan LocalStorage.
+- DILARANG menggunakan backend, PHP, MySQL, Node.js server, WebSocket, API server, atau database eksternal.
+- Tidak boleh ada file CSS/JS terpisah atau dependensi CDN eksternal. Semua aset visual dibuat menggunakan CSS, SVG inline, Canvas, emoji, atau ilustrasi terintegrasi.
+- Terapkan state management terpusat, event handling konsisten, game loop requestAnimationFrame, input validation, cleanup interval/animation frame, dan LocalStorage untuk skor & riwayat.
+
+==================================================
+2. DESAIN VISUAL & SKEMA WARNA (THEME & PALETTE)
+==================================================
+- Tema Visual Pilihan: ${selectedTheme}
+- Skema Warna Kustom:
+  * Primary Color: ${p}
+  * Secondary Color: ${s}
+  * Accent Color: ${a}
+  * Background Color: ${bg}
+  * Text Color: ${txt}
+  * Button Color: ${btnColor}
+- Karakter visual harus benar-benar mencerminkan tema ${selectedTheme} (UI/UX, bingkai, elemen visual, background), bukan sekadar mengganti warna background.
+
+==================================================
+3. KUSTOMISASI ANIMASI
+==================================================
+- Tingkat Animasi: ${animLevel}
+- Intensitas Animasi: ${selectedAnimIntensity}
+- Sertakan animasi hover effects, transition, confetti celebration, floating objects, particle effects, dan victory/defeat screens tanpa mengganggu performa browser.
+
+==================================================
+4. MEKANISME GAME & GENRE
+==================================================
+- Genre Pilihan: ${selectedGenre}
+- Game wajib memiliki mekanisme permainan asli yang sesuai dengan ${selectedGenre} (bukan sekadar kuis biasa).
+
+==================================================
+5. MULTIPLAYER LOKAL — TANPA SERVER
+==================================================
+- Mode Permainan: ${selectedMultiplayer}
+${selectedMultiplayer.includes('CLASS') && classCsv ? `- Daftar Peserta Terimport: ${classCsv}` : ''}
+- Seluruh mode multiplayer berjalan secara LOKAL pada 1 perangkat menggunakan JavaScript & state management browser. Tampilkan indikator giliran/pemain secara jelas.
+
+==================================================
+6. EDUCATIONAL CONTENT ENGINE & GENERATOR BANK SOAL HOTS
+==================================================
+- Nama Sekolah / Instansi: ${schoolName}
+- Mata Pelajaran & Topik: ${subject}
+- Target Jenjang & Kelas: ${grade}
+- Target Jumlah Soal: ${questionCount}
+- Format Variasi Soal: ${questionFormat}
+- Tingkat Kesulitan: ${difficulty}
+- Mode Penyusunan Soal: ${selectedQuestionMode}
+
+--- ATURAN GENERASI BANK SOAL HOTS & DISTRIBUSI SEIMBANG (WAJIB AI) ---
+1. PEDOMAN GENERASI SOAL HOTS (Higher Order Thinking Skills):
+   - AI WAJIB merumuskan seluruh ${questionCount} bank soal secara OTOMATIS berdasarkan mata pelajaran "${subject}" dan jenjang ${grade}.
+   - Soal disusun berorientasi pada indikator HOTS (C4-Menganalisis, C5-Mengevaluasi, C6-Mencipta) berbasis narasi studi kasus atau pemecahan masalah konkret.
+2. PILIHAN JAWABAN PENGECOH (QUALITY DISTRACTORS):
+   - Setiap soal pilihan ganda memuat 4 opsi jawaban (A, B, C, D) yang terdiri dari 1 Kunci Jawaban Benar + 3 Pilihan Jawaban Pengecoh (Distractors) yang logis, akurat secara keilmuan, dan menguji kejelian pemahaman konsep siswa (bukan pengecoh konyol/asal).
+3. RANDOMISASI & DISTRIBUSI KUNCI JAWABAN SEIMBANG (25% A, B, C, D):
+   - Kunci jawaban benar (A, B, C, D) WAJIB TERACAK & DIPERTAHANKAN DALAM RASIO PERBANDINGAN SEIMBANG (distribusi kunci jawaban mendekati 25% A, 25% B, 25% C, 25% D pada seluruh ${questionCount} soal).
+   - Seluruh urutan soal dan urutan opsi pilihan jawaban diacak secara dinamis (Random Shuffle) setiap kali permainan dimulai ulang.
+4. UMPAN BALIK & PENJELASAN PEDAGOGIS:
+   - Sediakan uraian umpan balik dan pembahasan pedagogis untuk setiap jawaban yang dipilih siswa.
+${selectedQuestionMode.includes('Manual') && questionBank ? `- Bank Soal Acuan Tambahan:\n${questionBank}` : ''}
+
+==================================================
+7. WEB AUDIO API & INTERFACE LIFECYCLE
+==================================================
+- Tema Audio: ${audioTheme} (Memakai Web Audio API Synthesizer, diaktifkan setelah interaksi pengguna).
+- Siklus Antarmuka Lengkap: Main Menu, Instructions, Player Setup, Game Mode, Countdown, Gameplay, Scoreboard, Pause Menu, Victory Screen, Game Over, dan Result Summary.
+
+==================================================
+8. RESPONSIVE & OUTPUT GUARANTEE
+==================================================
+- Responsif penuh untuk Desktop, Laptop, Tablet, Smartphone Android, dan Interactive Flat Panel (IFP 4K) dengan dukungan Mouse, Touch, dan Keyboard.
+- Outputkan HANYA 1 FILE HTML5 STANDALONE LENGKAP Tanpa Pseudocode, Tanpa Placeholder, Tanpa Kode Terpotong!
+
+Berikan output kode lengkap dalam \`\`\`html ... \`\`\`!`;
+
+      document.getElementById('promptViewport').textContent = masterPrompt;
+    }
+
+    function copyPrompt() {
+      const text = document.getElementById('promptViewport').textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        const toast = document.getElementById('toast');
+        toast.style.display = 'block';
+        setTimeout(() => toast.style.display = 'none', 2500);
+      });
+    }
+
+    function downloadTxt() {
+      const text = document.getElementById('promptViewport').textContent;
+      const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'Master_Prompt_Game_Architect_v4.txt';
+      a.click();
+    }
+
+    function resetForm() {
+      selectedTheme = 'Neon Cyberpunk';
+      selectedGenre = 'Space Shooter';
+      selectedMultiplayer = 'MODE 1 — SINGLE PLAYER (1 Pemain)';
+      selectedAnimIntensity = 'Normal';
+      setColors('#38BDF8', '#0284C7', '#F59E0B', '#070B14', '#FFFFFF', '#2563EB');
+      renderThemes();
+      renderGenres();
+      updateCustomColors();
+    }
+
+    // Init
+    renderThemes();
+    renderGenres();
+    updateCustomColors();
+  </script>
+</body>
+</html>

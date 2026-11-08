@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI PowerPoint Prompt Studio — Gamma Ready</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#080d18;--panel:#111a2b;--panel2:#172338;--line:#29364c;--text:#edf3ff;--muted:#9aabc4;--gold:#f5b942;--cyan:#56c8e8;--green:#39c99a}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 15% 0%,#172844 0,transparent 38%),var(--bg);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;padding:22px;min-height:100vh}
+header{max-width:1500px;margin:0 auto 20px;padding:20px 24px;border:1px solid var(--line);border-radius:18px;background:linear-gradient(120deg,#17263d,#101827);display:flex;justify-content:space-between;align-items:center;gap:16px}
+.brand{display:flex;align-items:center;gap:14px}.logo{width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,#f5b942,#ed7849);display:grid;place-items:center;font-size:25px}.brand h1{font-size:19px;margin:0 0 4px}.brand p{margin:0;color:var(--muted);font-size:12px}.tag{font-size:11px;font-weight:800;letter-spacing:.08em;color:#f5c86a;border:1px solid #795b2b;background:#382b19;padding:8px 12px;border-radius:99px}
+main{max-width:1500px;margin:auto;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(360px,.95fr);gap:20px}.panel{background:rgba(17,26,43,.96);border:1px solid var(--line);border-radius:17px;padding:21px;min-width:0}.panel h2{font-size:15px;margin:0 0 18px;padding-bottom:13px;border-bottom:1px solid var(--line);color:var(--gold)}.section{margin:20px 0 8px;color:#d9e5f7;font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{display:flex;flex-direction:column;gap:7px;margin-bottom:13px}.field label{font-size:12px;color:var(--muted);font-weight:700}.field input,.field select,.field textarea{width:100%;border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:10px;padding:11px 12px;font:inherit;font-size:13px;outline:none}.field textarea{resize:vertical;min-height:82px;line-height:1.5}.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--cyan);box-shadow:0 0 0 3px #56c8e822}
+.choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.choice{display:flex;align-items:flex-start;gap:9px;padding:11px;border:1px solid var(--line);background:var(--panel2);border-radius:11px;cursor:pointer;min-height:58px}.choice:has(input:checked){border-color:var(--gold);background:#382d1c}.choice input{accent-color:var(--gold);margin-top:3px}.choice b{display:block;font-size:12px}.choice small{display:block;color:var(--muted);font-size:10px;margin-top:3px;line-height:1.35}
+.actions{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}.btn{border:0;border-radius:10px;padding:12px 16px;font-weight:800;cursor:pointer;font:inherit;font-size:12px}.primary{background:linear-gradient(120deg,#f5b942,#ed8748);color:#211606;flex:1}.secondary{background:#233149;color:#eaf2ff;border:1px solid var(--line)}.output{font:12px/1.65 'DM Mono',monospace;white-space:pre-wrap;overflow:auto;max-height:72vh;min-height:500px;padding:17px;background:#080e19;border:1px solid var(--line);border-radius:12px;color:#dbe8fa}.hint{font-size:11px;color:var(--muted);line-height:1.5;margin:9px 0 0}.toast{position:fixed;bottom:20px;right:20px;background:#176c55;color:white;padding:12px 17px;border-radius:10px;display:none;font-size:13px;font-weight:700;box-shadow:0 8px 25px #0008}
+@media(max-width:950px){main{grid-template-columns:1fr}.output{max-height:none;min-height:420px}}@media(max-width:560px){body{padding:10px}header{padding:15px;align-items:flex-start}.tag{display:none}.grid,.choices{grid-template-columns:1fr}.panel{padding:15px}.brand h1{font-size:15px}}
+</style>
+</head>
+<body>
+<header><div class="brand"><div class="logo">✦</div><div><h1>AI POWERPOINT PROMPT STUDIO</h1><p>Materi-aware slide architect • AI visual direction • Gamma.app ready</p></div></div><div class="tag">GAMMA AI BACKGROUND READY</div></header>
+<main>
+<section class="panel">
+<h2>🎯 Konfigurasi presentasi</h2>
+<div class="grid">
+<div class="field" style="grid-column: span 2;"><label for="schoolName">Nama Sekolah / Instansi</label><input id="schoolName" value="SMP Negeri 1 Jakarta" placeholder="Contoh: SMP Negeri 1 Jakarta / SD Merdeka"></div>
+<div class="field"><label for="topic">Judul / topik materi</label><input id="topic" value="Berpikir Komputasional" placeholder="Masukkan topik materi"></div>
+<div class="field"><label for="audience">Audiens / jenjang</label><select id="audience"><option>Siswa SMP — Fase D</option><option>Siswa SD — Fase A–C</option><option>Siswa SMA/SMK — Fase E–F</option><option>Mahasiswa</option><option>Guru / pendidik</option><option>Peserta umum / profesional</option></select></div>
+<div class="field"><label for="subject">Mata pelajaran / bidang</label><input id="subject" value="Informatika" placeholder="Contoh: IPA, Bahasa Indonesia"></div>
+<div class="field"><label for="level">Kedalaman materi</label><select id="level"><option>Seimbang — konseptual dan aplikatif</option><option>Dasar — pengenalan konsep</option><option>Menengah — pemahaman dan penerapan</option><option>Mendalam — analisis, evaluasi, dan sintesis</option></select></div>
+<div class="field"><label for="count">Jumlah slide</label><select id="count"><option>10 slide</option><option selected>12 slide</option><option>15 slide</option><option>18 slide</option><option>20 slide</option><option>8 slide ringkas</option></select></div>
+<div class="field"><label for="duration">Durasi presentasi</label><select id="duration"><option>10–15 menit</option><option selected>20–30 menit</option><option>30–45 menit</option><option>45–60 menit</option></select></div>
+</div>
+<div class="section">Fokus / karakter materi</div>
+<div class="choices" id="focus">
+<label class="choice"><input type="radio" name="focus" value="Materi konseptual: definisi, prinsip, konsep inti, hubungan antarkonsep, dan contoh konkret." checked><span><b>Konseptual</b><small>Konsep, prinsip, definisi, dan hubungan ide</small></span></label>
+<label class="choice"><input type="radio" name="focus" value="Materi prosedural: urutan langkah, demonstrasi, alur kerja, contoh proses, dan kesalahan umum."><span><b>Prosedural / langkah kerja</b><small>Tahapan, cara melakukan, dan demonstrasi</small></span></label>
+<label class="choice"><input type="radio" name="focus" value="Materi sains atau fenomena: observasi, fakta, proses alam, sebab-akibat, data, dan model penjelas."><span><b>Sains / fenomena</b><small>Fenomena, proses, data, dan sebab-akibat</small></span></label>
+<label class="choice"><input type="radio" name="focus" value="Materi humaniora atau bahasa: konteks, contoh autentik, interpretasi, perbandingan, dan diskusi."><span><b>Bahasa / humaniora</b><small>Konteks, teks, interpretasi, dan diskusi</small></span></label>
+<label class="choice"><input type="radio" name="focus" value="Materi matematika: visualisasi abstraksi, model, rumus seperlunya, contoh bertahap, dan latihan pemecahan masalah."><span><b>Matematika</b><small>Rumus, model visual, contoh bertahap</small></span></label>
+<label class="choice"><input type="radio" name="focus" value="Materi keterampilan atau proyek: masalah nyata, tujuan, alat/bahan, tahapan, produk, dan refleksi."><span><b>Proyek / keterampilan</b><small>Problem, proses, produk, dan refleksi</small></span></label>
+</div>
+<div class="section">Gaya desain presentasi</div>
+<div class="choices" id="design">
+<label class="choice"><input type="radio" name="design" value="Editorial Modern — tipografi kuat, grid rapi, ruang kosong lega, foto editorial, dan komposisi asimetris." checked><span><b>Editorial modern</b><small>Elegan, rapi, tipografi kuat</small></span></label>
+<label class="choice"><input type="radio" name="design" value="Playful 3D Education — ilustrasi 3D ramah, objek mengambang, bentuk geometris, warna cerah terkontrol, dan visual menyenangkan."><span><b>Playful 3D education</b><small>Ceria, ilustratif, cocok untuk siswa</small></span></label>
+<label class="choice"><input type="radio" name="design" value="Cinematic Storytelling — fotografi sinematik, komposisi dramatis, pencahayaan atmosferik, dan alur visual seperti cerita."><span><b>Cinematic storytelling</b><small>Dramatis, imersif, bercerita</small></span></label>
+<label class="choice"><input type="radio" name="design" value="Infographic / Data Visualization — diagram informatif, ikon konsisten, bagan, angka besar, dan visualisasi data."><span><b>Infografis</b><small>Diagram, ikon, data, dan alur</small></span></label>
+<label class="choice"><input type="radio" name="design" value="Minimalist Swiss — minimalis, sistem grid presisi, kontras tipografi, elemen seperlunya, dan whitespace luas."><span><b>Minimalis Swiss</b><small>Bersih, fokus, profesional</small></span></label>
+<label class="choice"><input type="radio" name="design" value="Futuristic 3D Tech — ruang digital, objek 3D, glow halus, gradient terukur, dan elemen teknologi modern."><span><b>Futuristic 3D</b><small>Teknologi, modern, imersif</small></span></label>
+</div>
+<div class="grid" style="margin-top:14px">
+<div class="field"><label for="palette">Palet warna</label><select id="palette"><option>AI memilih palet paling relevan dengan materi</option><option>Emerald, cream, dan gold</option><option>Navy, electric blue, dan white</option><option>Terracotta, sand, dan olive</option><option>Vibrant primary — merah, biru, kuning</option><option>Pastel lavender, mint, dan peach</option><option>Monochrome black, white, dan grey</option><option>Dark charcoal dan neon cyan</option></select></div>
+<div class="field"><label for="background">Strategi background AI</label><select id="background"><option selected>AI generate background berbeda untuk setiap slide</option><option>AI generate 3–4 background visual yang konsisten per bagian</option><option>Background foto sinematik dengan overlay agar teks terbaca</option><option>Background abstrak / tekstur halus, tidak ramai</option><option>Background minimalis dengan bentuk geometris</option></select></div>
+</div>
+<div class="section">Pengaturan konten dan visual</div>
+<div class="grid">
+<div class="field"><label for="visual">Kepadatan visual</label><select id="visual"><option>Seimbang — teks singkat + visual dominan</option><option>Visual dominan — teks sangat ringkas</option><option>Detail — lebih banyak penjelasan dan diagram</option></select></div>
+<div class="field"><label for="layout">Variasi layout</label><select id="layout"><option>Variatif otomatis, sesuai fungsi setiap slide</option><option>Terstruktur konsisten, variasi secukupnya</option><option>Eksperimental, komposisi berani</option></select></div>
+</div>
+<div class="field"><label for="outline">Capaian pembelajaran / submateri / poin wajib</label><textarea id="outline" placeholder="Tuliskan CP, tujuan, submateri, contoh, atau poin yang wajib dibahas. Pisahkan per baris.">1. Pengertian berpikir komputasional
+2. Dekomposisi
+3. Pengenalan pola
+4. Abstraksi
+5. Algoritma
+6. Contoh penerapan dalam kehidupan sehari-hari</textarea></div>
+<div class="field"><label for="notes">Konteks tambahan (opsional)</label><textarea id="notes" placeholder="Contoh: gunakan contoh lingkungan sekitar siswa, sertakan aktivitas diskusi, hindari istilah terlalu teknis."></textarea></div>
+<div class="actions"><button class="btn primary" onclick="generate()">✨ Buat master prompt</button><button class="btn secondary" onclick="resetForm()">↺ Reset</button></div>
+</section>
+<section class="panel">
+<h2>📄 Master prompt siap salin ke Gamma.app</h2>
+<div id="output" class="output">Klik “Buat master prompt” untuk menyusun instruksi presentasi sesuai materi dan gaya desain yang dipilih.</div>
+<p class="hint">Prompt ini mengarahkan Gamma untuk memilih visual berdasarkan isi materi, membuat background dengan AI, dan menghindari satu template monoton untuk semua slide. Hasil gambar/background tetap mengikuti kemampuan dan pengaturan akun Gamma.</p>
+<div class="actions"><button class="btn primary" onclick="copyPrompt()">📋 Salin prompt</button><button class="btn secondary" onclick="downloadPrompt()">⬇ Unduh TXT</button></div>
+</section>
+</main>
+<div class="toast" id="toast">Prompt berhasil disalin.</div>
+<script>
+const $=id=>document.getElementById(id);
+function val(id){return $(id).value}
+function selected(name){return document.querySelector(`input[name="${name}"]:checked`).value}
+function generate(){
+ const schoolName=val('schoolName').trim()||'Nama Sekolah / Instansi';
+ const topic=val('topic').trim()||'Topik pembelajaran';
+ const audience=val('audience'),subject=val('subject'),level=val('level'),count=val('count'),duration=val('duration');
+ const focus=selected('focus'),design=selected('design'),palette=val('palette'),background=val('background'),visual=val('visual'),layout=val('layout'),outline=val('outline').trim()||'Kembangkan submateri yang relevan dengan topik secara runtut dan akurat.',notes=val('notes').trim()||'Tidak ada konteks tambahan.';
+ const prompt=`# MASTER PROMPT GAMMA.APP — PRESENTATION DESIGNER
+# NAMA SEKOLAH / INSTANSI: ${schoolName.toUpperCase()}
+
+Bertindaklah sebagai **instructional designer, subject-matter educator, visual storyteller, dan presentation art director kelas dunia**. Buat presentasi pembelajaran yang benar-benar disesuaikan dengan karakter materi di ${schoolName}, bukan sekadar mengganti judul pada template generik.
+
+1. BRIEF PRESENTASI
+- Nama Sekolah / Instansi: ${schoolName}
+- Topik/judul: ${topic}
+- Mata pelajaran/bidang: ${subject}
+- Audiens: ${audience}
+- Kedalaman: ${level}
+- Fokus materi: ${focus}
+- Jumlah: ${count}
+- Durasi penyampaian: ${duration}
+- Gaya desain terpilih: ${design}
+- Palet warna: ${palette}
+- Strategi background: ${background}
+- Kepadatan: ${visual}
+- Variasi layout: ${layout}
+2. ATURAN UTAMA: DESAIN HARUS MENGIKUTI MATERI
+Lakukan interpretasi topik terlebih dahulu sebelum mendesain. Tentukan:
+1. konsep inti dan istilah kunci;
+2. alur belajar dari pengetahuan awal menuju pemahaman dan penerapan;
+3. jenis visual paling tepat untuk setiap konsep (foto, ilustrasi, diagram proses, timeline, peta konsep, tabel perbandingan, grafik, model 3D, atau infografis);
+4. metafora visual yang relevan dan tidak menyesatkan;
+5. contoh kontekstual yang dekat dengan kehidupan audiens.
+
+Jangan memaksakan visual yang tidak berhubungan dengan materi. Contoh: materi ekosistem menggunakan visual habitat dan rantai makanan; materi sejarah menggunakan artefak, peta, dan timeline; materi matematika menggunakan model visual, grafik, dan tahapan penyelesaian; materi bahasa menggunakan contoh teks, anotasi, dan situasi komunikasi; materi informatika menggunakan flowchart, antarmuka, struktur, atau ilustrasi sistem sesuai bahasan.
+
+3. ART DIRECTION DAN KONSISTENSI VISUAL
+Terapkan gaya desain yang dipilih secara konsisten, tetapi buat komposisi tiap slide bervariasi sesuai fungsi kontennya. Gunakan:
+- sistem grid dan hierarki tipografi yang jelas;
+- judul singkat dan kuat;
+- maksimal 3–5 gagasan utama per slide;
+- teks ringkas, mudah dibaca dari jarak kelas;
+- kontras tinggi antara teks dan background;
+- ikon, ilustrasi, foto, dan diagram dengan satu bahasa visual;
+- ruang kosong yang cukup; hindari slide penuh teks;
+- aksen warna yang konsisten, bukan semua elemen berwarna mencolok.
+
+Jangan gunakan layout yang sama berulang-ulang. Variasikan cover sinematik, split-screen, full-bleed image, big number, diagram, timeline, comparison, card layout, quote/callout, process steps, dan recap sesuai kebutuhan. Jangan membuat layout variasi hanya demi dekorasi.
+
+4. BACKGROUND DAN GAMBAR BUATAN AI — WAJIB DIPERHATIKAN
+Gunakan kemampuan **AI image generation / AI-generated visuals di Gamma** untuk menghasilkan background dan ilustrasi yang relevan dengan topik.
+- Buat background AI yang dirancang khusus untuk presentasi ini, bukan background stok generik.
+- Untuk strategi “berbeda setiap slide”, buat visual/background unik pada setiap slide namun tetap satu art direction.
+- Untuk strategi “per bagian”, gunakan variasi background yang serasi dalam satu bagian dan transisi visual yang halus antarbagian.
+- Background harus mendukung isi, tidak mengalahkan teks, dan menyediakan area tenang untuk penempatan judul atau isi.
+- Gunakan foto/ilustrasi AI berkualitas tinggi, detail bersih, komposisi profesional, pencahayaan terarah, dan perspektif yang masuk akal.
+- Hindari gambar berisi teks, huruf acak, watermark, logo palsu, anatomi cacat, objek ganda yang tidak masuk akal, atau detail visual yang mengganggu.
+- Jangan menempatkan teks penting di area gambar yang ramai. Gunakan overlay/gradient transparan atau panel kontras bila diperlukan.
+- Untuk slide diagram, rumus, tabel, atau data, prioritaskan elemen native Gamma yang tajam dan dapat diedit; jangan membuat diagram penting sebagai gambar raster.
+- Jangan memakai gambar dekoratif yang tidak punya hubungan semantik dengan materi.
+
+### Arahan prompt gambar AI
+Untuk setiap slide, tentukan deskripsi visual spesifik yang memuat: subjek utama, konteks materi, lingkungan/latar, sudut pandang, komposisi, pencahayaan, mood, gaya artistik, palet warna, serta area kosong untuk teks. Gunakan rasio widescreen 16:9. Pertahankan konsistensi gaya antar-slide tanpa mengulang gambar yang sama.
+
+5. STRUKTUR DAN ALUR SLIDE
+Susun alur yang logis dan adaptif. Jangan memaksakan struktur jika tidak sesuai materi. Gunakan urutan yang relevan dari:
+- pembuka/cover yang memancing rasa ingin tahu;
+- pertanyaan pemantik atau masalah kontekstual;
+- tujuan pembelajaran;
+- pengantar konsep/prasyarat;
+- penjelasan konsep inti secara bertahap;
+- contoh, demonstrasi, studi kasus, atau penerapan;
+- aktivitas singkat/diskusi/latihan bila relevan;
+- rangkuman hubungan antarkonsep;
+- refleksi, pertanyaan pemahaman, atau penutup.
+
+Setiap slide harus memiliki satu pesan utama. Pastikan tidak ada pengulangan isi antar-slide dan semua submateri wajib tercakup.
+
+6. PANDUAN KONTEN
+- Akurat, sesuai tingkat audiens, dan tidak mengarang fakta, kutipan, data, atau sumber.
+- Jelaskan istilah baru dengan bahasa sederhana saat pertama muncul.
+- Gunakan contoh nyata dan kontekstual, bukan contoh abstrak tanpa penjelasan.
+- Rumus, kode, angka, atau data harus benar dan terbaca.
+- Jika informasi tidak tersedia atau membutuhkan sumber, jangan mengarang; tandai sebagai hal yang perlu diverifikasi.
+- Sesuaikan kedalaman penjelasan dengan durasi dan jenjang.
+
+7. FORMAT TIAP SLIDE
+Untuk setiap slide, hasilkan:
+- **Judul:** ringkas, informatif, dan menarik.
+- **Pesan utama:** satu kalimat inti.
+- **Isi:** poin atau penjelasan singkat yang cukup untuk dipahami.
+- **Visual utama:** visual yang benar-benar menjelaskan materi.
+- **Arahan background AI:** deskripsi background unik atau variasi background sesuai strategi terpilih.
+- **Komposisi/layout:** penempatan judul, isi, visual, dan area kosong.
+- **Catatan presenter:** narasi penjelasan guru/pemateri yang tidak perlu ditampilkan penuh di slide.
+
+8. SPESIFIKASI OUTPUT GAMMA
+Buat langsung sebagai presentasi Gamma, bukan sebagai esai panjang atau naskah dokumen.
+- Gunakan format widescreen 16:9.
+- Gunakan fitur Generate AI images / AI visuals untuk background dan visual pendukung.
+- Pilih tema Gamma yang paling dekat dengan art direction di atas, lalu sesuaikan palet, tipografi, dan komposisinya.
+- Gunakan elemen native Gamma untuk teks, diagram, tabel, dan grafik agar tetap tajam dan mudah diedit.
+- Pastikan setiap slide memiliki desain yang matang dan berbeda secara fungsional.
+- Jangan menampilkan instruksi desain, prompt gambar, atau catatan presenter sebagai teks utama slide.
+- Jangan menambahkan slide yang tidak diminta kecuali benar-benar dibutuhkan untuk kelengkapan alur.
+
+9. OUTLINE / MATERI WAJIB
+${outline}
+
+10. KONTEKS TAMBAHAN
+${notes}
+
+11. PEMERIKSAAN AKHIR
+Sebelum menyelesaikan, periksa: kesesuaian materi dengan visual; ketercakupan seluruh outline; akurasi isi; konsistensi gaya; variasi layout; keterbacaan teks di atas background; kualitas dan relevansi background AI; serta alur pembelajaran. Revisi slide yang terlalu padat, repetitif, generik, atau memiliki gambar yang tidak relevan.
+
+**Hasil akhir yang diinginkan:** presentasi yang terasa dibuat khusus untuk topik "${topic}", menarik secara visual, mudah dipahami ${audience.toLowerCase()}, dan siap digunakan untuk mengajar atau presentasi.`;
+ $('output').textContent=prompt;
+}
+function copyPrompt(){const t=$('output').textContent;navigator.clipboard.writeText(t).then(()=>toast()).catch(()=>{const x=document.createElement('textarea');x.value=t;document.body.appendChild(x);x.select();document.execCommand('copy');x.remove();toast()})}
+function downloadPrompt(){const blob=new Blob([$('output').textContent],{type:'text/plain;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='Master_Prompt_Gamma_AI_Presentation.txt';a.click();URL.revokeObjectURL(a.href)}
+function toast(){$('toast').style.display='block';setTimeout(()=>$('toast').style.display='none',2200)}
+function resetForm(){location.reload()}
+
+// Attach real-time input and change listeners to all form fields
+document.querySelectorAll('input, select, textarea').forEach(el => {
+  el.addEventListener('input', generate);
+  el.addEventListener('change', generate);
+});
+
+generate();
+</script>
+</body>
+</html>

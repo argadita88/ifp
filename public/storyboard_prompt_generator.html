@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Storyboard Prompt Studio v1.0 — Visual Scene Architect</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #080D18;
+      --panel: #111A2B;
+      --panel2: #172338;
+      --line: #29364C;
+      --text: #EDF3FF;
+      --muted: #9AABC4;
+      --purple: #A855F7;
+      --cyan: #56C8E8;
+      --emerald: #39C99A;
+      --rose: #F43F5E;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: radial-gradient(ellipse at 15% 0%, #1D1836 0, transparent 38%), var(--bg);
+      color: var(--text);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      padding: 22px;
+      min-height: 100vh;
+    }
+
+    header {
+      max-width: 1500px;
+      margin: 0 auto 20px;
+      padding: 20px 24px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: linear-gradient(120deg, #231638, #101827);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .brand { display: flex; align-items: center; gap: 14px; }
+    .logo {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #A855F7, #EC4899);
+      display: grid;
+      place-items: center;
+      font-size: 25px;
+      color: #FFF;
+    }
+
+    .brand h1 { font-size: 19px; margin: 0 0 4px; }
+    .brand p { margin: 0; color: var(--muted); font-size: 12px; }
+
+    .tag {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      color: #C084FC;
+      border: 1px solid #7E22CE;
+      background: #3B0764;
+      padding: 8px 12px;
+      border-radius: 99px;
+    }
+
+    main {
+      max-width: 1500px;
+      margin: auto;
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(360px, .95fr);
+      gap: 20px;
+    }
+
+    .panel {
+      background: rgba(17, 26, 43, .96);
+      border: 1px solid var(--line);
+      border-radius: 17px;
+      padding: 21px;
+      min-width: 0;
+    }
+
+    .panel h2 {
+      font-size: 15px;
+      margin: 0 0 18px;
+      padding-bottom: 13px;
+      border-bottom: 1px solid var(--line);
+      color: var(--purple);
+    }
+
+    .section {
+      margin: 20px 0 8px;
+      color: #D9E5F7;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+    .field { display: flex; flex-direction: column; gap: 7px; margin-bottom: 13px; }
+    .field label { font-size: 12px; color: var(--muted); font-weight: 700; }
+    .field input, .field select, .field textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      background: var(--panel2);
+      color: var(--text);
+      border-radius: 10px;
+      padding: 11px 12px;
+      font: inherit;
+      font-size: 13px;
+      outline: none;
+    }
+
+    .field textarea { resize: vertical; min-height: 82px; line-height: 1.5; }
+    .field input:focus, .field select:focus, .field textarea:focus {
+      border-color: var(--purple);
+      box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.2);
+    }
+
+    .choices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
+    .choice {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      padding: 11px;
+      border: 1px solid var(--line);
+      background: var(--panel2);
+      border-radius: 11px;
+      cursor: pointer;
+      min-height: 58px;
+    }
+
+    .choice:has(input:checked) {
+      border-color: var(--purple);
+      background: #2E1065;
+    }
+
+    .choice input { accent-color: var(--purple); margin-top: 3px; }
+    .choice b { display: block; font-size: 12px; }
+    .choice small { display: block; color: var(--muted); font-size: 10px; margin-top: 3px; line-height: 1.35; }
+
+    .actions { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
+    .btn {
+      border: 0;
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-weight: 800;
+      cursor: pointer;
+      font: inherit;
+      font-size: 12px;
+    }
+
+    .primary {
+      background: linear-gradient(120deg, #A855F7, #EC4899);
+      color: #FFF;
+      flex: 1;
+    }
+
+    .secondary { background: #233149; color: #EAF2FF; border: 1px solid var(--line); }
+
+    .output {
+      font: 12px/1.65 'DM Mono', monospace;
+      white-space: pre-wrap;
+      overflow: auto;
+      max-height: 72vh;
+      min-height: 500px;
+      padding: 17px;
+      background: #080E19;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      color: #DBE8FA;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #10B981;
+      color: white;
+      padding: 12px 17px;
+      border-radius: 10px;
+      display: none;
+      font-size: 13px;
+      font-weight: 700;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+    }
+
+    @media(max-width: 950px) {
+      main { grid-template-columns: 1fr; }
+      .output { max-height: none; min-height: 420px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="brand">
+      <div class="logo">🎬</div>
+      <div>
+        <h1>AI STORYBOARD PROMPT STUDIO v1.0</h1>
+        <p>Visual Scene Architect • Panel Flow Designer • Midjourney / DALL-E / ChatGPT Ready</p>
+      </div>
+    </div>
+    <div class="tag">STORYBOARD AI READY</div>
+  </header>
+
+  <main>
+    <section class="panel">
+      <h2>🎯 Konfigurasi &amp; Keinginan Pembuat Storyboard</h2>
+
+      <div class="grid">
+        <div class="field" style="grid-column: span 2;">
+          <label for="schoolName">Nama Sekolah / Instansi</label>
+          <input id="schoolName" value="SMP Negeri 1 Jakarta" placeholder="Contoh: SMP Negeri 1 Jakarta / SD Merdeka">
+        </div>
+        <div class="field">
+          <label for="topic">Judul / Topik Cerita / Materi</label>
+          <input id="topic" value="Petualangan Berpikir Komputasional & Enkripsi Data" placeholder="Masukkan judul materi/cerita">
+        </div>
+        <div class="field">
+          <label for="subject">Mata Pelajaran / Bidang</label>
+          <input id="subject" value="Informatika" placeholder="Contoh: IPA, Sejarah, Bahasa Indonesia">
+        </div>
+        <div class="field">
+          <label for="audience">Target Audiens / Jenjang</label>
+          <select id="audience">
+            <option>Siswa SMP — Fase D</option>
+            <option>Siswa SD — Fase A–C</option>
+            <option>Siswa SMA/SMK — Fase E–F</option>
+            <option>Umum / Anak-Anak</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="panelCount">Jumlah Panel / Adegan</label>
+          <select id="panelCount">
+            <option>4 Panel (Short Strip)</option>
+            <option selected>6 Panel (Standard Board)</option>
+            <option>8 Panel (Detailed Scene)</option>
+            <option>12 Panel (Full Storyboard)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="aspectRatio">Rasio Frame / Canvas</label>
+          <select id="aspectRatio">
+            <option selected>16:9 Widescreen (Film / Video)</option>
+            <option>4:3 Classic Format</option>
+            <option>1:1 Square (Instagram / Media)</option>
+            <option>9:16 Vertical (Reels / Shorts)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="cameraAngle">Sudut Kamera Utama</label>
+          <select id="cameraAngle">
+            <option selected>Dinamis (Variasi Wide, Medium & Close-Up)</option>
+            <option>Cinematic Wide Shot (Latar Suasana)</option>
+            <option>Close-Up Ekspresi Karakter</option>
+            <option>Bird's Eye View (Tampak Atas)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="section">Gaya Visual &amp; Desain Storyboard</div>
+      <div class="choices" id="design">
+        <label class="choice">
+          <input type="radio" name="design" value="Comic Book Panel — garis ink tegas, balon percakapan, aksen onomatopia, gaya komik edukasi warna cerah." checked>
+          <span><b>Comic Book Panel</b><small>Komik edukasi, teks percakapan, warna cerah</small></span>
+        </label>
+        <label class="choice">
+          <input type="radio" name="design" value="Cinematic Film Board — fotografi sinematik, lighting dramatis, kedalaman bidang, komposisi film profesional.">
+          <span><b>Cinematic Film Board</b><small>Sinematik, lighting dramatis, kualitas film</small></span>
+        </label>
+        <label class="choice">
+          <input type="radio" name="design" value="3D Cartoon Style — render 3D Pixar style, karakter ramah, warna lembut berenergi positif.">
+          <span><b>3D Cartoon Style</b><small>3D menggemaskan, gaya animasi modern</small></span>
+        </label>
+        <label class="choice">
+          <input type="radio" name="design" value="Manga / Anime Sketch — ilustrasi manga Jepang, shading garis hitam-putih artistik, ekspresi dinamis.">
+          <span><b>Manga / Anime Sketch</b><small>Sketsa anime, shading ink, ekspresi dinamis</small></span>
+        </label>
+        <label class="choice">
+          <input type="radio" name="design" value="Line Art Minimalist — sketsa garis vektor bersih, latar belakang simpel, fokus pada gestur karakter.">
+          <span><b>Line Art Minimalist</b><small>Garis bersih, fokus gestur, elegan</small></span>
+        </label>
+        <label class="choice">
+          <input type="radio" name="design" value="Isometric Digital Board — perspektif isometrik 3D 45 derajat, layout grid rapi, detail lingkungan.">
+          <span><b>Isometric Digital</b><small>Sudut pandang 3D isometrik, detail grid</small></span>
+        </label>
+      </div>
+
+      <div class="section">Poin Alur Adegan &amp; Instruksi Khusus</div>
+      <div class="field">
+        <label for="outline">Outline Adegan Per Panel (Poin Penting)</label>
+        <textarea id="outline" placeholder="Tuliskan alur cerita per adegan...">Panel 1: Tokoh Andi bingung menerima pesan rahasia terenkripsi di kelas.
+Panel 2: Guru menjelaskan konsep Caesar Cipher dengan pergeseran abjad.
+Panel 3: Andi dan Siti berdiskusi memecahkan kode pergeseran 3 langkah.
+Panel 4: Kode berhasil terpecahkan dan pintu rahasia laboratorium terbuka.
+Panel 5: Tim merayakan keberhasilan dengan gembira.
+Panel 6: Refleksi pentingnya proteksi data pribadi dalam kehidupan digital.</textarea>
+      </div>
+
+      <div class="field">
+        <label for="notes">Spesifikasi Karakter &amp; Konteks Tambahan</label>
+        <textarea id="notes" placeholder="Contoh: Tokoh Andi mengenakan seragam SMP dan kacamata, Siti memegang tablet gawai."></textarea>
+      </div>
+
+      <div class="actions">
+        <button class="btn primary" onclick="generate()">✨ Buat Master Prompt Storyboard</button>
+        <button class="btn secondary" onclick="resetForm()">↺ Reset</button>
+      </div>
+    </section>
+
+    <!-- Output Panel -->
+    <section class="panel">
+      <h2>🎬 Master Prompt Storyboard AI (Midjourney / ChatGPT / DALL-E)</h2>
+      <div id="output" class="output">Klik "Buat Master Prompt Storyboard" untuk menghasilkan instruksi pembuatan storyboard visual secara otomatis.</div>
+      <div class="actions">
+        <button class="btn primary" onclick="copyPrompt()">📋 Salin Master Prompt</button>
+        <button class="btn secondary" onclick="downloadPrompt()">⬇ Unduh .TXT</button>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast">Master Prompt Storyboard berhasil disalin!</div>
+
+  <script>
+    const $ = id => document.getElementById(id);
+    function val(id) { return $(id).value; }
+    function selected(name) { return document.querySelector(`input[name="${name}"]:checked`).value; }
+
+    function generate() {
+      const schoolName = val('schoolName').trim() || 'Nama Sekolah / Instansi';
+      const topic = val('topic').trim() || 'Topik Storyboard';
+      const subject = val('subject');
+      const audience = val('audience');
+      const panelCount = val('panelCount');
+      const aspectRatio = val('aspectRatio');
+      const cameraAngle = val('cameraAngle');
+      const design = selected('design');
+      const outline = val('outline').trim() || 'Buat alur adegan cerita secara urut dan jelas.';
+      const notes = val('notes').trim() || 'Tidak ada spesifikasi karakter tambahan.';
+
+      const prompt = `# MASTER PROMPT AI STORYBOARD & VISUAL SCENE ARCHITECT
+# NAMA SEKOLAH / INSTANSI: ${schoolName.toUpperCase()}
+# TOPIK CERITA: ${topic.toUpperCase()} (${subject.toUpperCase()})
+# STYLE VISUAL: ${design.split('—')[0].trim().toUpperCase()}
+
+Bertindaklah sebagai **World-Class Director, Storyboard Artist, Visual Concept Designer, dan Instructional Storyteller**. Buatkan storyboard visual yang mendalam, terstruktur, dan sinematik berdasarkan spesifikasi berikut:
+
+## 1. BRIEF STORYBOARD & METADATA
+- Nama Sekolah / Instansi: ${schoolName}
+- Judul / Topik Cerita: ${topic}
+- Mata Pelajaran / Bidang: ${subject}
+- Target Audiens / Jenjang: ${audience}
+- Format Jumlah Panel: ${panelCount}
+- Rasio Frame Canvas: ${aspectRatio}
+- Sudut Kamera Utama: ${cameraAngle}
+- Gaya Desain Visual: ${design}
+- Karakter & Catatan Tambahan: ${notes} \n\n## 2. PANDUAN VISUAL & ART DIRECTION`;Terapkan gaya visual ${design} secara konsisten di seluruh panel:
+1. Pastikan setiap panel memiliki komposisi visual yang jelas (Foregorund, Midground, Background).
+2. Tentukan pencahayaan (lighting), kontras warna, dan ekspresi karakter pada setiap adegan.
+3. Sediakan deskripsi arahan gambar AI Image Generator (Midjourney / DALL-E 3 / Stable Diffusion) dengan parameter aspect ratio ${aspectRatio.includes('16:9') ? '--ar 16:9' : '--ar 4:3'}.
+
+## 3. ALUR ADEGAN & OUTLINE PANEL
+${outline}
+
+## 4. FORMAT RINCIAN SETIAP PANEL STORYBOARD
+Untuk setiap panel dari ${panelCount}, hasilkan secara terstruktur:
+- **PANEL NUMBER & TITLE:** Nama adegan/panel.
+- **VISUAL DESCRIPTION:** Deskripsi detail karakter, aksi, lingkungan latar, dan ekspresi.
+- **CAMERA SHOT & ANGLE:** Sudut pandang kamera (e.g. Wide Shot, Close-Up, Medium Shot, Dutch Angle).
+- **TEXT / DIALOGUE / CAPTION:** Narasi atau dialog percakapan karakter.
+- **AI IMAGE GENERATOR PROMPT:** Prompt bahasa Inggris siap pakai untuk Midjourney / DALL-E 3 (termasuk style, lighting, dan aspect ratio).
+
+Silakan susun ${panelCount} storyboard tentang "${topic}" secara lengkap, terstruktur, dan siap diolah menjadi gambar/video!`;
+
+      $('output').textContent = prompt;
+    }
+
+    function copyPrompt() {
+      const t = $('output').textContent;
+      navigator.clipboard.writeText(t).then(() => toast()).catch(() => {
+        const x = document.createElement('textarea');
+        x.value = t;
+        document.body.appendChild(x);
+        x.select();
+        document.execCommand('copy');
+        x.remove();
+        toast();
+      });
+    }
+
+    function downloadPrompt() {
+      const blob = new Blob([$('output').textContent], { type: 'text/plain;charset=utf-8' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'Master_Prompt_Storyboard_AI.txt';
+      a.click();
+      URL.revokeObjectURL(a.href);
+    }
+
+    function toast() {
+      $('toast').style.display = 'block';
+      setTimeout(() => $('toast').style.display = 'none', 2200);
+    }
+
+    function resetForm() {
+      location.reload();
+    }
+
+    // Attach real-time input and change listeners
+    document.querySelectorAll('input, select, textarea').forEach(el => {
+      el.addEventListener('input', generate);
+      el.addEventListener('change', generate);
+    });
+
+    generate();
+  </script>
+</body>
+</html>

@@ -1,0 +1,2852 @@
+﻿<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="description" content="Outpost Zero: Zombie Siege Quiz — Gim Interaktif IFP Edukasi Informatika Kelas 9 Berstandar Studio Game">
+  <title>🛡️ OUTPOST ZERO: Zombie Siege Defense — Tactical Quiz Battle</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Teko:wght@500;600;700&family=Rajdhani:wght@500;600;700&family=Chakra+Petch:wght@500;600;700&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧟</text></svg>">
+
+  <style>
+    /* ══════════════════════════════════════════════════════════════════════
+       OUTPOST ZERO: TACTICAL APOCALYPSE DEFENSE THEME
+       Art Direction: Stylized 2D Military Outpost & Tactical Comic Arcade
+       ══════════════════════════════════════════════════════════════════════ */
+    :root {
+      --c-slate-950: #07090e;
+      --c-slate-900: #0d1117;
+      --c-slate-850: #131722;
+      --c-slate-800: #1a202c;
+      --c-slate-700: #2d3748;
+      --c-steel: #4a5568;
+      --c-steel-light: #718096;
+
+      --hazard-yellow: #f59e0b;
+      --hazard-amber: #d97706;
+      --hazard-dark: #271a00;
+      --toxic-green: #10b981;
+      --toxic-glow: rgba(16, 185, 129, 0.4);
+      --alert-crimson: #ef4444;
+      --alert-glow: rgba(239, 68, 68, 0.45);
+      --radar-cyan: #06b6d4;
+
+      /* Team Color Palette (Military Call-Signs) */
+      --t1-crimson: #f43f5e;
+      --t1-glow: rgba(244, 63, 94, 0.4);
+      --t2-cobalt: #0284c7;
+      --t2-glow: rgba(2, 132, 199, 0.4);
+      --t3-emerald: #10b981;
+      --t3-glow: rgba(16, 185, 129, 0.4);
+      --t4-amber: #eab308;
+      --t4-glow: rgba(234, 179, 8, 0.4);
+
+      /* Typography */
+      --font-heading: 'Teko', sans-serif;
+      --font-tactical: 'Rajdhani', sans-serif;
+      --font-body: 'Chakra Petch', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: var(--font-body);
+      background: var(--c-slate-950);
+      color: #f7fafc;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+
+    /* Screen manager */
+    .screen {
+      display: none;
+      width: 100vw;
+      height: 100vh;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+    .screen.active {
+      display: flex;
+    }
+
+    /* ══════════════════════════════════════════════════════════════════════
+       1. SETUP SCREEN: WAR ROOM CRISIS PROTOCOL
+       ══════════════════════════════════════════════════════════════════════ */
+    #setup-screen {
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background:
+        radial-gradient(ellipse at 50% 30%, rgba(245, 158, 11, 0.08) 0%, transparent 60%),
+        radial-gradient(circle at 20% 80%, rgba(239, 68, 68, 0.06) 0%, transparent 50%),
+        linear-gradient(180deg, #090c14 0%, #05070a 100%);
+      position: relative;
+      overflow-y: auto;
+      padding: 24px;
+      z-index: 10;
+    }
+
+    .ambient-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .setup-bunker-card {
+      position: relative;
+      z-index: 2;
+      width: min(980px, 95vw);
+      background: linear-gradient(145deg, rgba(19, 23, 34, 0.94), rgba(13, 17, 23, 0.97));
+      border: 2px solid #2d3748;
+      border-radius: 20px;
+      padding: clamp(20px, 3.5vw, 36px);
+      box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.8),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1),
+        inset 0 0 40px rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(16px);
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    /* Rivet screws on bunker panel corners */
+    .setup-bunker-card::before, .setup-bunker-card::after {
+      content: "";
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #718096;
+      box-shadow: inset 1px 1px 2px #fff, inset -1px -1px 2px #000;
+    }
+    .setup-bunker-card::before { top: 12px; left: 12px; }
+    .setup-bunker-card::after { top: 12px; right: 12px; }
+
+    /* Hazard Warning Header Strip */
+    .bunker-header {
+      text-align: center;
+      position: relative;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .hazard-stripe {
+      height: 8px;
+      background: repeating-linear-gradient(
+        -45deg,
+        #f59e0b,
+        #f59e0b 14px,
+        #1a202c 14px,
+        #1a202c 28px
+      );
+      border-radius: 4px;
+      margin-bottom: 14px;
+      opacity: 0.85;
+      box-shadow: 0 0 12px rgba(245, 158, 11, 0.3);
+    }
+    .bunker-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(245, 158, 11, 0.12);
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      color: #f59e0b;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      padding: 4px 14px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .bunker-title {
+      font-family: var(--font-heading);
+      font-size: clamp(2.4rem, 4.8vw, 3.8rem);
+      font-weight: 700;
+      letter-spacing: 3px;
+      line-height: 0.95;
+      background: linear-gradient(180deg, #ffffff 20%, #cbd5e0 70%, #718096 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 4px 24px rgba(0, 0, 0, 0.7);
+    }
+    .bunker-title span {
+      color: #ef4444;
+      -webkit-text-fill-color: #ef4444;
+      text-shadow: 0 0 20px rgba(239, 68, 68, 0.6);
+    }
+    .bunker-subtitle {
+      font-family: var(--font-tactical);
+      font-size: clamp(0.85rem, 1.4vw, 1rem);
+      color: #a0aec0;
+      letter-spacing: 1.5px;
+      margin-top: 4px;
+      text-transform: uppercase;
+    }
+
+    /* Setup Section Containers */
+    .setup-group-label {
+      font-family: var(--font-tactical);
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #f59e0b;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    /* Team Count Selector (Tactical Tabs) */
+    .team-tactical-selector {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    .team-count-btn {
+      background: #111522;
+      border: 1.5px solid #2d3748;
+      border-radius: 10px;
+      padding: 12px;
+      color: #a0aec0;
+      font-family: var(--font-heading);
+      font-size: 1.7rem;
+      line-height: 1;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .team-count-btn span {
+      font-family: var(--font-tactical);
+      font-size: 0.76rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #718096;
+    }
+    .team-count-btn:hover {
+      border-color: #4a5568;
+      background: #171d2e;
+      color: #ffffff;
+      transform: translateY(-2px);
+    }
+    .team-count-btn.selected {
+      border-color: #f59e0b;
+      background: linear-gradient(180deg, rgba(245, 158, 11, 0.15), rgba(17, 21, 34, 0.9));
+      color: #f59e0b;
+      box-shadow: 0 0 20px rgba(245, 158, 11, 0.25), inset 0 1px 0 rgba(245, 158, 11, 0.4);
+      transform: translateY(-2px);
+    }
+    .team-count-btn.selected span {
+      color: #fef3c7;
+    }
+
+    /* Difficulty Threat Selector */
+    .diff-tactical-selector {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    .diff-btn {
+      background: #111522;
+      border: 1.5px solid #2d3748;
+      border-radius: 10px;
+      padding: 12px 14px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 4px;
+      transition: all 0.2s ease;
+    }
+    .diff-title {
+      font-family: var(--font-heading);
+      font-size: 1.35rem;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .diff-desc {
+      font-family: var(--font-body);
+      font-size: 0.72rem;
+      color: #718096;
+      line-height: 1.3;
+    }
+    .diff-btn[data-mode="easy"] .diff-title { color: #10b981; }
+    .diff-btn[data-mode="normal"] .diff-title { color: #f59e0b; }
+    .diff-btn[data-mode="hard"] .diff-title { color: #ef4444; }
+
+    .diff-btn:hover {
+      transform: translateY(-2px);
+      background: #171d2e;
+    }
+    .diff-btn.selected[data-mode="easy"] {
+      border-color: #10b981;
+      background: rgba(16, 185, 129, 0.12);
+      box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+    }
+    .diff-btn.selected[data-mode="normal"] {
+      border-color: #f59e0b;
+      background: rgba(245, 158, 11, 0.12);
+      box-shadow: 0 0 20px rgba(245, 158, 11, 0.3);
+    }
+    .diff-btn.selected[data-mode="hard"] {
+      border-color: #ef4444;
+      background: rgba(239, 68, 68, 0.15);
+      box-shadow: 0 0 20px rgba(239, 68, 68, 0.35);
+    }
+    .diff-btn.selected .diff-desc {
+      color: #e2e8f0;
+    }
+
+    /* Team Callsign Input Grid */
+    .team-inputs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+    }
+    .team-input-pod {
+      background: #0d111b;
+      border: 1.5px solid #2d3748;
+      border-radius: 10px;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: border-color 0.2s;
+    }
+    .team-input-badge {
+      width: 14px;
+      height: 14px;
+      border-radius: 3px;
+      flex-shrink: 0;
+      box-shadow: 0 0 8px currentColor;
+    }
+    .team-input-pod input {
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #ffffff;
+      font-family: var(--font-tactical);
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      width: 100%;
+    }
+
+    /* Big Tactical Deploy Button */
+    .start-btn {
+      background: linear-gradient(180deg, #dc2626 0%, #991b1b 100%);
+      border: 2px solid #ef4444;
+      border-radius: 12px;
+      padding: 16px 36px;
+      color: #ffffff;
+      font-family: var(--font-heading);
+      font-size: clamp(1.4rem, 2.5vw, 1.85rem);
+      letter-spacing: 2px;
+      cursor: pointer;
+      box-shadow: 0 6px 28px rgba(239, 68, 68, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+    .start-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 36px rgba(239, 68, 68, 0.6);
+      background: linear-gradient(180deg, #ef4444 0%, #b91c1c 100%);
+    }
+    .start-btn:active {
+      transform: translateY(1px);
+    }
+
+    /* ══════════════════════════════════════════════════════════════════════
+       2. IN-GAME SCREEN: OUTPOST UNDER SIEGE
+       ══════════════════════════════════════════════════════════════════════ */
+    #game-screen {
+      flex-direction: column;
+      background: #080a10;
+    }
+
+    /* Top Command HUD */
+    .command-hud-bar {
+      height: 60px;
+      background: linear-gradient(180deg, #131724 0%, #0c0f18 100%);
+      border-bottom: 2px solid #2d3748;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      gap: 14px;
+      z-index: 20;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
+      flex-shrink: 0;
+    }
+
+    .hud-wave-block {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .wave-badge-tactical {
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid rgba(245, 158, 11, 0.5);
+      color: #f59e0b;
+      font-family: var(--font-heading);
+      font-size: 1.3rem;
+      letter-spacing: 1.5px;
+      padding: 4px 12px;
+      border-radius: 6px;
+      white-space: nowrap;
+    }
+    .mode-badge-tactical {
+      font-family: var(--font-tactical);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      padding: 3px 8px;
+      border-radius: 4px;
+      border: 1px solid;
+      text-transform: uppercase;
+    }
+    .mode-badge-tactical.easy { background: rgba(16, 185, 129, 0.15); border-color: #10b981; color: #10b981; }
+    .mode-badge-tactical.normal { background: rgba(245, 158, 11, 0.15); border-color: #f59e0b; color: #f59e0b; }
+    .mode-badge-tactical.hard { background: rgba(239, 68, 68, 0.15); border-color: #ef4444; color: #ef4444; }
+
+    /* Center Bunker HP Meter */
+    .hud-base-block {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex: 1;
+      max-width: 440px;
+    }
+    .base-label-row {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      font-family: var(--font-tactical);
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #a0aec0;
+      letter-spacing: 1px;
+      margin-bottom: 3px;
+    }
+    .base-hp-text-bold {
+      font-family: var(--font-mono);
+      font-weight: 800;
+      color: #38bdf8;
+    }
+    .bunker-hp-track {
+      width: 100%;
+      height: 12px;
+      background: #090c14;
+      border: 1px solid #4a5568;
+      border-radius: 4px;
+      overflow: hidden;
+      position: relative;
+    }
+    .bunker-hp-fill {
+      height: 100%;
+      width: 100%;
+      background: linear-gradient(90deg, #10b981, #34d399);
+      transition: width 0.25s ease, background 0.4s ease;
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.6);
+    }
+    .bunker-hp-fill.warning {
+      background: linear-gradient(90deg, #f59e0b, #fbbf24);
+      box-shadow: 0 0 10px rgba(245, 158, 11, 0.6);
+    }
+    .bunker-hp-fill.danger {
+      background: linear-gradient(90deg, #dc2626, #ef4444);
+      box-shadow: 0 0 14px rgba(239, 68, 68, 0.8);
+      animation: alertPulse 0.7s infinite alternate;
+    }
+    @keyframes alertPulse {
+      0% { opacity: 0.7; }
+      100% { opacity: 1; }
+    }
+
+    /* Right Live Ticker & Quick Controls */
+    .hud-right-block {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .live-squadron-ticker {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #0d111a;
+      border: 1px solid #2d3748;
+      border-radius: 8px;
+      padding: 4px 10px;
+    }
+    .ticker-team {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+    .ticker-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 2px;
+    }
+    .ticker-score {
+      font-weight: 800;
+      color: #ffffff;
+    }
+
+    .hud-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: #1a202c;
+      border: 1px solid #4a5568;
+      color: #cbd5e0;
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+    }
+    .hud-btn:hover {
+      background: #2d3748;
+      color: #ffffff;
+      border-color: #718096;
+    }
+
+    /* Combat Canvas Viewport */
+    .combat-stage-area {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+      min-height: 240px;
+      background: #090c14;
+    }
+    #gameCanvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    /* Tactical Alert Banner Overlay */
+    .tactical-alert-banner {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.7);
+      background: rgba(13, 17, 23, 0.95);
+      border: 2px solid #f59e0b;
+      border-radius: 14px;
+      padding: 16px 36px;
+      text-align: center;
+      z-index: 30;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 0 50px rgba(0, 0, 0, 0.9);
+    }
+    .tactical-alert-banner.show {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+    .tactical-alert-title {
+      font-family: var(--font-heading);
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 700;
+      letter-spacing: 3px;
+      line-height: 1;
+    }
+    .tactical-alert-sub {
+      font-family: var(--font-tactical);
+      font-size: 0.95rem;
+      color: #cbd5e0;
+      letter-spacing: 1px;
+      margin-top: 4px;
+    }
+    .tactical-alert-banner.boss-alert {
+      border-color: #ef4444;
+      box-shadow: 0 0 60px rgba(239, 68, 68, 0.5);
+    }
+    .tactical-alert-banner.boss-alert .tactical-alert-title {
+      color: #ef4444;
+      text-shadow: 0 0 25px rgba(239, 68, 68, 0.7);
+    }
+
+    /* ══════════════════════════════════════════════════════════════════════
+       3. SIMULTANEOUS MULTI-TOUCH QUIZ TERMINALS (2-4 SQUADRONS)
+       ══════════════════════════════════════════════════════════════════════ */
+    .quiz-terminals-dock {
+      height: clamp(260px, 37vh, 340px);
+      background: #090c14;
+      border-top: 2px solid #2d3748;
+      display: grid;
+      gap: 6px;
+      padding: 6px 8px;
+      flex-shrink: 0;
+      z-index: 20;
+      box-shadow: 0 -6px 24px rgba(0, 0, 0, 0.8);
+    }
+    .quiz-terminals-dock.teams-2 { grid-template-columns: repeat(2, 1fr); }
+    .quiz-terminals-dock.teams-3 { grid-template-columns: repeat(3, 1fr); }
+    .quiz-terminals-dock.teams-4 { grid-template-columns: repeat(4, 1fr); }
+
+    .tactical-terminal-card {
+      background: linear-gradient(180deg, #121624 0%, #0c0f18 100%);
+      border: 1.5px solid #2d3748;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    /* Team color borders */
+    .tactical-terminal-card.team-0 { border-color: rgba(244, 63, 94, 0.45); }
+    .tactical-terminal-card.team-1 { border-color: rgba(2, 132, 199, 0.45); }
+    .tactical-terminal-card.team-2 { border-color: rgba(16, 185, 129, 0.45); }
+    .tactical-terminal-card.team-3 { border-color: rgba(234, 179, 8, 0.45); }
+
+    /* Flash feedback animation */
+    .tactical-terminal-card.flash-hit {
+      animation: terminalHitFlash 0.6s ease;
+    }
+    .tactical-terminal-card.flash-miss {
+      animation: terminalMissFlash 0.6s ease;
+    }
+    @keyframes terminalHitFlash {
+      0%, 100% { background: linear-gradient(180deg, #121624 0%, #0c0f18 100%); }
+      50% { background: rgba(16, 185, 129, 0.35); }
+    }
+    @keyframes terminalMissFlash {
+      0%, 100% { background: linear-gradient(180deg, #121624 0%, #0c0f18 100%); }
+      50% { background: rgba(239, 68, 68, 0.35); }
+    }
+
+    .terminal-top-strip {
+      padding: 6px 10px;
+      background: rgba(0, 0, 0, 0.35);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .terminal-callsign {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-tactical);
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+    .callsign-indicator {
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+      box-shadow: 0 0 6px currentColor;
+    }
+    .terminal-telemetry {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: #a0aec0;
+    }
+    .telemetry-val {
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    /* Terminal Question Progress Timer */
+    .terminal-timer-track {
+      height: 4px;
+      background: #090c14;
+      width: 100%;
+      overflow: hidden;
+    }
+    .terminal-timer-bar {
+      height: 100%;
+      width: 100%;
+      background: #10b981;
+      transition: width 0.1s linear, background-color 0.25s ease;
+    }
+    .terminal-timer-bar.warning { background: #f59e0b; }
+    .terminal-timer-bar.danger { background: #ef4444; }
+
+    /* CRT Question Display Box */
+    .terminal-crt-body {
+      padding: 8px 10px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 6px;
+      min-height: 0;
+    }
+    .crt-topic-tag {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      font-weight: 700;
+      color: #f59e0b;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .crt-question-text {
+      font-family: var(--font-body);
+      font-size: clamp(0.74rem, 1.1vw, 0.86rem);
+      font-weight: 600;
+      line-height: 1.35;
+      color: #f7fafc;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      min-height: 0;
+    }
+
+    /* Tactical Answer Keypad */
+    .crt-keypad-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5px;
+    }
+    .keypad-btn {
+      background: #161c2c;
+      border: 1px solid #2d3748;
+      border-radius: 6px;
+      padding: 6px 8px;
+      color: #e2e8f0;
+      font-family: var(--font-tactical);
+      font-size: clamp(0.72rem, 1vw, 0.82rem);
+      font-weight: 600;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      line-height: 1.2;
+      transition: all 0.15s ease;
+      touch-action: manipulation;
+    }
+    .keypad-btn .btn-key-badge {
+      width: 22px;
+      height: 22px;
+      border-radius: 4px;
+      background: #232a3e;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: #cbd5e0;
+      flex-shrink: 0;
+    }
+    .keypad-btn:hover {
+      background: #1f273d;
+      border-color: #4a5568;
+    }
+    .keypad-btn:active {
+      transform: scale(0.97);
+    }
+    .keypad-btn.correct {
+      background: rgba(16, 185, 129, 0.3) !important;
+      border-color: #10b981 !important;
+      color: #ffffff !important;
+    }
+    .keypad-btn.correct .btn-key-badge {
+      background: #10b981;
+      color: #07090e;
+    }
+    .keypad-btn.wrong {
+      background: rgba(239, 68, 68, 0.3) !important;
+      border-color: #ef4444 !important;
+      color: #ffffff !important;
+    }
+    .keypad-btn.wrong .btn-key-badge {
+      background: #ef4444;
+      color: #ffffff;
+    }
+    .keypad-btn.disabled {
+      pointer-events: none;
+      opacity: 0.45;
+    }
+
+    /* Dynamic Superpower Tactical Callout */
+    .tactical-superpower-callout {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      font-family: var(--font-heading);
+      font-size: 1.5rem;
+      letter-spacing: 1.5px;
+      padding: 6px 16px;
+      border-radius: 8px;
+      z-index: 15;
+      pointer-events: none;
+      opacity: 0;
+      white-space: nowrap;
+      text-transform: uppercase;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
+    }
+    .tactical-superpower-callout.show {
+      animation: tacticalCalloutPop 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes tacticalCalloutPop {
+      0% { transform: translate(-50%, -50%) scale(0.4); opacity: 0; }
+      20% { transform: translate(-50%, -50%) scale(1.15); opacity: 1; }
+      70% { transform: translate(-50%, -60%) scale(1); opacity: 1; }
+      100% { transform: translate(-50%, -90%) scale(0.85); opacity: 0; }
+    }
+    .callout-double { background: #d97706; color: #fff; border: 1.5px solid #fbbf24; }
+    .callout-triple { background: #ea580c; color: #fff; border: 1.5px solid #fb923c; }
+    .callout-critical { background: #dc2626; color: #fff; border: 1.5px solid #f87171; }
+    .callout-freeze { background: #0284c7; color: #fff; border: 1.5px solid #38bdf8; }
+    .callout-bomb { background: #7c3aed; color: #fff; border: 1.5px solid #c084fc; }
+
+    /* ══════════════════════════════════════════════════════════════════════
+       4. RESULTS & COMBAT DEBRIEFING SCREEN
+       ══════════════════════════════════════════════════════════════════════ */
+    #results-screen {
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background:
+        radial-gradient(ellipse at 50% 25%, rgba(245, 158, 11, 0.08) 0%, transparent 55%),
+        linear-gradient(180deg, #0d1117 0%, #05070a 100%);
+      position: relative;
+      overflow-y: auto;
+      padding: 24px;
+      z-index: 10;
+    }
+
+    .debriefing-card {
+      background: linear-gradient(145deg, rgba(19, 23, 34, 0.95), rgba(13, 17, 23, 0.98));
+      border: 2px solid #2d3748;
+      border-radius: 24px;
+      padding: clamp(24px, 4vw, 42px);
+      width: min(980px, 95vw);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(18px);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .debriefing-title {
+      font-family: var(--font-heading);
+      font-size: clamp(2.4rem, 4.5vw, 3.6rem);
+      font-weight: 700;
+      letter-spacing: 3px;
+      line-height: 1;
+    }
+    .debriefing-subtitle {
+      font-family: var(--font-tactical);
+      font-size: clamp(0.9rem, 1.4vw, 1.05rem);
+      color: #a0aec0;
+      letter-spacing: 1px;
+      margin-top: 4px;
+    }
+
+    /* Podium Cards Grid */
+    .podium-roster-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 14px;
+      margin-top: 10px;
+    }
+    .podium-honor-card {
+      background: #111522;
+      border: 2px solid #2d3748;
+      border-radius: 14px;
+      padding: 18px 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      position: relative;
+      transition: transform 0.2s;
+    }
+    .podium-honor-card:hover {
+      transform: translateY(-4px);
+    }
+    .podium-honor-card.rank-1 {
+      border-color: #f59e0b;
+      background: linear-gradient(180deg, rgba(245, 158, 11, 0.15) 0%, #111522 100%);
+      box-shadow: 0 0 35px rgba(245, 158, 11, 0.25);
+    }
+    .honor-badge-icon {
+      font-size: 2.4rem;
+      line-height: 1;
+    }
+    .honor-squadron-name {
+      font-family: var(--font-heading);
+      font-size: 1.4rem;
+      letter-spacing: 1px;
+    }
+    .honor-score-val {
+      font-family: var(--font-mono);
+      font-size: 1.6rem;
+      font-weight: 800;
+    }
+    .honor-stats-breakdown {
+      font-family: var(--font-body);
+      font-size: 0.76rem;
+      color: #a0aec0;
+      line-height: 1.6;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding-top: 8px;
+      width: 100%;
+      text-align: left;
+    }
+
+    .redeploy-btn {
+      background: linear-gradient(180deg, #059669 0%, #047857 100%);
+      border: 1.5px solid #10b981;
+      border-radius: 12px;
+      padding: 14px 34px;
+      color: #ffffff;
+      font-family: var(--font-heading);
+      font-size: 1.4rem;
+      letter-spacing: 2px;
+      cursor: pointer;
+      box-shadow: 0 6px 25px rgba(16, 185, 129, 0.35);
+      align-self: center;
+      transition: all 0.2s;
+      text-transform: uppercase;
+    }
+    .redeploy-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 35px rgba(16, 185, 129, 0.5);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ════════════════ 1. SETUP / WAR ROOM SCREEN ════════════════ -->
+  <section class="screen active" id="setup-screen">
+    <canvas class="ambient-canvas" id="ambientSetupCanvas"></canvas>
+
+    <div class="setup-bunker-card">
+      <div class="bunker-header">
+        <div class="hazard-stripe"></div>
+        <div class="bunker-badge">🚨 EMERGENCY DEFENSE PROTOCOL ACTIVE</div>
+        <h1 class="bunker-title">OUTPOST ZERO <span>// ZOMBIE SIEGE</span></h1>
+        <p class="bunker-subtitle">Multi-Touch Tactical Defense &amp; Informatika SMP Quiz</p>
+      </div>
+
+      <!-- Squadron Count Selector -->
+      <div>
+        <div class="setup-group-label">👥 TENTUKAN JUMLAH SKUADRON (SIMULTAN IFP)</div>
+        <div class="team-tactical-selector">
+          <button type="button" class="team-count-btn selected" data-count="2">2<span>Skuadron</span></button>
+          <button type="button" class="team-count-btn" data-count="3">3<span>Skuadron</span></button>
+          <button type="button" class="team-count-btn" data-count="4">4<span>Skuadron</span></button>
+        </div>
+      </div>
+
+      <!-- Threat Level Selector -->
+      <div>
+        <div class="setup-group-label">⚡ LEVEL ANCAMAN ZOMBIE (DIFFICULTY)</div>
+        <div class="diff-tactical-selector">
+          <button type="button" class="diff-btn" data-mode="easy">
+            <span class="diff-title">🟢 LEVEL ALPHA</span>
+            <span class="diff-desc">Santai · Hama Sedikit · Bunker HP 700</span>
+          </button>
+          <button type="button" class="diff-btn selected" data-mode="normal">
+            <span class="diff-title">🟡 LEVEL BETA</span>
+            <span class="diff-desc">Standar · Varian Lengkap · Bunker HP 850</span>
+          </button>
+          <button type="button" class="diff-btn" data-mode="hard">
+            <span class="diff-title">🔴 LEVEL OMEGA</span>
+            <span class="diff-desc">Swarm Masif · Varian Penuh · Bunker HP 1000</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Squadron Callsign Inputs -->
+      <div>
+        <div class="setup-group-label">🏷️ CALLSIGN SKUADRON PERTAHANAN</div>
+        <div class="team-inputs-grid" id="teamInputsContainer">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+
+      <!-- Launch Button -->
+      <button type="button" class="start-btn" id="btnStartDefense">
+        ⚔️ AKTIFKAN PROTOKOL PERTAHANAN BUNKER
+      </button>
+    </div>
+  </section>
+
+  <!-- ════════════════ 2. IN-GAME BATTLE SCREEN ════════════════ -->
+  <section class="screen" id="game-screen">
+    <!-- Top Command HUD -->
+    <header class="command-hud-bar">
+      <div class="hud-wave-block">
+        <div class="wave-badge-tactical" id="hudWaveDisplay">WAVE 1 / 5</div>
+        <span class="mode-badge-tactical normal" id="hudModeBadge">BETA</span>
+      </div>
+
+      <!-- Center Base HP Bar -->
+      <div class="hud-base-block">
+        <div class="base-label-row">
+          <span>🏰 INTEGRITAS BUNKER SEKTOR ZERO</span>
+          <span class="base-hp-text-bold" id="hudBaseHpVal">850 / 850</span>
+        </div>
+        <div class="bunker-hp-track">
+          <div class="bunker-hp-fill" id="hudBaseHpFill" style="width: 100%;"></div>
+        </div>
+      </div>
+
+      <!-- Right Telemetry Ticker & Audio Controls -->
+      <div class="hud-right-block">
+        <div class="live-squadron-ticker" id="hudLiveSquadrons">
+          <!-- Dynamic live scores -->
+        </div>
+        <button type="button" class="hud-btn" id="btnToggleAudio" title="Toggle Audio">🔊</button>
+        <button type="button" class="hud-btn" id="btnToggleFullscreen" title="Fullscreen">⛶</button>
+      </div>
+    </header>
+
+    <!-- Combat Viewport Canvas -->
+    <div class="combat-stage-area">
+      <canvas id="gameCanvas"></canvas>
+
+      <!-- Center Wave / Boss Notification Banner -->
+      <div class="tactical-alert-banner" id="tacticalAlertBanner">
+        <div class="tactical-alert-title" id="alertTitle">INCOMING WAVE 1</div>
+        <div class="tactical-alert-sub" id="alertSub">Pasukan zombie terdeteksi mendekati garis pertahanan!</div>
+      </div>
+    </div>
+
+    <!-- Simultaneous Multi-Touch Terminals Dock -->
+    <div class="quiz-terminals-dock teams-2" id="quizTerminalsDock">
+      <!-- 2-4 Squadron Stations dynamically injected -->
+    </div>
+  </section>
+
+  <!-- ════════════════ 3. AFTER-ACTION COMBAT DEBRIEFING ════════════════ -->
+  <section class="screen" id="results-screen">
+    <div class="debriefing-card">
+      <div>
+        <h1 class="debriefing-title" id="resultsTitle">🏆 PERTAHANAN BUNKER BERHASIL!</h1>
+        <p class="debriefing-subtitle" id="resultsSubtitle">Laporan evaluasi pertempuran dan kontribusi skuadron</p>
+      </div>
+
+      <div class="podium-roster-grid" id="podiumGrid">
+        <!-- Rendered dynamically -->
+      </div>
+
+      <button type="button" class="redeploy-btn" id="btnPlayAgain">
+        🔄 LUNCURKAN MISI BARU
+      </button>
+    </div>
+  </section>
+
+  <!-- ════════════════ 4. JAVASCRIPT GAME ENGINE ════════════════ -->
+  <script>
+    // Canvas roundRect Polyfill for legacy IFP webviews / older browsers
+    if (!CanvasRenderingContext2D.prototype.roundRect) {
+      CanvasRenderingContext2D.prototype.roundRect = function(x, y, w, h, r) {
+        if (typeof r === 'undefined') r = 0;
+        if (typeof r === 'number') r = [r, r, r, r];
+        const radius = Math.min(w / 2, h / 2, r[0] || 0);
+        this.beginPath();
+        this.moveTo(x + radius, y);
+        this.arcTo(x + w, y, x + w, y + h, radius);
+        this.arcTo(x + w, y + h, x, y + h, radius);
+        this.arcTo(x, y + h, x, y, radius);
+        this.arcTo(x, y, x + w, y, radius);
+        this.closePath();
+        return this;
+      };
+    }
+
+    // ============================================================
+    // 1. QUESTIONS BANK (ALL ORIGINAL QUESTIONS PRESERVED)
+    // ============================================================
+    const QUESTIONS = [
+      // ── 1. BERPIKIR KOMPUTASIONAL ──
+      { question: "Apa langkah pertama dalam penyelesaian masalah secara komputasional?", options: ["Menulis kode program", "Dekomposisi masalah", "Membuat flowchart", "Menguji program"], answer: 1, topic: "Berpikir Komputasional", difficulty: 1 },
+      { question: "Teknik memecah masalah kompleks menjadi bagian-bagian kecil yang lebih mudah dikelola disebut?", options: ["Abstraksi", "Dekomposisi", "Pengenalan Pola", "Algoritma"], answer: 1, topic: "Berpikir Komputasional", difficulty: 1 },
+      { question: "Apa yang dimaksud dengan 'abstraksi' dalam berpikir komputasional?", options: ["Fokus pada informasi penting dan mengabaikan detail yang tidak relevan", "Membuat kode program menjadi lebih rumit", "Menggabungkan semua data menjadi satu", "Menghapus seluruh file dari komputer"], answer: 0, topic: "Berpikir Komputasional", difficulty: 2 },
+      { question: "Proses mencari kesamaan atau keteraturan dalam suatu permasalahan disebut?", options: ["Dekomposisi", "Abstraksi", "Pengenalan Pola", "Debugging"], answer: 2, topic: "Berpikir Komputasional", difficulty: 1 },
+      { question: "Urutan langkah-langkah logis dan sistematis untuk menyelesaikan masalah disebut?", options: ["Algoritma", "Variabel", "Hardware", "Database"], answer: 0, topic: "Berpikir Komputasional", difficulty: 1 },
+      { question: "Mengurutkan data dari nilai terkecil ke terbesar dalam algoritma disebut?", options: ["Ascending", "Descending", "Searching", "Filtering"], answer: 0, topic: "Berpikir Komputasional", difficulty: 1 },
+      { question: "Algoritma pencarian yang memeriksa elemen satu per satu dari awal hingga akhir adalah?", options: ["Binary Search", "Linear Search", "Bubble Sort", "Quick Sort"], answer: 1, topic: "Berpikir Komputasional", difficulty: 2 },
+      { question: "Manakah di bawah ini yang MERUPAKAN 4 pilar utama Berpikir Komputasional?", options: ["Dekomposisi, Pengenalan Pola, Abstraksi, Algoritma", "Input, Output, Process, Storage", "Hardware, Software, Brainware, Network", "Word, Excel, PowerPoint, Access"], answer: 0, topic: "Berpikir Komputasional", difficulty: 2 },
+      { question: "Struktur data yang beroperasi dengan prinsip LIFO (Last In, First Out) seperti tumpukan buku adalah?", options: ["Queue (Antrean)", "Stack (Tumpukan)", "Array", "Tree"], answer: 1, topic: "Berpikir Komputasional", difficulty: 2 },
+      { question: "Struktur data antrean pembelian tiket di mana data pertama masuk akan pertama dilayani (FIFO) adalah?", options: ["Stack", "Queue", "Graph", "Binary Tree"], answer: 1, topic: "Berpikir Komputasional", difficulty: 1 },
+      { question: "Berapakah nilai desimal dari bilangan biner 1010?", options: ["8", "10", "12", "14"], answer: 1, topic: "Berpikir Komputasional", difficulty: 1 },
+      { question: "Berapakah nilai desimal dari bilangan biner 1111?", options: ["12", "14", "15", "16"], answer: 2, topic: "Berpikir Komputasional", difficulty: 2 },
+      { question: "Operasi logika yang HANYA bernilai BENAR jika kedua kondisi yang diuji sama-sama bernilai benar adalah?", options: ["Gerbang OR", "Gerbang AND", "Gerbang NOT", "Gerbang XOR"], answer: 1, topic: "Berpikir Komputasional", difficulty: 1 },
+      { question: "Operasi logika yang menghasilkan nilai BENAR jika salah satu atau kedua input bernilai benar adalah?", options: ["Gerbang OR", "Gerbang AND", "Gerbang NOT", "Gerbang NAND"], answer: 0, topic: "Berpikir Komputasional", difficulty: 1 },
+      { question: "Algoritma pengurutan yang menukar dua data bersebelahan jika urutannya belum sesuai secara berulang disebut?", options: ["Bubble Sort", "Linear Search", "Binary Search", "Hash Map"], answer: 0, topic: "Berpikir Komputasional", difficulty: 2 },
+      { question: "Syarat mutlak agar algoritma pencarian biner (Binary Search) dapat berjalan dengan sukses adalah?", options: ["Data harus berukuran sangat kecil", "Data harus sudah terurut terlebih dahulu", "Semua data harus bertipe angka genap", "Data harus disimpan di cloud"], answer: 1, topic: "Berpikir Komputasional", difficulty: 2 },
+
+      // ── 2. MICROSOFT WORD & APLIKASI PERKANTORAN ──
+      { question: "Shortcut keyboard di Microsoft Word untuk menyalin (copy) teks yang dipilih adalah?", options: ["Ctrl + V", "Ctrl + C", "Ctrl + X", "Ctrl + Z"], answer: 1, topic: "Microsoft Word", difficulty: 1 },
+      { question: "Fungsi dari shortcut Ctrl + Z pada Microsoft Word adalah?", options: ["Mencetak dokumen", "Membatalkan perintah terakhir (Undo)", "Menyimpan dokumen", "Membuat teks tebal"], answer: 1, topic: "Microsoft Word", difficulty: 1 },
+      { question: "Fitur di Microsoft Word untuk membuat surat masal dengan penerima berbeda dinamakan?", options: ["Mail Merge", "Table of Contents", "Track Changes", "WordArt"], answer: 0, topic: "Microsoft Word", difficulty: 2 },
+      { question: "Untuk membuat Daftar Isi otomatis di Microsoft Word, kita menggunakan gaya penulisan (style)?", options: ["Normal & Spacing", "Heading 1, Heading 2, dst.", "Title & Subtitle", "Header & Footer"], answer: 1, topic: "Microsoft Word", difficulty: 2 },
+      { question: "Orientasi kertas horizontal (melebar ke samping) di Microsoft Word disebut?", options: ["Portrait", "Landscape", "Margins", "Columns"], answer: 1, topic: "Microsoft Word", difficulty: 1 },
+      { question: "Fitur yang digunakan untuk menyisipkan catatan di bagian bawah setiap halaman dokumen adalah?", options: ["Header", "Footer", "Watermark", "Page Break"], answer: 1, topic: "Microsoft Word", difficulty: 1 },
+      { question: "Shortcut untuk menyimpan dokumen di Microsoft Word secara cepat adalah?", options: ["Ctrl + S", "Ctrl + P", "Ctrl + N", "Ctrl + O"], answer: 0, topic: "Microsoft Word", difficulty: 1 },
+      { question: "Untuk mengubah jarak antar baris teks dalam paragraf di MS Word, kita mengatur?", options: ["Font Size", "Line Spacing", "Text Alignment", "Indent"], answer: 1, topic: "Microsoft Word", difficulty: 1 },
+      { question: "Shortcut Ctrl + H pada Microsoft Word berfungsi untuk?", options: ["Mencari teks (Find)", "Mengganti teks (Find and Replace)", "Membuka dokumen baru", "Menyorot teks"], answer: 1, topic: "Microsoft Word", difficulty: 2 },
+      { question: "Shortcut di Microsoft Word untuk mengulang kembali tindakan yang baru saja dibatalkan (Redo) adalah?", options: ["Ctrl + Z", "Ctrl + Y", "Ctrl + R", "Ctrl + U"], answer: 1, topic: "Microsoft Word", difficulty: 1 },
+      { question: "Shortcut keyboard untuk memotong (cut) teks terpilih agar bisa dipindahkan ke tempat lain adalah?", options: ["Ctrl + C", "Ctrl + X", "Ctrl + P", "Ctrl + D"], answer: 1, topic: "Microsoft Word", difficulty: 1 },
+      { question: "Shortcut untuk membuat perataan teks menjadi rata tengah (Center align) di Microsoft Word adalah?", options: ["Ctrl + L", "Ctrl + R", "Ctrl + E", "Ctrl + J"], answer: 2, topic: "Microsoft Word", difficulty: 1 },
+      { question: "Shortcut untuk membuat perataan teks rata kanan dan kiri sekaligus (Justify) adalah?", options: ["Ctrl + J", "Ctrl + K", "Ctrl + L", "Ctrl + M"], answer: 0, topic: "Microsoft Word", difficulty: 1 },
+      { question: "Fitur di Word untuk membagi dokumen sehingga format penomoran halaman atau orientasi dapat berbeda antar halaman adalah?", options: ["Page Break", "Section Break", "Line Break", "Paragraph Indent"], answer: 1, topic: "Microsoft Word", difficulty: 2 },
+      { question: "Pada Microsoft Excel, rumus/fungsi standar yang digunakan untuk menjumlahkan sekumpulan angka adalah?", options: ["=TOTAL()", "=SUM()", "=COUNT()", "=ADD()"], answer: 1, topic: "Aplikasi Perkantoran", difficulty: 1 },
+      { question: "Rumus di Microsoft Excel yang digunakan untuk mencari nilai rata-rata dari sekelompok data adalah?", options: ["=MEAN()", "=AVERAGE()", "=MEDIAN()", "=SUM()"], answer: 1, topic: "Aplikasi Perkantoran", difficulty: 1 },
+      { question: "Simbol yang digunakan untuk mengunci baris atau kolom (sel absolut) di Excel agar tidak bergeser saat disalin adalah?", options: ["Tanda pagar (#)", "Tanda dollar ($)", "Tanda persen (%)", "Tanda bintang (*)"], answer: 1, topic: "Aplikasi Perkantoran", difficulty: 2 },
+      { question: "Efek animasi visual saat berpindah dari satu slide ke slide berikutnya di PowerPoint dinamakan?", options: ["Animation", "Transition", "Slide Design", "Presentation View"], answer: 1, topic: "Aplikasi Perkantoran", difficulty: 1 },
+
+      // ── 3. GOOGLE & LAYANAN CLOUD ──
+      { question: "Layanan penyimpanan awan (cloud storage) buatan Google yang menyediakan kapasitas gratis 15GB dinamakan?", options: ["Google Docs", "Google Drive", "Google Classroom", "Google Meet"], answer: 1, topic: "Google Services", difficulty: 1 },
+      { question: "Aplikasi berbasis web dari Google yang berfungsi mirip Microsoft Word untuk mengedit dokumen bersama adalah?", options: ["Google Sheets", "Google Slides", "Google Docs", "Google Forms"], answer: 2, topic: "Google Services", difficulty: 1 },
+      { question: "Operator pencarian Google untuk mencari format file tertentu (misal PDF) adalah?", options: ["filetype:pdf", "search:pdf", "doc:pdf", "ext:pdf"], answer: 0, topic: "Google Services", difficulty: 2 },
+      { question: "Untuk mencari frasa kata yang persis sama di Google Search, kita menggunakan tanda?", options: ["Tanda kurung ( )", "Tanda petik ganda \" \"", "Tanda pagar #", "Tanda bintang *"], answer: 1, topic: "Google Services", difficulty: 2 },
+      { question: "Layanan Google yang digunakan untuk membuat formulir survei atau kuis online adalah?", options: ["Google Keep", "Google Forms", "Google Sites", "Google Translate"], answer: 1, topic: "Google Services", difficulty: 1 },
+      { question: "Keuntungan utama menggunakan Google Docs dibanding aplikasi pengolah kata biasa adalah?", options: ["Dapat diakses dan diedit bersama secara real-time dari mana saja", "Tidak memerlukan koneksi jaringan sama sekali", "Ukurannya selalu lebih kecil dari 1KB", "Hanya bisa dibuka di laptop buatan Google"], answer: 0, topic: "Google Services", difficulty: 1 },
+      { question: "Mesin pencari (search engine) buatan Google pertama kali dikembangkan oleh?", options: ["Bill Gates & Steve Jobs", "Larry Page & Sergey Brin", "Mark Zuckerberg & Elon Musk", "Jeff Bezos & Tim Berners-Lee"], answer: 1, topic: "Google Services", difficulty: 2 },
+      { question: "Layanan konvergensi video konferensi dari Google untuk belajar online adalah?", options: ["Google Meet", "Google Chat", "Gmail", "Google Duo"], answer: 0, topic: "Google Services", difficulty: 1 },
+      { question: "Izin akses file di Google Drive yang hanya memperbolehkan orang membaca tanpa bisa mengedit atau mengomentari adalah?", options: ["Editor", "Commenter", "Viewer (Pelihat)", "Owner"], answer: 2, topic: "Google Services", difficulty: 1 },
+      { question: "Tingkatan izin di Google Docs yang memperbolehkan orang lain memberikan saran koreksi tanpa mengubah teks asli dinamakan?", options: ["Commenter (Pemberi Komentar)", "Editor", "Viewer", "Restricted"], answer: 0, topic: "Google Services", difficulty: 1 },
+      { question: "Operator pencarian Google yang digunakan untuk menyaring hasil pencarian hanya dari situs web pemerintah Indonesia adalah?", options: ["domain:gov", "site:go.id", "filter:pemerintah", "url:indonesia"], answer: 1, topic: "Google Services", difficulty: 2 },
+      { question: "Fungsi dari tanda minus (-) di depan kata pencarian pada Google Search adalah?", options: ["Mencari rumus matematika", "Mengecualikan kata tersebut dari hasil pencarian", "Mencari kata berkonotasi negatif", "Mempercepat koneksi unduhan"], answer: 1, topic: "Google Services", difficulty: 2 },
+      { question: "Fitur di Google Docs yang memungkinkan kita melihat seluruh riwayat perbaikan dokumen beserta pembuatnya adalah?", options: ["Version History", "Document Outline", "Word Counter", "Explore Tab"], answer: 0, topic: "Google Services", difficulty: 1 },
+      { question: "Platform Google yang dirancang khusus untuk mendistribusikan materi, tugas, dan nilai secara online di sekolah adalah?", options: ["Google Classroom", "Google Play Store", "Google Earth", "Google Maps"], answer: 0, topic: "Google Services", difficulty: 1 },
+      { question: "Keuntungan utama menyimpan dokumen di Google Drive dibanding di flashdisk adalah?", options: ["Dapat diakses kapan saja dari berbagai perangkat dan aman dari kerusakan fisik", "Tidak memerlukan jaringan internet sama sekali", "Penyimpanan otomatis tanpa batasan kapasitas", "Hanya bisa dibuka jika memakai laptop khusus"], answer: 0, topic: "Google Services", difficulty: 1 },
+
+      // ── 4. INTERNET & JARINGAN ──
+      { question: "Jaringan komputer global yang menghubungkan jutaan komputer di seluruh dunia disebut?", options: ["LAN", "Intranet", "Internet", "Ethernet"], answer: 2, topic: "Internet", difficulty: 1 },
+      { question: "Aplikasi yang digunakan untuk membuka halaman web di internet (contoh: Chrome, Edge, Firefox) disebut?", options: ["Web Browser", "Search Engine", "Web Server", "Operating System"], answer: 0, topic: "Internet", difficulty: 1 },
+      { question: "Alamat unik berupa nomor yang mengidentifikasi setiap perangkat di jaringan internet dinamakan?", options: ["MAC Address", "IP Address", "URL", "DNS"], answer: 1, topic: "Internet", difficulty: 1 },
+      { question: "Simbol gembok pada alamat HTTPS di web browser menandakan bahwa halaman web tersebut?", options: ["Terkunci dan tidak bisa dibuka", "Aman karena komunikasi data dienkripsi", "Memiliki virus berpotensi bahaya", "Bebas dari kuota internet"], answer: 1, topic: "Internet", difficulty: 1 },
+      { question: "Kejahatan siber yang memancing korban untuk memberikan info rahasia (password/rekening) melalui web palsu disebut?", options: ["Phishing", "Hacking", "Spamming", "Browsing"], answer: 0, topic: "Internet", difficulty: 2 },
+      { question: "Perangkat yang berfungsi menghubungkan jaringan lokal dengan jaringan internet adalah?", options: ["Modem / Router", "Monitor", "Printer", "Soundcard"], answer: 0, topic: "Internet", difficulty: 1 },
+      { question: "Jejak aktivitas digital yang kita tinggalkan saat berselancar di internet dinamakan?", options: ["Digital Footprint (Jejak Digital)", "Digital Memory", "Internet Cache", "History Cookies"], answer: 0, topic: "Internet", difficulty: 1 },
+      { question: "Satuan untuk mengukur kecepatan mentransfer data di internet adalah?", options: ["Mbps (Megabits per second)", "GHz (Gigahertz)", "RPM (Rotation per minute)", "Pixel"], answer: 0, topic: "Internet", difficulty: 1 },
+      { question: "Kepanjangan dari singkatan LAN dalam jaringan komputer adalah?", options: ["Local Area Network", "Large Area Network", "Link Access Network", "Logical Array Node"], answer: 0, topic: "Internet", difficulty: 1 },
+      { question: "Topologi jaringan komputer di mana semua komputer klien dihubungkan ke satu konsentrator pusat (Switch/Hub) disebut?", options: ["Topologi Bus", "Topologi Star", "Topologi Ring", "Topologi Mesh"], answer: 1, topic: "Internet", difficulty: 1 },
+      { question: "Sistem di internet yang bertugas menerjemahkan nama domain (seperti google.com) menjadi alamat IP angka dinamakan?", options: ["DHCP", "DNS (Domain Name System)", "FTP", "HTTP"], answer: 1, topic: "Internet", difficulty: 2 },
+      { question: "Jenis kabel jaringan dengan konektor RJ-45 yang paling umum dipasang di laboratorium komputer sekolah adalah?", options: ["Kabel UTP / Twisted Pair", "Kabel Coaxial", "Kabel Fiber Optic", "Kabel Telepon"], answer: 0, topic: "Internet", difficulty: 1 },
+      { question: "Jenis malware berbahaya yang mengunci dan mengenkripsi seluruh file di komputer korban lalu memeras tebusan dinamakan?", options: ["Adware", "Ransomware", "Spyware", "Spam"], answer: 1, topic: "Internet", difficulty: 2 },
+      { question: "Lapisan keamanan ganda yang mewajibkan kode verifikasi OTP lewat ponsel setelah memasukkan password dinamakan?", options: ["Two-Factor Authentication (2FA)", "Single Sign-On (SSO)", "Data Backup", "Firewall Filtering"], answer: 0, topic: "Internet", difficulty: 1 },
+      { question: "Kriteria password yang paling kuat dan aman dari serangan peretasan adalah?", options: ["Tanggal lahir atau nama panggilan pribadi", "Angka berurutan seperti 12345678", "Gabungan huruf besar, kecil, angka, dan simbol minimal 8-12 karakter", "Nama sekolah tempat belajar"], answer: 2, topic: "Internet", difficulty: 1 },
+
+      // ── 5. DAMPAK & ETIKA PENGGUNAAN AI ──
+      { question: "Apa kepanjangan dari AI dalam dunia teknologi informasi?", options: ["Artificial Intelligence (Kecerdasan Buatan)", "Automated Internet", "Advanced Interface", "Algorithm Integration"], answer: 0, topic: "Etika AI", difficulty: 1 },
+      { question: "Contoh aplikasi kecerdasan buatan berbasis Generative AI yang dapat menjawab pertanyaan dan membuat teks adalah?", options: ["ChatGPT / Google Gemini", "Windows Media Player", "Microsoft Paint", "Calculator"], answer: 0, topic: "Etika AI", difficulty: 1 },
+      { question: "Tindakan menyalin hasil tulisan buatan AI dan mengklaimnya sebagai karya murni milik sendiri dinamakan?", options: ["Plagiarisme", "Abstraksi", "Inovasi", "Kolaborasi"], answer: 0, topic: "Etika AI", difficulty: 1 },
+      { question: "Mengapa kita TIDAK boleh langsung mempercayai 100% jawaban dari AI tanpa memeriksa ulang?", options: ["AI kadang mengalami 'halusinasi' atau memberikan informasi yang salah/rekayasa", "AI selalu ingin menipu manusia secara sengaja", "AI hanya bekerja pada malam hari", "AI tidak punya koneksi listrik"], answer: 0, topic: "Etika AI", difficulty: 2 },
+      { question: "Teknologi rekayasa kecerdasan buatan untuk membuat video atau foto palsu yang sangat mirip wajah seseorang disebut?", options: ["Deepfake", "Deep Learning", "Firewall", "Biometrik"], answer: 0, topic: "Etika AI", difficulty: 2 },
+      { question: "Manakah cara yang etis dan bijak bagi siswa dalam memanfaatkan AI untuk tugas sekolah?", options: ["Menggunakannya sebagai asisten untuk curah pendapat (brainstorming) dan memahami konsep", "Menyuruh AI mengerjakan seluruh tugas lalu mengumpulkan tanpa dibaca", "Memasukkan data pribadi teman atau guru ke dalam sistem AI", "Menggunakan AI untuk membuat cerita bohong di media sosial"], answer: 0, topic: "Etika AI", difficulty: 1 },
+      { question: "Bahaya memasukkan informasi rahasia atau data pribadi sensitif ke dalam platform AI publik adalah?", options: ["Data tersebut bisa tersimpan dan digunakan untuk melatih model AI publik", "Komputer akan langsung meledak", "Akun AI akan langsung terhapus otomatis", "Nilai sekolah akan berkurang otomatis"], answer: 0, topic: "Etika AI", difficulty: 2 },
+      { question: "Dampak positif penggunaan AI dalam bidang pendidikan bagi siswa adalah?", options: ["Membantu personalisasi pembelajaran dan menjawab pertanyaan penjelasan konsep", "Membuat siswa tidak perlu belajar lagi selamanya", "Menghilangkan kebutuhan akan sekolah dan guru", "Menghapus seluruh buku pelajaran secara fisik"], answer: 0, topic: "Etika AI", difficulty: 1 },
+      { question: "Masalah 'Bias AI' terjadi ketika sistem AI memberikan jawaban yang tidak adil karena?", options: ["Data pelatihan yang digunakan AI mengandung prasangka atau ketidakseimbangan", "AI terlalu pintar melebihi penciptanya", "AI kehabisan daya baterai", "AI dipasang pada komputer lama"], answer: 0, topic: "Etika AI", difficulty: 2 },
+      { question: "Instruksi atau teks perintah terarah yang diberikan pengguna kepada AI agar menghasilkan jawaban yang tepat disebut?", options: ["Prompt", "Compiler", "Token", "Script"], answer: 0, topic: "Etika AI", difficulty: 1 },
+      { question: "Fitur kecerdasan buatan yang mampu mengenali identitas wajah seseorang dari rekaman kamera pengawas dinamakan?", options: ["Face Recognition", "Optical Character Recognition", "Speech Recognition", "Machine Vision"], answer: 0, topic: "Etika AI", difficulty: 1 },
+      { question: "Tindakan intimidasi, pelecehan, atau penghinaan terhadap teman melalui pesan digital atau media sosial dinamakan?", options: ["Cyberbullying", "Cybercrime", "Phishing", "Spamming"], answer: 0, topic: "Etika AI", difficulty: 1 },
+      { question: "Hak hukum eksklusif yang melindungi pencipta lagu, buku, atau perangkat lunak dari pembajakan tanpa izin disebut?", options: ["Hak Paten", "Hak Cipta (Copyright)", "Merek Dagang", "Lisensi Terbuka"], answer: 1, topic: "Etika AI", difficulty: 1 },
+      { question: "Undang-Undang di Indonesia yang secara khusus mengatur tentang perlindungan rahasia data pribadi warga negara adalah?", options: ["UU Sisdiknas", "UU Pelindungan Data Pribadi (UU PDP)", "UU Ketenagakerjaan", "UU Hak Asasi Manusia"], answer: 1, topic: "Etika AI", difficulty: 2 },
+      { question: "Mengapa sangat berbahaya mengunggah foto KTP atau Kartu Keluarga secara bebas ke media sosial?", options: ["Dapat disalahgunakan penipu untuk pinjaman online ilegal dan pencurian identitas", "Kamera ponsel akan langsung rusak", "Akun media sosial akan dinonaktifkan otomatis", "Warna kartu identitas akan luntur"], answer: 0, topic: "Etika AI", difficulty: 1 },
+      { question: "Fenomena di media sosial di mana seseorang hanya disajikan informasi yang sependapat dengannya sehingga makin tertutup dinamakan?", options: ["Filter Bubble / Echo Chamber", "Deepfake Syndrome", "Cloud Computing", "Digital Divide"], answer: 0, topic: "Etika AI", difficulty: 2 },
+      { question: "Langkah pertama yang paling tepat saat kita membaca berita mengejutkan di grup WhatsApp yang mencurigakan adalah?", options: ["Langsung menyebarkan ke semua kontak agar waspada", "Memeriksa kebenaran berita di situs cek fakta resmi sebelum menyebarkannya", "Menghapus aplikasi WhatsApp", "Menulis komentar marah-marah"], answer: 1, topic: "Etika AI", difficulty: 1 },
+
+      // ── 6. PEMROGRAMAN VISUAL & ALGORITMA SMP ──
+      { question: "Objek atau karakter interaktif yang dapat diberi perintah gerak dan suara pada aplikasi Scratch dinamakan?", options: ["Sprite", "Stage", "Costume", "Backdrop"], answer: 0, topic: "Pemrograman Visual", difficulty: 1 },
+      { question: "Blok kontrol pada Scratch yang digunakan untuk mengulang sekumpulan perintah sebanyak angka tertentu adalah?", options: ["Blok Forever", "Blok Repeat (Ulangi)", "Blok Wait", "Blok If-Then"], answer: 1, topic: "Pemrograman Visual", difficulty: 1 },
+      { question: "Struktur kendali logika program yang mengambil keputusan berdasarkan syarat tertentu dinamakan?", options: ["Percabangan (If - Else)", "Perulangan (Looping)", "Variabel", "Operator"], answer: 0, topic: "Pemrograman Visual", difficulty: 1 },
+      { question: "Tempat untuk menyimpan nilai angka atau teks yang nilainya dapat berubah-ubah selama program berjalan disebut?", options: ["Variabel", "Konstanta", "Operator", "Sprite"], answer: 0, topic: "Pemrograman Visual", difficulty: 1 },
+      { question: "Blok Events di Scratch yang menjadi pemicu utama agar kode program mulai berjalan saat bendera hijau diklik adalah?", options: ["When Green Flag Clicked", "Stop All", "Say Hello", "Change X by 10"], answer: 0, topic: "Pemrograman Visual", difficulty: 1 },
+      { question: "Aktivitas melacak, mencari, dan memperbaiki kesalahan logika atau bug pada program dinamakan?", options: ["Compiling", "Debugging", "Running", "Coding"], answer: 1, topic: "Pemrograman Visual", difficulty: 1 },
+      { question: "Tipe data dalam pemrograman komputer yang hanya memiliki dua kemungkinan nilai (True atau False) adalah?", options: ["Integer", "String", "Boolean", "Float"], answer: 2, topic: "Pemrograman Visual", difficulty: 1 },
+      { question: "Blok perulangan di Scratch yang menjalankan instruksi di dalamnya tanpa henti kecuali program distop adalah?", options: ["Repeat 10", "Forever", "Repeat Until", "Wait 1 secs"], answer: 1, topic: "Pemrograman Visual", difficulty: 1 },
+
+      // ── 7. TEKNOLOGI IFP & GIM INTERAKTIF EDUKASI ──
+      { question: "Keunggulan utama layar IFP (Interactive Flat Panel) dibanding proyektor konvensional di kelas adalah?", options: ["Layar sentuh resolusi 4K dengan kecerahan tinggi tanpa terhalang bayangan tubuh", "Tidak memerlukan aliran listrik sama sekali", "Harganya jauh lebih murah dari spidol", "Hanya bisa dipakai untuk memutar video kartun"], answer: 0, topic: "Teknologi IFP", difficulty: 1 },
+      { question: "Fitur layar IFP yang memungkinkan banyak siswa menyentuh layar secara serentak untuk menjawab kuis bersama dinamakan?", options: ["Multi-Touch (Multi-Sentuhan)", "Single Touch", "Screen Saver", "Bluetooth Tethering"], answer: 0, topic: "Teknologi IFP", difficulty: 1 },
+      { question: "Fitur nirkabel pada IFP untuk menampilkan layar laptop atau smartphone guru ke layar sentuh besar tanpa kabel HDMI adalah?", options: ["Screen Mirroring / Wireless Casting", "USB Tethering", "Hard Reset", "Audio Jack"], answer: 0, topic: "Teknologi IFP", difficulty: 1 },
+      { question: "Metode pembelajaran yang menerapkan mekanika permainan (skor, level, tantangan kompetisi) ke dalam materi sekolah disebut?", options: ["Gim Interaktif (Gamification)", "Simulasi Militer", "E-Commerce", "Virtualisasi"], answer: 0, topic: "Teknologi IFP", difficulty: 1 },
+      { question: "Fungsi tombol 'Freeze' pada remote/panel IFP yang sangat bermanfaat bagi guru di kelas adalah?", options: ["Membekukan layar IFP sementara guru mencari dokumen rahasia di laptop", "Mendinginkan suhu ruangan kelas", "Menghapus seluruh file siswa secara otomatis", "Mematikan sambungan internet sekolah"], answer: 0, topic: "Teknologi IFP", difficulty: 1 },
+      { question: "Mengapa aktivitas kuis beregu pada game zombie IFP melatih keterampilan abad 21 bagi siswa SMP?", options: ["Melatih komunikasi tim, kolaborasi cepat, dan pemecahan masalah kritis", "Membuat siswa tidak perlu berbicara satu sama lain", "Menghilangkan penilaian tugas guru", "Mencegah siswa masuk ke lab komputer"], answer: 0, topic: "Teknologi IFP", difficulty: 1 }
+    ];
+
+    function shuffleArray(arr) {
+      const shuffled = [...arr];
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      return shuffled;
+    }
+
+    // ============================================================
+    // 2. PROCEDURAL TACTICAL AUDIO ENGINE (WEB AUDIO API)
+    // ============================================================
+    class TacticalAudioEngine {
+      constructor() {
+        this.ctx = null;
+        this.enabled = true;
+        this.masterVolume = 0.35;
+      }
+      init() {
+        try {
+          if (!this.ctx) {
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            if (AudioContext) this.ctx = new AudioContext();
+          }
+        } catch (e) {
+          console.warn('Web Audio not supported');
+          this.enabled = false;
+        }
+      }
+      resume() {
+        if (this.ctx && this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+      }
+      _osc(freq, type, duration, vol = 0.3) {
+        if (!this.enabled) return;
+        this.init();
+        if (!this.ctx) return;
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, now);
+        gain.gain.setValueAtTime(vol * this.masterVolume, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + duration);
+      }
+      _noise(duration, vol = 0.25, lowpass = 1000) {
+        if (!this.enabled) return;
+        this.init();
+        if (!this.ctx) return;
+        const now = this.ctx.currentTime;
+        const bufferSize = this.ctx.sampleRate * duration;
+        const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+        const src = this.ctx.createBufferSource();
+        src.buffer = buffer;
+        const filter = this.ctx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(lowpass, now);
+        const gain = this.ctx.createGain();
+        gain.gain.setValueAtTime(vol * this.masterVolume, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+        src.connect(filter);
+        filter.connect(gain);
+        gain.connect(this.ctx.destination);
+        src.start(now);
+      }
+      playShoot(teamIdx = 0) {
+        // Vary pitch according to turret team
+        const freqs = [920, 750, 620, 1050];
+        this._osc(freqs[teamIdx % freqs.length] || 880, 'sawtooth', 0.12, 0.22);
+        this._noise(0.08, 0.18, 1400);
+      }
+      playHit() {
+        this._noise(0.09, 0.25, 800);
+        this._osc(180, 'triangle', 0.1, 0.2);
+      }
+      playZombieDeath() {
+        this._osc(260, 'sawtooth', 0.25, 0.25);
+        this._noise(0.2, 0.25, 600);
+      }
+      playCorrect() {
+        const notes = [523, 659, 784, 1046];
+        notes.forEach((freq, i) => {
+          setTimeout(() => this._osc(freq, 'sine', 0.12, 0.28), i * 65);
+        });
+      }
+      playWrong() {
+        this._osc(180, 'square', 0.15, 0.25);
+        setTimeout(() => this._osc(130, 'square', 0.22, 0.25), 110);
+      }
+      playSuperpower() {
+        for (let i = 0; i < 5; i++) {
+          setTimeout(() => this._osc(450 + i * 140, 'triangle', 0.1, 0.24), i * 50);
+        }
+        setTimeout(() => this._noise(0.2, 0.25, 1800), 250);
+      }
+      playBossAppear() {
+        this._osc(75, 'sawtooth', 0.6, 0.45);
+        this._osc(80, 'sawtooth', 0.6, 0.4);
+        setTimeout(() => {
+          this._osc(55, 'square', 0.5, 0.4);
+          this._noise(0.4, 0.35, 450);
+        }, 350);
+      }
+      playWaveComplete() {
+        [440, 554, 659, 880].forEach((note, i) => {
+          setTimeout(() => this._osc(note, 'triangle', 0.2, 0.3), i * 120);
+        });
+      }
+      playBaseHit() {
+        this._osc(90, 'square', 0.25, 0.4);
+        this._noise(0.25, 0.35, 500);
+      }
+      playGameOver() {
+        [360, 310, 260, 180].forEach((note, i) => {
+          setTimeout(() => this._osc(note, 'sawtooth', 0.35, 0.3), i * 240);
+        });
+      }
+      playVictory() {
+        [523, 659, 784, 1047, 1318].forEach((note, i) => {
+          setTimeout(() => this._osc(note, 'sine', 0.22, 0.32), i * 130);
+        });
+      }
+      playBomb() {
+        this._noise(0.55, 0.5, 400);
+        this._osc(50, 'sine', 0.5, 0.45);
+      }
+      playFreeze() {
+        this._osc(1300, 'sine', 0.25, 0.22);
+        this._osc(1600, 'sine', 0.18, 0.18);
+      }
+      playClick() { this._osc(650, 'sine', 0.04, 0.14); }
+      toggle() { this.enabled = !this.enabled; return this.enabled; }
+    }
+
+    // ============================================================
+    // 3. 2D CANVAS COMBAT RENDERER (OUTPOST ZERO PERIMETER)
+    // ============================================================
+    class OutpostRenderer {
+      constructor(canvas) {
+        this.canvas = canvas;
+        this.ctx = canvas.getContext('2d');
+        this.particles = [];
+        this.damageNumbers = [];
+        this.lasers = [];
+        this.screenShake = { x: 0, y: 0, intensity: 0 };
+
+        // Tactical Team Colors
+        this.teamColors = ['#f43f5e', '#0284c7', '#10b981', '#eab308'];
+        this.teamGlows = [
+          'rgba(244, 63, 94, 0.45)',
+          'rgba(2, 132, 199, 0.45)',
+          'rgba(16, 185, 129, 0.45)',
+          'rgba(234, 179, 8, 0.45)'
+        ];
+
+        this.time = 0;
+        this.searchlightAngle = 0;
+        this._resize();
+        window.addEventListener('resize', () => this._resize());
+      }
+      _resize() {
+        const rect = this.canvas.parentElement.getBoundingClientRect();
+        const dpr = window.devicePixelRatio || 1;
+        this.canvas.width = rect.width * dpr;
+        this.canvas.height = rect.height * dpr;
+        this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        this.displayW = rect.width;
+        this.displayH = rect.height;
+      }
+      getPathBounds() {
+        return {
+          top: this.displayH * 0.32,
+          bottom: this.displayH * 0.68,
+          centerY: this.displayH * 0.5,
+          height: this.displayH * 0.36
+        };
+      }
+      getBasePosition() {
+        return { x: this.displayW - 65, y: this.displayH * 0.5 };
+      }
+      getBaseReachX() {
+        return this.displayW - 110;
+      }
+      getTowerPositions(numTeams) {
+        const w = this.displayW, h = this.displayH;
+        if (numTeams === 2) {
+          return [{ x: w * 0.65, y: h * 0.16 }, { x: w * 0.65, y: h * 0.84 }];
+        }
+        if (numTeams === 3) {
+          return [{ x: w * 0.56, y: h * 0.14 }, { x: w * 0.56, y: h * 0.86 }, { x: w * 0.76, y: h * 0.14 }];
+        }
+        return [
+          { x: w * 0.52, y: h * 0.14 },
+          { x: w * 0.52, y: h * 0.86 },
+          { x: w * 0.72, y: h * 0.14 },
+          { x: w * 0.72, y: h * 0.86 }
+        ];
+      }
+      getSpawnY() {
+        const p = this.getPathBounds();
+        const margin = p.height * 0.22;
+        return p.top + margin + Math.random() * (p.height - margin * 2);
+      }
+      clear() {
+        this.ctx.clearRect(0, 0, this.displayW, this.displayH);
+      }
+
+      drawWastelandEnvironment() {
+        const ctx = this.ctx;
+        const w = this.displayW, h = this.displayH;
+
+        // Dark apocalyptic wasteland gradient
+        const bgGrad = ctx.createLinearGradient(0, 0, 0, h);
+        bgGrad.addColorStop(0, '#070a12');
+        bgGrad.addColorStop(0.5, '#0b0f1a');
+        bgGrad.addColorStop(1, '#070a12');
+        ctx.fillStyle = bgGrad;
+        ctx.fillRect(0, 0, w, h);
+
+        // Grid scanlines (tactical radar map overlay)
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.02)';
+        ctx.lineWidth = 1;
+        for (let x = 0; x < w; x += 45) {
+          ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+        }
+        for (let y = 0; y < h; y += 45) {
+          ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+        }
+
+        // Animated Sweeping Searchlight Spotlights from the Outpost
+        this.searchlightAngle += 0.012;
+        const base = this.getBasePosition();
+        ctx.save();
+        ctx.translate(base.x, base.y);
+        const sweepAngle1 = Math.PI + Math.sin(this.searchlightAngle) * 0.35;
+        const sweepGrad = ctx.createRadialGradient(0, 0, 20, Math.cos(sweepAngle1) * w * 0.8, Math.sin(sweepAngle1) * w * 0.8, w * 0.6);
+        sweepGrad.addColorStop(0, 'rgba(245, 158, 11, 0.09)');
+        sweepGrad.addColorStop(1, 'rgba(245, 158, 11, 0)');
+        ctx.fillStyle = sweepGrad;
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.arc(0, 0, w * 0.85, sweepAngle1 - 0.25, sweepAngle1 + 0.25);
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
+      }
+
+      drawCombatRoad() {
+        const ctx = this.ctx, p = this.getPathBounds();
+
+        // Asphalt road with damaged borders
+        const roadGrad = ctx.createLinearGradient(0, p.top, 0, p.bottom);
+        roadGrad.addColorStop(0, '#121623');
+        roadGrad.addColorStop(0.5, '#192033');
+        roadGrad.addColorStop(1, '#121623');
+        ctx.fillStyle = roadGrad;
+        ctx.fillRect(0, p.top, this.displayW, p.height);
+
+        // Fortified Road Barricade Borders with Hazard Stripes
+        ctx.fillStyle = '#1e2638';
+        ctx.fillRect(0, p.top - 6, this.displayW, 6);
+        ctx.fillRect(0, p.bottom, this.displayW, 6);
+
+        // Hazard markings along edges
+        ctx.strokeStyle = '#f59e0b';
+        ctx.lineWidth = 2;
+        ctx.setLineDash([16, 22]);
+        ctx.beginPath();
+        ctx.moveTo(0, p.top - 3);
+        ctx.lineTo(this.displayW, p.top - 3);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(0, p.bottom + 3);
+        ctx.lineTo(this.displayW, p.bottom + 3);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // Broken center lane dashes
+        ctx.setLineDash([14, 28]);
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.06)';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(0, p.centerY);
+        ctx.lineTo(this.displayW, p.centerY);
+        ctx.stroke();
+        ctx.setLineDash([]);
+      }
+
+      drawFortressBunker(hp, maxHp) {
+        const ctx = this.ctx, base = this.getBasePosition(), hpRatio = Math.max(0, hp / maxHp);
+        const w = 56, h = Math.min(this.displayH * 0.44, 160);
+        const bx = base.x - w / 2, by = base.y - h / 2;
+
+        const alertColor = hpRatio > 0.5 ? '#10b981' : hpRatio > 0.25 ? '#f59e0b' : '#ef4444';
+
+        // Bunker concrete & armor hull
+        ctx.save();
+        ctx.fillStyle = '#171d2c';
+        ctx.strokeStyle = alertColor;
+        ctx.lineWidth = 2.5;
+        ctx.shadowColor = alertColor;
+        ctx.shadowBlur = 14 + Math.sin(this.time * 3) * 6;
+        ctx.beginPath();
+        ctx.roundRect(bx, by, w, h, 6);
+        ctx.fill();
+        ctx.stroke();
+
+        // Bunker Battlements & Gun Slits
+        const teeth = 5;
+        const toothH = (h - 10) / teeth;
+        for (let i = 0; i < teeth; i++) {
+          const sy = by + 5 + i * toothH;
+          ctx.fillStyle = '#0a0d15';
+          ctx.fillRect(bx + 6, sy + 3, w - 12, toothH * 0.45);
+          ctx.strokeStyle = alertColor;
+          ctx.lineWidth = 1;
+          ctx.strokeRect(bx + 6, sy + 3, w - 12, toothH * 0.45);
+        }
+
+        // Radar Dish on top of bunker
+        ctx.strokeStyle = '#f59e0b';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(base.x, by - 12, 10, Math.PI * 0.8, Math.PI * 1.8);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(base.x, by - 12);
+        ctx.lineTo(base.x, by);
+        ctx.stroke();
+
+        // Barbed Wire Obstacle in front of Bunker
+        ctx.strokeStyle = '#718096';
+        ctx.lineWidth = 1.5;
+        const wireX = bx - 14;
+        ctx.beginPath();
+        for (let y = by; y < by + h; y += 12) {
+          ctx.moveTo(wireX - 6, y);
+          ctx.lineTo(wireX + 6, y + 8);
+          ctx.moveTo(wireX + 6, y);
+          ctx.lineTo(wireX - 6, y + 8);
+        }
+        ctx.stroke();
+        ctx.restore();
+
+        // Bunker HP Bar HUD at Base
+        const barW = w + 26, barH = 7;
+        const barX = base.x - barW / 2, barY = by + h + 10;
+        ctx.fillStyle = '#090d15';
+        ctx.beginPath();
+        ctx.roundRect(barX, barY, barW, barH, 3);
+        ctx.fill();
+
+        ctx.fillStyle = alertColor;
+        ctx.beginPath();
+        ctx.roundRect(barX, barY, barW * hpRatio, barH, 3);
+        ctx.fill();
+
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 11px Rajdhani, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(`${Math.ceil(hp)} HP`, base.x, barY + barH + 13);
+        ctx.fillStyle = alertColor;
+        ctx.font = 'bold 9px Teko, sans-serif';
+        ctx.fillText('OUTPOST BUNKER', base.x, by - 16);
+      }
+
+      drawTacticalTurret(pos, teamIdx, teamName, dmgDealt, killCount, targetPos) {
+        const ctx = this.ctx;
+        const color = this.teamColors[teamIdx % this.teamColors.length];
+        const s = 22;
+        const path = this.getPathBounds();
+        const isAbove = pos.y < path.centerY;
+
+        // Turret Mounting Platform
+        ctx.save();
+        ctx.fillStyle = '#131826';
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.roundRect(pos.x - s, pos.y - s, s * 2, s * 2, 8);
+        ctx.fill();
+        ctx.stroke();
+
+        // Power Conduit Line to Road
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 1.5;
+        ctx.setLineDash([3, 5]);
+        ctx.beginPath();
+        ctx.moveTo(pos.x, pos.y + (isAbove ? s : -s));
+        ctx.lineTo(pos.x, isAbove ? path.top : path.bottom);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // Turret Rotating Cannon Barrel
+        let angle = targetPos
+          ? Math.atan2(targetPos.y - pos.y, targetPos.x - pos.x)
+          : Math.atan2(path.centerY - pos.y, 0);
+
+        ctx.save();
+        ctx.translate(pos.x, pos.y);
+        ctx.rotate(angle);
+
+        // Double barrel design
+        ctx.fillStyle = color;
+        ctx.fillRect(4, -5, s * 1.15, 3.5);
+        ctx.fillRect(4, 1.5, s * 1.15, 3.5);
+
+        // Muzzle brake
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(4 + s * 1.15 - 2, -6, 3, 12);
+
+        // Central turret dome
+        ctx.restore();
+        ctx.fillStyle = '#0a0d15';
+        ctx.beginPath();
+        ctx.arc(pos.x, pos.y, 8, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        ctx.arc(pos.x, pos.y, 5, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Callsign Badge & Combat Telemetry
+        ctx.font = 'bold 12px Teko, sans-serif';
+        ctx.fillStyle = color;
+        ctx.textAlign = 'center';
+        const labelY = pos.y + s + (isAbove ? 14 : -s * 2 - 4);
+        ctx.fillText(teamName.toUpperCase(), pos.x, labelY);
+
+        ctx.font = '600 9px "JetBrains Mono", monospace';
+        ctx.fillStyle = '#cbd5e0';
+        ctx.fillText(`DMG: ${dmgDealt} · KILLS: ${killCount}`, pos.x, labelY + 11);
+
+        ctx.restore();
+      }
+
+      drawStylizedZombie(zombie) {
+        const ctx = this.ctx;
+        const isBoss = zombie.isBoss;
+        const isRunner = zombie.isRunner;
+        const isTank = zombie.isTank;
+
+        const scale = isBoss ? 1.75 : (isTank ? 1.35 : (isRunner ? 0.9 : 1.05));
+        const bodyH = 26 * scale, bodyW = 16 * scale, headR = 8 * scale;
+        const x = zombie.x, y = zombie.y;
+
+        // Walking bob and arm swings
+        const walkBob = Math.sin(this.time * (isRunner ? 8.5 : 5.5) + zombie.id) * (isRunner ? 3 : 2);
+        const armSwing = Math.sin(this.time * (isRunner ? 8.5 : 5.5) + zombie.id) * 14;
+
+        ctx.save();
+
+        // Cryo-Freeze Ice Block Visual
+        if (zombie.frozen) {
+          ctx.save();
+          ctx.fillStyle = 'rgba(6, 182, 212, 0.35)';
+          ctx.strokeStyle = '#38bdf8';
+          ctx.lineWidth = 2;
+          ctx.shadowColor = '#06b6d4';
+          ctx.shadowBlur = 14;
+          ctx.beginPath();
+          ctx.roundRect(x - bodyW * 0.9, y - bodyH - headR - 4, bodyW * 1.8, bodyH + headR * 2 + 10, 8);
+          ctx.fill();
+          ctx.stroke();
+          ctx.restore();
+        }
+
+        ctx.translate(x, y - bodyH * 0.2 + walkBob);
+
+        // Ground shadow
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
+        ctx.beginPath();
+        ctx.ellipse(0, bodyH * 0.5 + 4, bodyW * 0.75, 4, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Color coding by zombie class
+        let skinColor = isBoss ? '#4c1d95' : (isTank ? '#334155' : (isRunner ? '#b91c1c' : '#27472e'));
+        let clothColor = isBoss ? '#1e1136' : (isTank ? '#1e293b' : (isRunner ? '#7f1d1d' : '#142918'));
+
+        // Legs
+        ctx.strokeStyle = '#0f172a';
+        ctx.lineWidth = 3.5 * scale;
+        ctx.beginPath();
+        ctx.moveTo(-bodyW * 0.25, bodyH * 0.4);
+        ctx.lineTo(-bodyW * 0.25 - walkBob, bodyH * 0.5 + 4);
+        ctx.moveTo(bodyW * 0.25, bodyH * 0.4);
+        ctx.lineTo(bodyW * 0.25 + walkBob, bodyH * 0.5 + 4);
+        ctx.stroke();
+
+        // Torso
+        ctx.fillStyle = clothColor;
+        ctx.beginPath();
+        ctx.roundRect(-bodyW / 2, -bodyH / 2, bodyW, bodyH * 0.85, 4);
+        ctx.fill();
+
+        // Arms reaching forward aggressively
+        ctx.strokeStyle = skinColor;
+        ctx.lineWidth = 3 * scale;
+        ctx.lineCap = 'round';
+        ctx.beginPath();
+        ctx.moveTo(bodyW / 2, -bodyH * 0.15);
+        ctx.lineTo(bodyW / 2 + 12 * scale, -bodyH * 0.15 + armSwing * 0.3);
+        ctx.moveTo(-bodyW / 2, -bodyH * 0.1);
+        ctx.lineTo(-bodyW / 2 - 8 * scale, -bodyH * 0.1 - armSwing * 0.3);
+        ctx.stroke();
+
+        // Head
+        ctx.fillStyle = skinColor;
+        ctx.beginPath();
+        ctx.arc(0, -bodyH / 2 - headR + 2, headR, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Glowing menacing eyes
+        const eyeColor = isBoss ? '#fbbf24' : (isRunner ? '#f97316' : (isTank ? '#38bdf8' : '#ef4444'));
+        ctx.fillStyle = eyeColor;
+        ctx.shadowColor = eyeColor;
+        ctx.shadowBlur = 6;
+        ctx.beginPath();
+        ctx.arc(-headR * 0.35, -bodyH / 2 - headR + 2, 1.8 * scale, 0, Math.PI * 2);
+        ctx.arc(headR * 0.35, -bodyH / 2 - headR + 2, 1.8 * scale, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.shadowBlur = 0;
+
+        // Class Badges
+        if (isBoss) {
+          ctx.fillStyle = '#fbbf24';
+          ctx.font = 'bold 9px Teko, sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText('👑 TITAN BOSS', 0, -bodyH / 2 - headR - 6);
+        } else if (isTank) {
+          ctx.fillStyle = '#38bdf8';
+          ctx.font = 'bold 8px Teko, sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText('🛡️ BRUTE', 0, -bodyH / 2 - headR - 4);
+        } else if (isRunner) {
+          ctx.fillStyle = '#f97316';
+          ctx.font = 'bold 8px Teko, sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText('⚡ SPRINTER', 0, -bodyH / 2 - headR - 4);
+        }
+
+        ctx.restore();
+
+        // HP bar above zombie
+        const hpRatio = Math.max(0, zombie.hp / zombie.maxHp);
+        const barW = Math.max(26, bodyW * 1.5);
+        const barH = 4;
+        const barY = y - bodyH - headR - (isBoss ? 16 : 8) + walkBob;
+
+        ctx.fillStyle = '#090d15';
+        ctx.fillRect(x - barW / 2, barY, barW, barH);
+        ctx.fillStyle = hpRatio > 0.5 ? '#10b981' : hpRatio > 0.25 ? '#f59e0b' : '#ef4444';
+        ctx.fillRect(x - barW / 2, barY, barW * hpRatio, barH);
+
+        // Numeric HP
+        ctx.font = `bold ${isBoss ? 11 : 9}px "JetBrains Mono", monospace`;
+        ctx.fillStyle = '#ffffff';
+        ctx.textAlign = 'center';
+        ctx.fillText(Math.ceil(zombie.hp), x, barY - 2);
+      }
+
+      addLaser(fromX, fromY, toX, toY, color) {
+        this.lasers.push({ fromX, fromY, toX, toY, color, life: 1 });
+      }
+
+      updateAndDrawLasers(dt) {
+        const ctx = this.ctx;
+        for (let i = this.lasers.length - 1; i >= 0; i--) {
+          const l = this.lasers[i];
+          l.life -= dt * 3.2;
+          if (l.life <= 0) {
+            this.lasers.splice(i, 1);
+            continue;
+          }
+          ctx.save();
+          ctx.globalAlpha = l.life * 0.7;
+          ctx.strokeStyle = l.color;
+          ctx.lineWidth = 3.5;
+          ctx.shadowColor = l.color;
+          ctx.shadowBlur = 14;
+          ctx.beginPath();
+          ctx.moveTo(l.fromX, l.fromY);
+          ctx.lineTo(l.toX, l.toY);
+          ctx.stroke();
+
+          // Laser core
+          ctx.strokeStyle = '#ffffff';
+          ctx.lineWidth = 1.2;
+          ctx.beginPath();
+          ctx.moveTo(l.fromX, l.fromY);
+          ctx.lineTo(l.toX, l.toY);
+          ctx.stroke();
+          ctx.restore();
+        }
+      }
+
+      addParticles(x, y, color, count = 10, speed = 3.5) {
+        for (let i = 0; i < count; i++) {
+          const angle = (Math.PI * 2 * i) / count + Math.random() * 0.4;
+          this.particles.push({
+            x, y,
+            vx: Math.cos(angle) * speed * (0.6 + Math.random()),
+            vy: Math.sin(angle) * speed * (0.6 + Math.random()),
+            life: 1,
+            decay: 0.025 + Math.random() * 0.02,
+            color,
+            size: 2.5 + Math.random() * 3
+          });
+        }
+      }
+
+      addExplosion(x, y, color) {
+        this.addParticles(x, y, color, 16, 5.5);
+        this.addParticles(x, y, '#ffffff', 6, 3);
+      }
+
+      addFreezeParticles(x, y) {
+        for (let i = 0; i < 12; i++) {
+          this.particles.push({
+            x: x + (Math.random() - 0.5) * 35,
+            y: y + (Math.random() - 0.5) * 25,
+            vx: (Math.random() - 0.5) * 1,
+            vy: -Math.random() * 1.8,
+            life: 1,
+            decay: 0.018,
+            color: '#38bdf8',
+            size: 2 + Math.random() * 3,
+            isSnow: true
+          });
+        }
+      }
+
+      updateAndDrawParticles() {
+        const ctx = this.ctx;
+        for (let i = this.particles.length - 1; i >= 0; i--) {
+          const p = this.particles[i];
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += 0.04;
+          p.life -= p.decay;
+          if (p.life <= 0) {
+            this.particles.splice(i, 1);
+            continue;
+          }
+          ctx.globalAlpha = p.life;
+          ctx.fillStyle = p.color;
+          if (p.isSnow) {
+            ctx.font = '10px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('❄', p.x, p.y);
+          } else {
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2);
+            ctx.fill();
+          }
+          ctx.globalAlpha = 1;
+        }
+      }
+
+      addDamageNumber(x, y, damage, superType) {
+        const colors = {
+          normal: '#ffffff',
+          double: '#f59e0b',
+          triple: '#ea580c',
+          critical: '#ef4444',
+          freeze: '#38bdf8',
+          bomb: '#c084fc'
+        };
+        this.damageNumbers.push({
+          x: x + (Math.random() - 0.5) * 20,
+          y,
+          text: `-${damage}`,
+          color: colors[superType] || '#ffffff',
+          life: 1,
+          size: superType === 'normal' ? 14 : 18,
+          label: superType !== 'normal' ? superType.toUpperCase() + '!' : null
+        });
+      }
+
+      updateAndDrawDamageNumbers() {
+        const ctx = this.ctx;
+        for (let i = this.damageNumbers.length - 1; i >= 0; i--) {
+          const d = this.damageNumbers[i];
+          d.y -= 1.3;
+          d.life -= 0.02;
+          if (d.life <= 0) {
+            this.damageNumbers.splice(i, 1);
+            continue;
+          }
+          ctx.save();
+          ctx.globalAlpha = d.life;
+          ctx.font = `bold ${d.size}px "JetBrains Mono", monospace`;
+          ctx.fillStyle = d.color;
+          ctx.shadowColor = d.color;
+          ctx.shadowBlur = 8;
+          ctx.textAlign = 'center';
+          ctx.fillText(d.text, d.x, d.y);
+          if (d.label) {
+            ctx.font = `bold ${d.size - 4}px Teko, sans-serif`;
+            ctx.fillText(d.label, d.x, d.y - d.size);
+          }
+          ctx.restore();
+        }
+      }
+
+      applyScreenShake(intensity = 6) {
+        this.screenShake.intensity = Math.max(this.screenShake.intensity, intensity);
+      }
+
+      beginFrame() {
+        if (this.screenShake.intensity > 0) {
+          this.screenShake.x = (Math.random() - 0.5) * this.screenShake.intensity;
+          this.screenShake.y = (Math.random() - 0.5) * this.screenShake.intensity;
+          this.screenShake.intensity *= 0.88;
+          if (this.screenShake.intensity < 0.3) {
+            this.screenShake.intensity = 0;
+            this.screenShake.x = 0;
+            this.screenShake.y = 0;
+          }
+          this.ctx.save();
+          this.ctx.translate(this.screenShake.x, this.screenShake.y);
+        }
+      }
+
+      endFrame() {
+        if (this.screenShake.x !== 0 || this.screenShake.y !== 0) {
+          this.ctx.restore();
+        }
+      }
+
+      tick() {
+        this.time += 0.016;
+      }
+    }
+
+    // ============================================================
+    // 4. QUIZ STATION MANAGER (SIMULTANEOUS 2-4 TEAMS)
+    // ============================================================
+    class OutpostQuizManager {
+      constructor(numTeams, questionTimerMax = 20) {
+        this.numTeams = numTeams;
+        this.teamQueues = [];
+        this.currentQuestions = [];
+        this.questionStartTimes = [];
+        this.answeredCounts = [];
+        this.correctCounts = [];
+        this.locked = [];
+        this.questionTimerMax = questionTimerMax;
+        this.questionTimers = [];
+
+        for (let i = 0; i < numTeams; i++) {
+          this.teamQueues.push(shuffleArray([...QUESTIONS]));
+          this.currentQuestions.push(null);
+          this.questionStartTimes.push(0);
+          this.answeredCounts.push(0);
+          this.correctCounts.push(0);
+          this.locked.push(false);
+          this.questionTimers.push(this.questionTimerMax);
+        }
+      }
+      getNextQuestion(teamIdx) {
+        if (this.teamQueues[teamIdx].length === 0) {
+          this.teamQueues[teamIdx] = shuffleArray([...QUESTIONS]);
+        }
+        const q = this.teamQueues[teamIdx].shift();
+        const correctText = q.options[q.answer];
+        const shuffledOptions = shuffleArray([...q.options]);
+        const newAnswer = shuffledOptions.indexOf(correctText);
+
+        this.currentQuestions[teamIdx] = {
+          question: q.question,
+          options: shuffledOptions,
+          answer: newAnswer,
+          topic: q.topic,
+          difficulty: q.difficulty
+        };
+        this.questionStartTimes[teamIdx] = Date.now();
+        this.questionTimers[teamIdx] = this.questionTimerMax;
+        this.locked[teamIdx] = false;
+        return this.currentQuestions[teamIdx];
+      }
+      checkAnswer(teamIdx, answerIdx) {
+        if (this.locked[teamIdx]) return null;
+        const q = this.currentQuestions[teamIdx];
+        if (!q) return null;
+
+        this.locked[teamIdx] = true;
+        this.answeredCounts[teamIdx]++;
+        const timeElapsed = (Date.now() - this.questionStartTimes[teamIdx]) / 1000;
+        const isCorrect = answerIdx === q.answer;
+        if (isCorrect) this.correctCounts[teamIdx]++;
+
+        return {
+          correct: isCorrect,
+          correctAnswer: q.answer,
+          timeElapsed,
+          superpower: isCorrect ? this._calculateSuperpower(timeElapsed) : null
+        };
+      }
+      _calculateSuperpower(timeElapsed) {
+        const roll = Math.random();
+        if (timeElapsed < 3) {
+          if (roll < 0.3) return { type: 'critical', damage: 200, label: '💀 CRITICAL HIT!', cssClass: 'callout-critical' };
+          if (roll < 0.5) return { type: 'triple', damage: 150, label: '🔥 TRIPLE POWER!', cssClass: 'callout-triple' };
+          return { type: 'double', damage: 100, label: '⚡ DOUBLE POWER!', cssClass: 'callout-double' };
+        }
+        if (timeElapsed < 5) {
+          if (roll < 0.05) return { type: 'bomb', damage: 100, label: '💣 BOMB!', cssClass: 'callout-bomb', aoe: true };
+          if (roll < 0.15) return { type: 'freeze', damage: 50, label: '❄️ FREEZE!', cssClass: 'callout-freeze', freeze: true };
+          if (roll < 0.30) return { type: 'double', damage: 100, label: '⚡ DOUBLE POWER!', cssClass: 'callout-double' };
+          return { type: 'normal', damage: 50, label: null, cssClass: null };
+        }
+        if (roll < 0.03) return { type: 'bomb', damage: 100, label: '💣 BOMB!', cssClass: 'callout-bomb', aoe: true };
+        if (roll < 0.08) return { type: 'critical', damage: 200, label: '💀 CRITICAL HIT!', cssClass: 'callout-critical' };
+        if (roll < 0.13) return { type: 'freeze', damage: 50, label: '❄️ FREEZE!', cssClass: 'callout-freeze', freeze: true };
+        if (roll < 0.23) return { type: 'double', damage: 100, label: '⚡ DOUBLE POWER!', cssClass: 'callout-double' };
+        return { type: 'normal', damage: 50, label: null, cssClass: null };
+      }
+      updateTimers(dt) {
+        for (let i = 0; i < this.numTeams; i++) {
+          if (!this.locked[i] && this.currentQuestions[i]) {
+            this.questionTimers[i] -= dt;
+            if (this.questionTimers[i] <= 0) {
+              this.questionTimers[i] = 0;
+              return { teamIdx: i, timedOut: true };
+            }
+          }
+        }
+        return null;
+      }
+      getTimerRatio(teamIdx) {
+        return Math.max(0, this.questionTimers[teamIdx] / this.questionTimerMax);
+      }
+      getStats(teamIdx) {
+        return {
+          answered: this.answeredCounts[teamIdx],
+          correct: this.correctCounts[teamIdx],
+          accuracy: this.answeredCounts[teamIdx] > 0
+            ? Math.round((this.correctCounts[teamIdx] / this.answeredCounts[teamIdx]) * 100)
+            : 0
+        };
+      }
+    }
+
+    // ============================================================
+    // 5. MAIN GAME CONTROLLER (OUTPOST ZERO)
+    // ============================================================
+    class OutpostZeroGame {
+      constructor() {
+        this.state = 'setup';
+        this.numTeams = 2;
+        this.teamNames = [];
+        this.difficulty = 'normal';
+        this.baseHp = 850;
+        this.maxBaseHp = 850;
+        this.questionTimer = 20;
+        this.baseDamageRate = { normal: 2.2, runner: 3.2, tank: 4.2, boss: 8.0 };
+
+        this.teamDamage = [];
+        this.teamKills = [];
+        this.teamBossKills = [];
+        this.teamScores = [];
+
+        this.currentWave = 0;
+        this.totalWaves = 5;
+        this.waveConfigs = [];
+        this._applyDifficultySettings();
+
+        this.zombies = [];
+        this.zombieIdCounter = 0;
+        this.spawnTimer = 0;
+        this.spawnedCount = 0;
+        this.waveSpawningDone = false;
+        this.waveCooldown = 0;
+        this.gameOver = false;
+
+        this.renderer = null;
+        this.quiz = null;
+        this.audio = new TacticalAudioEngine();
+
+        this.lastTime = 0;
+        this.animFrame = null;
+
+        this.setupScreen = document.getElementById('setup-screen');
+        this.gameScreen = document.getElementById('game-screen');
+        this.resultsScreen = document.getElementById('results-screen');
+        this.canvas = document.getElementById('gameCanvas');
+        this.alertBannerEl = document.getElementById('tacticalAlertBanner');
+
+        this._bindSetup();
+        this._initAmbientCanvas();
+      }
+
+      _initAmbientCanvas() {
+        const aCanvas = document.getElementById('ambientSetupCanvas');
+        if (!aCanvas) return;
+        const ctx = aCanvas.getContext('2d');
+        let w = aCanvas.width = window.innerWidth;
+        let h = aCanvas.height = window.innerHeight;
+        window.addEventListener('resize', () => {
+          w = aCanvas.width = window.innerWidth;
+          h = aCanvas.height = window.innerHeight;
+        });
+
+        // Dust & ash floating particles
+        const ashParticles = Array.from({ length: 60 }, () => ({
+          x: Math.random() * w,
+          y: Math.random() * h,
+          r: Math.random() * 2 + 1,
+          vx: (Math.random() - 0.5) * 0.4,
+          vy: Math.random() * 0.6 + 0.2,
+          a: Math.random() * 0.6 + 0.2
+        }));
+
+        const loop = () => {
+          ctx.clearRect(0, 0, w, h);
+          ashParticles.forEach(p => {
+            p.x += p.vx;
+            p.y += p.vy;
+            if (p.y > h) { p.y = 0; p.x = Math.random() * w; }
+            ctx.fillStyle = `rgba(245, 158, 11, ${p.a})`;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+            ctx.fill();
+          });
+          requestAnimationFrame(loop);
+        };
+        loop();
+      }
+
+      _bindSetup() {
+        const teamBtns = document.querySelectorAll('.team-count-btn');
+        teamBtns.forEach(btn => {
+          btn.addEventListener('click', () => {
+            teamBtns.forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            this.numTeams = parseInt(btn.dataset.count);
+            this._showTeamInputs();
+            this.audio.init();
+            this.audio.playClick();
+          });
+        });
+
+        const diffBtns = document.querySelectorAll('.diff-btn');
+        diffBtns.forEach(btn => {
+          btn.addEventListener('click', () => {
+            diffBtns.forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            this.difficulty = btn.dataset.mode || 'normal';
+            this.audio.init();
+            this.audio.playClick();
+          });
+        });
+
+        // Initialize default callsigns
+        this._showTeamInputs();
+
+        // Start Defense Button
+        document.getElementById('btnStartDefense').addEventListener('click', () => {
+          if (this.numTeams < 2) return;
+          this._collectTeamNames();
+          this.audio.init();
+          this.audio.resume();
+          this.audio.playClick();
+          this.startGame();
+        });
+
+        // Audio Toggle
+        document.getElementById('btnToggleAudio').addEventListener('click', () => {
+          const enabled = this.audio.toggle();
+          document.getElementById('btnToggleAudio').textContent = enabled ? '🔊' : '🔇';
+        });
+
+        // Fullscreen Toggle
+        document.getElementById('btnToggleFullscreen').addEventListener('click', () => {
+          if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen?.().catch(() => {});
+          } else {
+            document.exitFullscreen?.().catch(() => {});
+          }
+        });
+
+        // Play Again Button
+        document.getElementById('btnPlayAgain').addEventListener('click', () => {
+          this.resultsScreen.classList.remove('active');
+          this.setupScreen.classList.add('active');
+          this.state = 'setup';
+          this.gameOver = false;
+        });
+      }
+
+      _applyDifficultySettings() {
+        const mode = this.difficulty || 'normal';
+        if (mode === 'easy') {
+          this.maxBaseHp = 700;
+          this.baseHp = 700;
+          this.questionTimer = 25;
+          this.baseDamageRate = { normal: 1.5, runner: 2.2, tank: 3.0, boss: 5.5 };
+          this.waveConfigs = [
+            { count: 6, hpMin: 35, hpMax: 65, bossCount: 0, spawnDelay: 2600, label: 'Pemanasan' },
+            { count: 10, hpMin: 45, hpMax: 80, bossCount: 0, spawnDelay: 2200, label: 'Patroli Zombie' },
+            { count: 15, hpMin: 60, hpMax: 100, bossCount: 1, spawnDelay: 1850, label: 'Serbuan Ringan' },
+            { count: 20, hpMin: 70, hpMax: 120, bossCount: 1, spawnDelay: 1550, label: 'Gelombang Menengah' },
+            { count: 28, hpMin: 85, hpMax: 140, bossCount: 2, spawnDelay: 1250, label: 'Final Defense' }
+          ];
+        } else if (mode === 'hard') {
+          this.maxBaseHp = 1000;
+          this.baseHp = 1000;
+          this.questionTimer = 15;
+          this.baseDamageRate = { normal: 3.2, runner: 4.5, tank: 6.0, boss: 11.0 };
+          this.waveConfigs = [
+            { count: 14, hpMin: 55, hpMax: 95, bossCount: 0, spawnDelay: 1500, label: 'Serbuan Cepat' },
+            { count: 24, hpMin: 70, hpMax: 125, bossCount: 1, spawnDelay: 1200, label: 'Swarm Zombie' },
+            { count: 36, hpMin: 85, hpMax: 155, bossCount: 2, spawnDelay: 950, label: 'Serangan Berat' },
+            { count: 50, hpMin: 100, hpMax: 190, bossCount: 3, spawnDelay: 780, label: 'Chaos Horde' },
+            { count: 68, hpMin: 120, hpMax: 230, bossCount: 5, spawnDelay: 620, label: 'Kiamat Zombie' }
+          ];
+        } else {
+          // Normal Mode
+          this.maxBaseHp = 850;
+          this.baseHp = 850;
+          this.questionTimer = 20;
+          this.baseDamageRate = { normal: 2.2, runner: 3.2, tank: 4.2, boss: 8.0 };
+          this.waveConfigs = [
+            { count: 9, hpMin: 45, hpMax: 80, bossCount: 0, spawnDelay: 2100, label: 'Pemanasan' },
+            { count: 16, hpMin: 60, hpMax: 105, bossCount: 1, spawnDelay: 1650, label: 'Serbuan Awal' },
+            { count: 25, hpMin: 75, hpMax: 135, bossCount: 2, spawnDelay: 1300, label: 'Gelombang Swarm' },
+            { count: 35, hpMin: 90, hpMax: 165, bossCount: 3, spawnDelay: 1000, label: 'Serangan Menengah' },
+            { count: 48, hpMin: 105, hpMax: 200, bossCount: 4, spawnDelay: 750, label: 'Final Boss Invasion' }
+          ];
+        }
+      }
+
+      _showTeamInputs() {
+        const container = document.getElementById('teamInputsContainer');
+        container.innerHTML = '';
+        const colors = ['#f43f5e', '#0284c7', '#10b981', '#eab308'];
+        const defaults = ['Skuadron Merah', 'Skuadron Biru', 'Skuadron Hijau', 'Skuadron Emas'];
+
+        for (let i = 0; i < this.numTeams; i++) {
+          const pod = document.createElement('div');
+          pod.className = 'team-input-pod';
+          pod.style.borderColor = colors[i];
+          pod.innerHTML = `
+            <span class="team-input-badge" style="background:${colors[i]};"></span>
+            <input type="text" class="team-callsign-input" value="${defaults[i]}" maxlength="16" placeholder="Callsign Skuadron ${i + 1}">
+          `;
+          container.appendChild(pod);
+        }
+      }
+
+      _collectTeamNames() {
+        this.teamNames = [];
+        const inputs = document.querySelectorAll('.team-callsign-input');
+        const defaults = ['Skuadron Merah', 'Skuadron Biru', 'Skuadron Hijau', 'Skuadron Emas'];
+        inputs.forEach((inp, i) => {
+          this.teamNames.push(inp.value.trim() || defaults[i]);
+        });
+      }
+
+      startGame() {
+        this.state = 'playing';
+        this._applyDifficultySettings();
+        this.teamDamage = new Array(this.numTeams).fill(0);
+        this.teamKills = new Array(this.numTeams).fill(0);
+        this.teamBossKills = new Array(this.numTeams).fill(0);
+        this.teamScores = new Array(this.numTeams).fill(0);
+        this.currentWave = 0;
+        this.zombies = [];
+        this.zombieIdCounter = 0;
+        this.gameOver = false;
+
+        this.renderer = new OutpostRenderer(this.canvas);
+        this.quiz = new OutpostQuizManager(this.numTeams, this.questionTimer);
+
+        this.setupScreen.classList.remove('active');
+        this.resultsScreen.classList.remove('active');
+        this.gameScreen.classList.add('active');
+
+        // Setup Mode Badge in HUD
+        const badge = document.getElementById('hudModeBadge');
+        if (badge) {
+          badge.className = `mode-badge-tactical ${this.difficulty}`;
+          badge.textContent = this.difficulty === 'easy' ? 'ALPHA' : (this.difficulty === 'hard' ? 'OMEGA' : 'BETA');
+        }
+
+        requestAnimationFrame(() => {
+          this.renderer._resize();
+          this._buildLiveHUD();
+          this._buildTerminals();
+          this._startNextWave();
+          this.lastTime = performance.now();
+          this._loop(this.lastTime);
+        });
+      }
+
+      _buildLiveHUD() {
+        const container = document.getElementById('hudLiveSquadrons');
+        container.innerHTML = '';
+        const colors = ['#f43f5e', '#0284c7', '#10b981', '#eab308'];
+
+        for (let i = 0; i < this.numTeams; i++) {
+          const item = document.createElement('div');
+          item.className = 'ticker-team';
+          item.id = `ticker-team-${i}`;
+          item.innerHTML = `
+            <span class="ticker-dot" style="background:${colors[i]};"></span>
+            <span style="color:${colors[i]}">${this.teamNames[i]}:</span>
+            <span class="ticker-score" id="ticker-score-${i}">0</span>
+          `;
+          container.appendChild(item);
+        }
+      }
+
+      _buildTerminals() {
+        const dock = document.getElementById('quizTerminalsDock');
+        dock.innerHTML = '';
+        dock.className = `quiz-terminals-dock teams-${this.numTeams}`;
+        const colors = ['#f43f5e', '#0284c7', '#10b981', '#eab308'];
+
+        for (let i = 0; i < this.numTeams; i++) {
+          const terminal = document.createElement('div');
+          terminal.className = `tactical-terminal-card team-${i}`;
+          terminal.id = `terminal-station-${i}`;
+
+          terminal.innerHTML = `
+            <div class="terminal-top-strip">
+              <div class="terminal-callsign" style="color: ${colors[i]}">
+                <span class="callsign-indicator" style="background:${colors[i]}"></span>
+                <span>${this.teamNames[i]}</span>
+              </div>
+              <div class="terminal-telemetry">
+                <span>💥 <span class="telemetry-val" id="stat-dmg-${i}">0</span></span>
+                <span>☠ <span class="telemetry-val" id="stat-kills-${i}">0</span></span>
+                <span>🎯 <span class="telemetry-val" id="stat-acc-${i}">0%</span></span>
+              </div>
+            </div>
+
+            <div class="terminal-timer-track">
+              <div class="terminal-timer-bar" id="terminal-timer-${i}" style="width: 100%;"></div>
+            </div>
+
+            <div class="terminal-crt-body">
+              <div class="crt-topic-tag" id="crt-topic-${i}">BERPIKIR KOMPUTASIONAL</div>
+              <div class="crt-question-text" id="crt-quest-${i}">Memuat transmisi pertanyaan...</div>
+              <div class="crt-keypad-grid" id="crt-keypad-${i}"></div>
+            </div>
+
+            <div class="tactical-superpower-callout" id="sp-callout-${i}"></div>
+          `;
+
+          dock.appendChild(terminal);
+          this._loadQuestion(i);
+        }
+      }
+
+      _loadQuestion(teamIdx) {
+        const q = this.quiz.getNextQuestion(teamIdx);
+        const letters = ['A', 'B', 'C', 'D'];
+
+        document.getElementById(`crt-topic-${teamIdx}`).textContent = `[SECTOR INTEL: ${q.topic.toUpperCase()}]`;
+        document.getElementById(`crt-quest-${teamIdx}`).textContent = q.question;
+
+        const keypad = document.getElementById(`crt-keypad-${teamIdx}`);
+        keypad.innerHTML = '';
+
+        q.options.forEach((optText, optIdx) => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'keypad-btn';
+          btn.innerHTML = `<span class="btn-key-badge">${letters[optIdx]}</span><span>${optText}</span>`;
+
+          const answerHandler = (e) => {
+            e.preventDefault();
+            this._onAnswer(teamIdx, optIdx);
+          };
+
+          btn.addEventListener('click', answerHandler);
+          btn.addEventListener('touchstart', answerHandler, { passive: false });
+          keypad.appendChild(btn);
+        });
+      }
+
+      _onAnswer(teamIdx, answerIdx) {
+        if (this.state !== 'playing' || this.gameOver) return;
+        const result = this.quiz.checkAnswer(teamIdx, answerIdx);
+        if (!result) return;
+
+        const terminal = document.getElementById(`terminal-station-${teamIdx}`);
+        const buttons = document.querySelectorAll(`#crt-keypad-${teamIdx} .keypad-btn`);
+
+        buttons.forEach((btn, i) => {
+          btn.classList.add('disabled');
+          if (i === this.quiz.currentQuestions[teamIdx].answer) btn.classList.add('correct');
+          if (i === answerIdx && !result.correct) btn.classList.add('wrong');
+        });
+
+        if (result.correct) {
+          terminal.classList.add('flash-hit');
+          this.audio.playCorrect();
+          this._fireAtZombie(teamIdx, result.superpower);
+
+          if (result.superpower && result.superpower.label) {
+            this._showSuperpowerCallout(teamIdx, result.superpower);
+            this.audio.playSuperpower();
+          }
+        } else {
+          terminal.classList.add('flash-miss');
+          this.audio.playWrong();
+        }
+
+        this._updateTelemetry(teamIdx);
+        setTimeout(() => {
+          terminal.classList.remove('flash-hit', 'flash-miss');
+          if (this.state === 'playing') this._loadQuestion(teamIdx);
+        }, 1100);
+      }
+
+      _onTimeout(teamIdx) {
+        const terminal = document.getElementById(`terminal-station-${teamIdx}`);
+        const buttons = document.querySelectorAll(`#crt-keypad-${teamIdx} .keypad-btn`);
+        this.quiz.locked[teamIdx] = true;
+        this.quiz.answeredCounts[teamIdx]++;
+
+        buttons.forEach((btn, i) => {
+          btn.classList.add('disabled');
+          if (i === this.quiz.currentQuestions[teamIdx].answer) btn.classList.add('correct');
+        });
+
+        terminal.classList.add('flash-miss');
+        this.audio.playWrong();
+        this._updateTelemetry(teamIdx);
+
+        setTimeout(() => {
+          terminal.classList.remove('flash-miss');
+          if (this.state === 'playing') this._loadQuestion(teamIdx);
+        }, 1100);
+      }
+
+      _showSuperpowerCallout(teamIdx, sp) {
+        const el = document.getElementById(`sp-callout-${teamIdx}`);
+        if (!el) return;
+        el.textContent = sp.label;
+        el.className = `tactical-superpower-callout ${sp.cssClass}`;
+        void el.offsetWidth;
+        el.classList.add('show');
+        setTimeout(() => el.classList.remove('show'), 1200);
+      }
+
+      _updateTelemetry(teamIdx) {
+        const stats = this.quiz.getStats(teamIdx);
+        document.getElementById(`stat-dmg-${teamIdx}`).textContent = this.teamDamage[teamIdx];
+        document.getElementById(`stat-kills-${teamIdx}`).textContent = this.teamKills[teamIdx];
+        document.getElementById(`stat-acc-${teamIdx}`).textContent = stats.accuracy + '%';
+      }
+
+      _fireAtZombie(teamIdx, superpower) {
+        if (!superpower) return;
+        const alive = this.zombies.filter(z => z.hp > 0).sort((a, b) => b.x - a.x);
+        if (alive.length === 0) return;
+
+        const turretPos = this.renderer.getTowerPositions(this.numTeams)[teamIdx];
+        const color = this.renderer.teamColors[teamIdx % this.renderer.teamColors.length];
+
+        if (superpower.aoe) {
+          // Bomb area of effect
+          alive.forEach(z => {
+            this._applyDamage(teamIdx, z, superpower.damage, superpower.type);
+            this.renderer.addLaser(turretPos.x, turretPos.y, z.x, z.y, color);
+          });
+          this.audio.playBomb();
+          this.renderer.applyScreenShake(8);
+        } else {
+          // Single target shot
+          const target = alive[0];
+          this._applyDamage(teamIdx, target, superpower.damage, superpower.type);
+          this.renderer.addLaser(turretPos.x, turretPos.y, target.x, target.y, color);
+
+          if (superpower.freeze) {
+            target.frozen = true;
+            target.frozenTimer = 3;
+            this.renderer.addFreezeParticles(target.x, target.y);
+            this.audio.playFreeze();
+          }
+          this.audio.playShoot(teamIdx);
+          this.renderer.applyScreenShake(superpower.damage > 50 ? 5 : 2.5);
+        }
+      }
+
+      _applyDamage(teamIdx, zombie, damage, superType) {
+        const actualDmg = Math.min(damage, zombie.hp);
+        zombie.hp -= damage;
+        this.teamDamage[teamIdx] += actualDmg;
+        this.renderer.addDamageNumber(zombie.x, zombie.y - 20, damage, superType);
+        this.renderer.addParticles(zombie.x, zombie.y, this.renderer.teamColors[teamIdx], 6, 2.5);
+
+        if (zombie.hp <= 0) {
+          this.teamKills[teamIdx]++;
+          if (zombie.isBoss) this.teamBossKills[teamIdx]++;
+        }
+        this._recalcScores();
+      }
+
+      _recalcScores() {
+        for (let i = 0; i < this.numTeams; i++) {
+          this.teamScores[i] = this.teamDamage[i] + (this.teamKills[i] * 100) + (this.teamBossKills[i] * 400);
+        }
+      }
+
+      _startNextWave() {
+        if (this.currentWave >= this.totalWaves) {
+          this._endGame(true);
+          return;
+        }
+        this.spawnedCount = 0;
+        this.spawnTimer = 1400;
+        this.waveSpawningDone = false;
+        this.waveCooldown = 3;
+        this._announceWave();
+        document.getElementById('hudWaveDisplay').textContent = `WAVE ${this.currentWave + 1} / ${this.totalWaves}`;
+      }
+
+      _announceWave() {
+        const el = this.alertBannerEl;
+        const tEl = document.getElementById('alertTitle');
+        const sEl = document.getElementById('alertSub');
+        const isFinal = this.currentWave === this.totalWaves - 1;
+
+        tEl.textContent = isFinal ? '⚠️ PERINGATAN: FINAL WAVE!' : `⚔️ GELOMBANG ${this.currentWave + 1}`;
+        sEl.textContent = isFinal
+          ? 'Hulking Abomination Boss memimpin serbuan pamungkas!'
+          : 'Garis perbatasan terancam, siagakan sistem artileri pertahanan!';
+
+        el.className = 'tactical-alert-banner' + (isFinal ? ' boss-alert' : '');
+        void el.offsetWidth;
+        el.classList.add('show');
+        this.audio.playWaveComplete();
+        setTimeout(() => el.classList.remove('show', 'boss-alert'), 2400);
+      }
+
+      _spawnZombie() {
+        const config = this.waveConfigs[this.currentWave];
+        if (this.spawnedCount >= config.count) return;
+
+        const isBoss = this.spawnedCount >= config.count - config.bossCount;
+        const mode = this.difficulty || 'normal';
+        const rand = Math.random();
+
+        let isRunner = false;
+        let isTank = false;
+
+        if (!isBoss) {
+          if (mode === 'easy') {
+            isRunner = (this.currentWave >= 2) && (rand < 0.15);
+            isTank = false;
+          } else if (mode === 'hard') {
+            isRunner = rand < 0.35;
+            isTank = !isRunner && (this.currentWave >= 1) && (rand > 0.65);
+          } else {
+            isRunner = (this.currentWave >= 1) && (rand < 0.25);
+            isTank = !isRunner && (this.currentWave >= 2) && (rand > 0.75);
+          }
+        }
+
+        let hp;
+        let speed;
+        if (isBoss) {
+          const bossBonus = mode === 'hard' ? 60 : (mode === 'easy' ? 0 : 30);
+          hp = 220 + Math.random() * 100 + (this.currentWave * 30) + bossBonus;
+          speed = (mode === 'hard' ? 0.28 : (mode === 'easy' ? 0.20 : 0.24)) + Math.random() * 0.08;
+        } else if (isTank) {
+          hp = Math.round(config.hpMax * 1.45 + Math.random() * 35);
+          speed = (mode === 'hard' ? 0.36 : 0.32) + Math.random() * 0.1;
+        } else if (isRunner) {
+          hp = Math.round(Math.max(35, config.hpMin * 0.8) + Math.random() * 15);
+          speed = (mode === 'hard' ? 0.72 : (mode === 'easy' ? 0.52 : 0.65)) + Math.random() * 0.20;
+        } else {
+          hp = Math.round(config.hpMin + Math.random() * (config.hpMax - config.hpMin));
+          speed = (mode === 'hard' ? 0.48 : (mode === 'easy' ? 0.35 : 0.42)) + Math.random() * 0.18;
+        }
+
+        this.zombies.push({
+          id: this.zombieIdCounter++,
+          x: -40 - Math.random() * 45,
+          y: this.renderer.getSpawnY(),
+          hp: Math.round(hp),
+          maxHp: Math.round(hp),
+          speed: speed,
+          isBoss,
+          isRunner,
+          isTank,
+          frozen: false,
+          frozenTimer: 0
+        });
+
+        this.spawnedCount++;
+        if (isBoss) {
+          this.audio.playBossAppear();
+          const el = this.alertBannerEl;
+          const tEl = document.getElementById('alertTitle');
+          const sEl = document.getElementById('alertSub');
+          tEl.textContent = '👹 MUTANT ABOMINATION BOSS!';
+          sEl.textContent = 'Fokuskan tembakan ke arah monster raksasa!';
+          el.className = 'tactical-alert-banner boss-alert';
+          void el.offsetWidth;
+          el.classList.add('show');
+          setTimeout(() => el.classList.remove('show', 'boss-alert'), 2200);
+        }
+      }
+
+      _loop(timestamp) {
+        if (this.state !== 'playing') return;
+        const dt = Math.min((timestamp - this.lastTime) / 1000, 0.05);
+        this.lastTime = timestamp;
+        this._update(dt);
+        this._render(dt);
+        this.animFrame = requestAnimationFrame(t => this._loop(t));
+      }
+
+      _update(dt) {
+        const timeout = this.quiz.updateTimers(dt);
+        if (timeout) this._onTimeout(timeout.teamIdx);
+
+        // Update timer bars
+        for (let i = 0; i < this.numTeams; i++) {
+          const ratio = this.quiz.getTimerRatio(i);
+          const bar = document.getElementById(`terminal-timer-${i}`);
+          if (bar) {
+            bar.style.width = (ratio * 100) + '%';
+            bar.classList.toggle('warning', ratio < 0.5 && ratio > 0.25);
+            bar.classList.toggle('danger', ratio <= 0.25);
+          }
+        }
+
+        const config = this.waveConfigs[this.currentWave];
+        if (!this.waveSpawningDone) {
+          this.spawnTimer -= dt * 1000;
+          if (this.spawnTimer <= 0 && this.spawnedCount < config.count) {
+            this._spawnZombie();
+            this.spawnTimer = config.spawnDelay + Math.random() * 300;
+          }
+          if (this.spawnedCount >= config.count) this.waveSpawningDone = true;
+        }
+
+        const baseReachX = this.renderer.getBaseReachX();
+        for (let i = this.zombies.length - 1; i >= 0; i--) {
+          const z = this.zombies[i];
+          if (z.frozen) {
+            z.frozenTimer -= dt;
+            if (z.frozenTimer <= 0) z.frozen = false;
+          }
+          if (!z.frozen) z.x += z.speed * 60 * dt;
+
+          // Reach Outpost bunker
+          if (z.x >= baseReachX) {
+            z.x = baseReachX;
+            const rates = this.baseDamageRate || { normal: 2.2, runner: 3.2, tank: 4.2, boss: 8.0 };
+            const dmgPerSec = z.isBoss ? rates.boss : (z.isTank ? rates.tank : (z.isRunner ? rates.runner : rates.normal));
+            const dmg = dmgPerSec * dt;
+            this.baseHp -= dmg;
+
+            if (Math.random() < 0.05) this.audio.playBaseHit();
+            this.renderer.applyScreenShake(3);
+
+            if (this.baseHp <= 0) {
+              this.baseHp = 0;
+              this._endGame(false);
+              return;
+            }
+          }
+
+          if (z.hp <= 0) {
+            this.renderer.addExplosion(z.x, z.y, z.isBoss ? '#c084fc' : (z.isRunner ? '#f97316' : (z.isTank ? '#38bdf8' : '#10b981')));
+            this.audio.playZombieDeath();
+            this.zombies.splice(i, 1);
+          }
+        }
+
+        const aliveZombies = this.zombies.filter(z => z.hp > 0);
+        const remainingInWave = (config.count - this.spawnedCount) + aliveZombies.length;
+        const waveDisplay = document.getElementById('hudWaveDisplay');
+        if (waveDisplay) {
+          waveDisplay.textContent = `WAVE ${this.currentWave + 1} / ${this.totalWaves} [${remainingInWave} 🧟]`;
+        }
+
+        if (this.waveSpawningDone && aliveZombies.length === 0) {
+          this.waveCooldown -= dt;
+          if (this.waveCooldown <= 0) {
+            this.currentWave++;
+            if (this.currentWave >= this.totalWaves) this._endGame(true);
+            else {
+              this.waveCooldown = 3;
+              setTimeout(() => this._startNextWave(), 2200);
+            }
+          }
+        }
+
+        // Bunker Health Bar HUD
+        const hpFill = document.getElementById('hudBaseHpFill');
+        const hpVal = document.getElementById('hudBaseHpVal');
+        if (hpFill && hpVal) {
+          const ratio = Math.max(0, this.baseHp / this.maxBaseHp);
+          hpFill.style.width = (ratio * 100) + '%';
+          hpFill.classList.toggle('warning', ratio < 0.5 && ratio > 0.25);
+          hpFill.classList.toggle('danger', ratio <= 0.25);
+          hpVal.textContent = `${Math.ceil(this.baseHp)} / ${this.maxBaseHp}`;
+        }
+
+        this._updateLiveLeaderboard();
+        this.renderer.tick();
+      }
+
+      _render(dt) {
+        const r = this.renderer;
+        r.clear();
+        r.drawWastelandEnvironment();
+        r.beginFrame();
+        r.drawCombatRoad();
+        r.drawFortressBunker(this.baseHp, this.maxBaseHp);
+
+        const alive = this.zombies.filter(z => z.hp > 0).sort((a, b) => b.x - a.x);
+        const frontTarget = alive.length > 0 ? { x: alive[0].x, y: alive[0].y } : null;
+
+        const turretPositions = r.getTowerPositions(this.numTeams);
+        for (let i = 0; i < this.numTeams; i++) {
+          r.drawTacticalTurret(turretPositions[i], i, this.teamNames[i], this.teamDamage[i], this.teamKills[i], frontTarget);
+        }
+
+        const sorted = [...this.zombies].filter(z => z.hp > 0).sort((a, b) => a.x - b.x);
+        sorted.forEach(z => r.drawStylizedZombie(z));
+
+        r.updateAndDrawLasers(dt);
+        r.updateAndDrawParticles();
+        r.updateAndDrawDamageNumbers();
+        r.endFrame();
+      }
+
+      _updateLiveLeaderboard() {
+        for (let i = 0; i < this.numTeams; i++) {
+          const el = document.getElementById(`ticker-score-${i}`);
+          if (el) el.textContent = this.teamScores[i];
+        }
+      }
+
+      _endGame(victory) {
+        if (this.gameOver) return;
+        this.gameOver = true;
+
+        if (victory) {
+          const bonus = Math.ceil(this.baseHp) * 2;
+          for (let i = 0; i < this.numTeams; i++) this.teamScores[i] += bonus;
+          this.audio.playVictory();
+        } else {
+          this.audio.playGameOver();
+        }
+
+        this._recalcScores();
+
+        setTimeout(() => {
+          this.state = 'results';
+          if (this.animFrame) cancelAnimationFrame(this.animFrame);
+          this._showDebriefing(victory);
+        }, 1500);
+      }
+
+      _showDebriefing(victory) {
+        this.gameScreen.classList.remove('active');
+        this.resultsScreen.classList.add('active');
+
+        const title = document.getElementById('resultsTitle');
+        const subtitle = document.getElementById('resultsSubtitle');
+        const colors = ['#f43f5e', '#0284c7', '#10b981', '#eab308'];
+
+        const sorted = this.teamNames.map((name, i) => ({
+          name, idx: i,
+          score: this.teamScores[i],
+          damage: this.teamDamage[i],
+          kills: this.teamKills[i],
+          bossKills: this.teamBossKills[i],
+          stats: this.quiz.getStats(i)
+        })).sort((a, b) => b.score - a.score);
+
+        const diffLabel = this.difficulty.toUpperCase();
+
+        if (victory) {
+          title.textContent = '🏆 SECTOR ZERO SECURED // PERTAHANAN BERHASIL!';
+          title.style.color = '#10b981';
+          subtitle.innerHTML = `🛡️ Integritas Bunker Tersisa: <strong>${Math.ceil(this.baseHp)} HP</strong> | Mode: <strong>${diffLabel}</strong> — Skuadron Terbaik: <strong style="color:${colors[sorted[0].idx]};">${sorted[0].name}</strong>`;
+        } else {
+          title.textContent = '💀 OUTPOST OVERRUN // BUNKER HANCUR!';
+          title.style.color = '#ef4444';
+          subtitle.innerHTML = `Garis pertahanan runtuh di Wave ${this.currentWave + 1} | Mode: <strong>${diffLabel}</strong> — Kontributor Teratas: <strong style="color:${colors[sorted[0].idx]};">${sorted[0].name}</strong>`;
+        }
+
+        const grid = document.getElementById('podiumGrid');
+        grid.innerHTML = '';
+        const medals = ['🥇', '🥈', '🥉', '🎖️'];
+
+        sorted.forEach((team, i) => {
+          const card = document.createElement('div');
+          card.className = `podium-honor-card ${i === 0 ? 'rank-1' : ''}`;
+          card.style.borderColor = colors[team.idx];
+
+          card.innerHTML = `
+            <div class="honor-badge-icon">${medals[i] || (i + 1)}</div>
+            <div class="honor-squadron-name" style="color:${colors[team.idx]};">${team.name}</div>
+            <div class="honor-score-val" style="color:${colors[team.idx]};">${team.score} PTS</div>
+            <div class="honor-stats-breakdown">
+              💥 Total Kerusakan: <strong>${team.damage}</strong><br>
+              🎯 Akurasi Menjawab: <strong>${team.stats.accuracy}%</strong> (${team.stats.correct}/${team.stats.answered})<br>
+              ☠ Zombie Dieliminasi: <strong>${team.kills}</strong><br>
+              👑 Boss Ditumbangkan: <strong>${team.bossKills}</strong>
+            </div>
+          `;
+          grid.appendChild(card);
+        });
+      }
+    }
+
+    // Initialize Game on DOM Ready
+    document.addEventListener('DOMContentLoaded', () => {
+      window.outpostGame = new OutpostZeroGame();
+    });
+  </script>
+</body>
+</html>

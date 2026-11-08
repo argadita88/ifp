@@ -1,0 +1,39 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg10" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0c2340"/>
+      <stop offset="50%" stop-color="#075985"/>
+      <stop offset="100%" stop-color="#6366f1"/>
+    </linearGradient>
+    <linearGradient id="cardBg10" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="rgba(255,255,255,0.12)"/>
+      <stop offset="100%" stop-color="rgba(255,255,255,0.04)"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1920" height="1080" fill="url(#bg10)"/>
+  <circle cx="1650" cy="200" r="280" fill="#6366f1" opacity="0.25" filter="blur(60px)"/>
+
+  <rect x="120" y="100" width="460" height="48" rx="24" fill="rgba(56, 189, 248, 0.2)" stroke="#38bdf8" stroke-width="2"/>
+  <text x="350" y="132" font-family="'Plus Jakarta Sans', sans-serif" font-size="20" font-weight="800" fill="#facc15" text-anchor="middle">AI FOR EDUCATION</text>
+
+  <text x="120" y="240" font-family="'Outfit', sans-serif" font-size="54" font-weight="900" fill="#ffffff">SLIDE 10: PROMPT ENGINEERING AI UNTUK PEMBUATAN GAME HTML</text>
+
+  <g transform="translate(120, 360)">
+    <rect x="0" y="0" width="1680" height="560" rx="28" fill="url(#cardBg10)" stroke="rgba(186, 230, 253, 0.3)" stroke-width="2"/>
+    <circle cx="100" cy="100" r="45" fill="#6366f1"/>
+    <text x="100" y="112" font-family="sans-serif" font-size="42" fill="#ffffff" text-anchor="middle">🤖</text>
+
+    <text x="170" y="115" font-family="'Plus Jakarta Sans', sans-serif" font-size="36" font-weight="800" fill="#ffffff">Poin Penting Slide 10</text>
+
+    <text x="100" y="220" font-family="'Plus Jakarta Sans', sans-serif" font-size="28" fill="#e0f2fe">
+      <tspan x="100" dy="0">• Master Prompt System Instruction v3</tspan>
+      <tspan x="100" dy="65">• Injeksi Soal Kurikulum Merdeka</tspan>
+      <tspan x="100" dy="65">• Desain Responsive Single-File HTML</tspan>
+    </text>
+  </g>
+
+  <line x1="120" y1="990" x2="1800" y2="990" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+  <text x="120" y="1030" font-family="'Plus Jakarta Sans', sans-serif" font-size="18" fill="#94a3b8">Gim Interaktif Informatika SMP · Media Pembelajaran Interaktif Layar Sentuh IFP</text>
+  <text x="1800" y="1030" font-family="'JetBrains Mono', monospace" font-size="18" fill="#38bdf8" text-anchor="end">Slide 10 / 12</text>
+</svg>
