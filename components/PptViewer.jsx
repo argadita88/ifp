@@ -120,7 +120,7 @@ export default function PptViewer({ showToast }) {
   const [isFullscreen, setIsFullscreen] = useState(false);
 
   // Parameter Form States
-  const [schoolName, setSchoolName] = useState('SMP Negeri 1 Jakarta');
+  const [schoolName, setSchoolName] = useState('SMP Negeri 1 Blimbingsari Satu Atap');
   const [pptSubject, setPptSubject] = useState('Gim Interaktif Informatika SMP - Kerangka MDA');
   const [pptAudience, setPptAudience] = useState('Siswa SMP (Fase D) - Kurikulum Merdeka');
   const [slideCount, setSlideCount] = useState('12 Slide Terstruktur');

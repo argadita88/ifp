@@ -11,7 +11,7 @@ export const LKPD_PRESETS = [
     desc: "Format standar Kurikulum Merdeka berbasis Berpikir Kritis & Profil Pelajar Pancasila.",
     icon: "GraduationCap",
     config: {
-      schoolName: "SMP Negeri 1 Jakarta",
+      schoolName: "SMP Negeri 1 Blimbingsari Satu Atap",
       subject: "Informatika",
       gradeLevel: "SMP",
       phase: "Fase D",

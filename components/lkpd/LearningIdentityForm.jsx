@@ -70,7 +70,7 @@ export default function LearningIdentityForm({ config, onChange, showToast }) {
             className="form-input"
             value={config.schoolName || ''}
             onChange={(e) => handleInputChange('schoolName', e.target.value)}
-            placeholder="Contoh: SMP Negeri 1 Jakarta / SD Merdeka..."
+            placeholder="Contoh: SMP Negeri 1 Blimbingsari Satu Atap..."
           />
         </div>
 

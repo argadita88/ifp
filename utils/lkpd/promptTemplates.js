@@ -9,7 +9,7 @@ Tugas Anda adalah merancang dan menghasilkan naskah lengkap LEMBAR KERJA PESERTA
 
 export function buildIdentitySection(config) {
   return `### I. IDENTITAS PEMBELAJARAN & LKPD
-- **Nama Sekolah / Instansi:** ${config.schoolName || 'SMP Negeri 1 Jakarta'}
+- **Nama Sekolah / Instansi:** ${config.schoolName || 'SMP Negeri 1 Blimbingsari Satu Atap'}
 - **Mata Pelajaran:** ${config.subject || 'Sesuai Materi'}
 - **Jenjang & Fase:** ${config.gradeLevel || 'SMP'} (${config.phase || 'Fase D'}) — ${config.grade || 'Kelas 8'}
 - **Semester / Tahun Ajaran:** ${config.semester || 'Ganjil'} / ${config.academicYear || '2026/2027'}

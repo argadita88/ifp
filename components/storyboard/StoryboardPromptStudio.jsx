@@ -71,7 +71,7 @@ const STORYBOARD_STYLES = [
 
 export default function StoryboardPromptStudio({ showToast }) {
   // Form States
-  const [schoolName, setSchoolName] = useState('SMP Negeri 1 Jakarta');
+  const [schoolName, setSchoolName] = useState('SMP Negeri 1 Blimbingsari Satu Atap');
   const [topic, setTopic] = useState('Petualangan Berpikir Komputasional & Enkripsi Data');
   const [subject, setSubject] = useState('Informatika');
   const [audience, setAudience] = useState('Siswa SMP (Fase D)');

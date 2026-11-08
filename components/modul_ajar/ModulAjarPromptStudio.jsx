@@ -20,13 +20,13 @@ import {
 
 export default function ModulAjarPromptStudio({ showToast }) {
   // Identitas Administrasi
-  const [schoolName, setSchoolName] = useState('SMP Negeri 1 Jakarta');
+  const [schoolName, setSchoolName] = useState('SMP Negeri 1 Blimbingsari Satu Atap');
   const [subject, setSubject] = useState('Informatika');
   const [gradePhase, setGradePhase] = useState('SMP — Kelas 8 (Fase D)');
   const [semester, setSemester] = useState('Semester Ganjil / 2026-2027');
-  const [teacherName, setTeacherName] = useState('Drs. Budi Santoso, M.Pd. / NIP. 198203152009021003');
-  const [principalName, setPrincipalName] = useState('Dr. Hj. Siti Rahmah, M.Pd. / NIP. 197505121999032001');
-  const [approvalDate, setApprovalDate] = useState('Jakarta, 14 Juli 2026');
+  const [teacherName, setTeacherName] = useState('Margaret Sulung D.P, S.Pd / NIP. 19880308 202221 1 003');
+  const [principalName, setPrincipalName] = useState('Yeti Chotimah, M.Pd. / NIP. 19760602 200801 2 024');
+  const [approvalDate, setApprovalDate] = useState('Blimbingsari, 14 Juli 2026');
 
   // Konten Pembelajaran & Pedagogi
   const [topic, setTopic] = useState('Berpikir Komputasional & Enkripsi Data');
@@ -126,13 +126,13 @@ Silakan hasilkan naskah Modul Ajar Kurikulum Merdeka tentang "${topic}" beserta 
   };
 
   const handleReset = () => {
-    setSchoolName('SMP Negeri 1 Jakarta');
+    setSchoolName('SMP Negeri 1 Blimbingsari Satu Atap');
     setSubject('Informatika');
     setGradePhase('SMP — Kelas 8 (Fase D)');
     setSemester('Semester Ganjil / 2026-2027');
-    setTeacherName('Drs. Budi Santoso, M.Pd. / NIP. 198203152009021003');
-    setPrincipalName('Dr. Hj. Siti Rahmah, M.Pd. / NIP. 197505121999032001');
-    setApprovalDate('Jakarta, 14 Juli 2026');
+    setTeacherName('Margaret Sulung D.P, S.Pd / NIP. 19880308 202221 1 003');
+    setPrincipalName('Yeti Chotimah, M.Pd. / NIP. 19760602 200801 2 024');
+    setApprovalDate('Blimbingsari, 14 Juli 2026');
     setTopic('Berpikir Komputasional & Enkripsi Data');
     setSubtopic('Algoritma Kriptografi Caesar Cipher & Proteksi Keamanan Siber');
     setTimeAlloc('2 x 40 Menit (1 Pertemuan)');

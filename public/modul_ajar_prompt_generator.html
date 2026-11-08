@@ -200,7 +200,7 @@
       <div class="grid">
         <div class="field" style="grid-column: span 2;">
           <label for="schoolName">Nama Satuan Pendidikan / Sekolah</label>
-          <input id="schoolName" value="SMP Negeri 1 Jakarta" placeholder="Masukkan nama sekolah">
+          <input id="schoolName" value="SMP Negeri 1 Blimbingsari Satu Atap" placeholder="Masukkan nama sekolah">
         </div>
         <div class="field">
           <label for="subject">Mata Pelajaran</label>
@@ -225,15 +225,15 @@
         </div>
         <div class="field">
           <label for="teacherName">Nama Guru Penyusun &amp; NIP</label>
-          <input id="teacherName" value="Drs. Budi Santoso, M.Pd. / NIP. 198203152009021003" placeholder="Nama & NIP Guru">
+          <input id="teacherName" value="Margaret Sulung D.P, S.Pd / NIP. 19880308 202221 1 003" placeholder="Nama & NIP Guru">
         </div>
         <div class="field">
           <label for="principalName">Nama Kepala Sekolah &amp; NIP</label>
-          <input id="principalName" value="Dr. Hj. Siti Rahmah, M.Pd. / NIP. 197505121999032001" placeholder="Nama & NIP Kepala Sekolah">
+          <input id="principalName" value="Yeti Chotimah, M.Pd. / NIP. 19760602 200801 2 024" placeholder="Nama & NIP Kepala Sekolah">
         </div>
         <div class="field">
           <label for="approvalDate">Lokasi &amp; Tanggal Pengesahan</label>
-          <input id="approvalDate" value="Jakarta, 14 Juli 2026" placeholder="Contoh: Jakarta, 14 Juli 2026">
+          <input id="approvalDate" value="Blimbingsari, 14 Juli 2026" placeholder="Contoh: Blimbingsari, 14 Juli 2026">
         </div>
       </div>
 
@@ -331,13 +331,13 @@
     function val(id) { return $(id).value; }
 
     function generate() {
-      const schoolName = val('schoolName').trim() || 'SMP Negeri 1 Jakarta';
+      const schoolName = val('schoolName').trim() || 'SMP Negeri 1 Blimbingsari Satu Atap';
       const subject = val('subject').trim() || 'Informatika';
       const gradePhase = val('gradePhase');
       const semester = val('semester').trim() || 'Ganjil / 2026-2027';
-      const teacherName = val('teacherName').trim() || 'Drs. Budi Santoso, M.Pd. / NIP...';
-      const principalName = val('principalName').trim() || 'Dr. Hj. Siti Rahmah, M.Pd. / NIP...';
-      const approvalDate = val('approvalDate').trim() || 'Jakarta, 14 Juli 2026';
+      const teacherName = val('teacherName').trim() || 'Margaret Sulung D.P, S.Pd / NIP. 19880308 202221 1 003';
+      const principalName = val('principalName').trim() || 'Yeti Chotimah, M.Pd. / NIP. 19760602 200801 2 024';
+      const approvalDate = val('approvalDate').trim() || 'Blimbingsari, 14 Juli 2026';
       const topic = val('topic').trim() || 'Topik Pembelajaran';
       const subtopic = val('subtopic').trim() || 'Submateri Pokok';
       const timeAlloc = val('timeAlloc');
@@ -348,7 +348,10 @@
       const differentiation = val('differentiation');
       const notes = val('notes').trim() || 'Tidak ada catatan tambahan.';
 
-      const prompt = `Bertindaklah sebagai **SEMPENSARI EduPlanner AI**, sebuah asisten kecerdasan buatan profesional yang mengintegrasikan peran sebagai Ahli Kurikulum Merdeka, Guru Penggerak, Ahli Pembelajaran Berdiferensiasi, Spesialis Deep Learning (Mindful, Meaningful, Joyful), Ahli Computational Thinking, serta Microsoft Word Document Developer (python-docx).
+      const prompt = `# MASTER PROMPT SYSTEM: SEMPENSARI EduPlanner AI — ARCHITECT MODUL AJAR KURIKULUM MERDEKA
+# DOKUMEN OUTPUT WAJIB: SCRIPT PYTHON PYTHON-DOCX (.DOCX F4/FOLIO) & NASKAH LENGKAP MODUL AJAR
+
+Bertindaklah sebagai **SEMPENSARI EduPlanner AI**, sebuah asisten kecerdasan buatan profesional yang mengintegrasikan peran sebagai Ahli Kurikulum Merdeka, Guru Penggerak, Ahli Pembelajaran Berdiferensiasi, Spesialis Deep Learning (Mindful, Meaningful, Joyful), Ahli Computational Thinking, serta Microsoft Word Document Developer (python-docx).
 
 Buatkan **MODUL AJAR KURIKULUM MERDEKA LENGKAP & KOMPREHENSIF 16 BAGIAN** berdasarkan identitas dan spesifikasi berikut:
 
